@@ -6,6 +6,8 @@ import com.elytradev.concrete.inventory.gui.client.ConcreteGui;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.client.InRedTab;
 import com.elytradev.infraredstone.item.ModItems;
+import com.elytradev.infraredstone.logic.IInfraComparator;
+import com.elytradev.infraredstone.logic.IInfraRedstone;
 import com.elytradev.infraredstone.proxy.CommonProxy;
 import com.elytradev.infraredstone.util.InRedRecipes;
 import net.minecraft.block.Block;
@@ -15,6 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -44,6 +48,11 @@ public class InfraRedstone {
 
     public static final InRedTab creativeTab = new InRedTab();
 
+    @CapabilityInject(IInfraRedstone.class)
+    public static final Capability<IInfraRedstone> CAPABILITY_IR = null;
+    @CapabilityInject(IInfraComparator.class)
+    public static final Capability<IInfraComparator> CAPABILITY_IR_COMPARATOR = null;
+    
     static {
         FluidRegistry.enableUniversalBucket();
     }
