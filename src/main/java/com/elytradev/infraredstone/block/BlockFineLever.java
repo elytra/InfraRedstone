@@ -13,7 +13,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 
-public class BlockFineLever extends BlockTileEntity<TileEntityFineLever> implements IBlockBase {
+public class BlockFineLever extends BlockModule<TileEntityFineLever> implements IBlockBase {
 
     protected String name;
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
