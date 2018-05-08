@@ -1,14 +1,13 @@
 package com.elytradev.infraredstone.item;
 
-import com.elytradev.infraredstone.InfraRedstone;
 import net.minecraft.item.Item;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModItems {
 
-    public static ItemBase INFRA_REDSTONE = new ItemBase("infra-redstone");
+    public static ItemBase PCB = new ItemBase("pcb");
     public static ItemBase[] allItems = {
-            INFRA_REDSTONE
+            PCB
     };
 
     public static void register(IForgeRegistry<Item> registry) {

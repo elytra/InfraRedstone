@@ -28,9 +28,10 @@ public class BlockBase extends Block implements IBlockBase {
         setUnlocalizedName(name);
         setRegistryName(name);
 
-        this.setHarvestLevel("pickaxe", 1);
-        this.setHardness(1.4f);
+        this.setHardness(0f);
         this.setResistance(8f); //actually quite susceptible to explosions
+
+        this.setCreativeTab(InfraRedstone.creativeTab);
     }
 
     public void registerItemModel(Item itemBlock) {
@@ -39,12 +40,6 @@ public class BlockBase extends Block implements IBlockBase {
 
     public Item createItemBlock() {
         return new ItemBlock(this).setRegistryName(getRegistryName());
-    }
-
-    @Override
-    public BlockBase setCreativeTab(CreativeTabs tab) {
-        super.setCreativeTab(tab);
-        return this;
     }
 
     @Override
