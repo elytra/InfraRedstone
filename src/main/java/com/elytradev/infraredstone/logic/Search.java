@@ -26,16 +26,16 @@ public class Search {
 			return wireSearch(world, device, initialPos);
 		}
 		
-		if (initialState.getBlock() instanceof IInfraRedstone) {
+		if (initialState.getBlock() instanceof ISimpleInfraRedstone) {
 			//We have a simple IR block behind us. Excellent! Don't search, just get its value.
-			return ((IInfraRedstone)initialState.getBlock()).getSignalValue(world, initialPos, initialState, dir.getOpposite());
+			return ((ISimpleInfraRedstone)initialState.getBlock()).getSignalValue(world, initialPos, initialState, dir.getOpposite());
 		}
 		
 		TileEntity te = world.getTileEntity(initialPos);
 		if (te!=null && te.hasCapability(InfraRedstone.CAPABILITY_IR, dir.getOpposite())) {
 			//We have a full IR tile behind us. Fantastic! Don't search, just get its value.
 			IInfraRedstone cap = te.getCapability(InfraRedstone.CAPABILITY_IR, dir.getOpposite());
-			return cap.getSignalValue(world, initialPos, initialState, dir.getOpposite());
+			return cap.getSignalValue();
 		}
 		
 		//Oh. Okay. No wires or machines. Well, return the vanilla redstone value here and call it a day.

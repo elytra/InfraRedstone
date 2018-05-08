@@ -8,6 +8,9 @@ import com.elytradev.infraredstone.client.InRedTab;
 import com.elytradev.infraredstone.item.ModItems;
 import com.elytradev.infraredstone.logic.IInfraComparator;
 import com.elytradev.infraredstone.logic.IInfraRedstone;
+import com.elytradev.infraredstone.logic.impl.InfraComparatorSerializer;
+import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
+import com.elytradev.infraredstone.logic.impl.InfraRedstoneSerializer;
 import com.elytradev.infraredstone.proxy.CommonProxy;
 import com.elytradev.infraredstone.util.InRedRecipes;
 import net.minecraft.block.Block;
@@ -19,6 +22,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -64,6 +68,10 @@ public class InfraRedstone {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         InRedLog.info(name + " is loading!");
+        
+        CapabilityManager.INSTANCE.register(IInfraRedstone.class, new InfraRedstoneSerializer(), InfraRedstoneHandler::new);
+        CapabilityManager.INSTANCE.register(IInfraComparator.class, new InfraComparatorSerializer(), InfraRedstoneHandler::new);
+        
         MinecraftForge.EVENT_BUS.register(InRedRecipes.class);
         config = InRedConfig.createConfig(event);
 

@@ -1,28 +1,37 @@
 package com.elytradev.infraredstone.tile;
 
-import com.elytradev.infraredstone.logic.IInfraRedstone;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import com.elytradev.infraredstone.InfraRedstone;
+import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 
-public class TileEntityFineLever extends TileEntityIRComponent implements IInfraRedstone {
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+
+public class TileEntityFineLever extends TileEntityIRComponent {
     public boolean active = true;
-    private int signal = 63;
+    private InfraRedstoneHandler signal = new InfraRedstoneHandler();
 
     public void toggleState() {
         if (active) {
             active = false;
-            signal = 0;
+            signal.setSignalValue(0);
         } else {
             active = true;
-            signal = 63;
+            signal.setSignalValue(63);
         }
     }
 
     @Override
-    public int getSignalValue(World world, BlockPos pos, IBlockState state, EnumFacing inspectingFrom) {
-        return signal;
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    	if (capability==InfraRedstone.CAPABILITY_IR) return true;
+    	
+    	return super.hasCapability(capability, facing);
     }
-
+    
+    @SuppressWarnings("unchecked")
+	@Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    	if (capability==InfraRedstone.CAPABILITY_IR) return (T) signal;
+    	
+    	return super.getCapability(capability, facing);
+    }
 }
