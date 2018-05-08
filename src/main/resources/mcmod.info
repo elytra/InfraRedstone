@@ -1,0 +1,19 @@
+[
+  {
+    "modid": "infraredstone",
+    "name": "InfraRedstone",
+    "description": "A better analog redstone replacement!",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "b0undarybreaker",
+      "Falkreon"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
