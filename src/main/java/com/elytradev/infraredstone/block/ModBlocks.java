@@ -11,10 +11,11 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class ModBlocks {
 
     public static final CableInfraRedstone INFRA_REDSTONE = new CableInfraRedstone();
-    public static final BlockFineLever FINE_LEVER = new BlockFineLever(Material.CIRCUITS, "fine_lever");
+    public static final BlockFineLever FINE_LEVER = new BlockFineLever();
+    public static final BlockDiode DIODE = new BlockDiode();
 
     public static Block[] allBlocks = {
-            FINE_LEVER, INFRA_REDSTONE
+            INFRA_REDSTONE, FINE_LEVER, DIODE
     };
 
     public static void register(IForgeRegistry<Block> registry) {
