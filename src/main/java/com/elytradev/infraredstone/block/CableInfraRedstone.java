@@ -74,7 +74,8 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
         return this.getDefaultState();
     }
 
-    public IBlockState getActualState(IBlockState state, World world, BlockPos pos) {
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         return state
                 .withProperty(NORTH, getCableConnections(world, pos, EnumFacing.NORTH))
                 .withProperty(SOUTH, getCableConnections(world, pos, EnumFacing.SOUTH))
@@ -86,23 +87,4 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
     public BlockStateContainer createBlockState(){
         return new BlockStateContainer(this, NORTH, SOUTH, EAST, WEST);
     }
-
-    @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
-        return this.getDefaultState()
-                .withProperty(NORTH, getCableConnections(world, pos, EnumFacing.NORTH))
-                .withProperty(SOUTH, getCableConnections(world, pos, EnumFacing.SOUTH))
-                .withProperty(EAST, getCableConnections(world, pos, EnumFacing.EAST))
-                .withProperty(WEST, getCableConnections(world, pos, EnumFacing.WEST));
-    }
-
-    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-        world.setBlockState(pos, world.getBlockState(pos)
-                .withProperty(NORTH, getCableConnections(world, pos, EnumFacing.NORTH))
-                .withProperty(SOUTH, getCableConnections(world, pos, EnumFacing.SOUTH))
-                .withProperty(EAST, getCableConnections(world, pos, EnumFacing.EAST))
-                .withProperty(WEST, getCableConnections(world, pos, EnumFacing.WEST)));
-
-    }
-
 }
