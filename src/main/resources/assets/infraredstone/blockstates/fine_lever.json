@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "active=false,facing=down": { "model": "lever_off", "x": 180, "y": 180 },
+    "active=false,facing=up": { "model": "lever_off" },
+    "active=false,facing=east": { "model": "lever_off", "x": 90, "y": 90 },
+    "active=false,facing=west": { "model": "lever_off", "x": 90, "y": 270 },
+    "active=false,facing=south" : { "model": "lever_off", "x": 90, "y": 180 },
+    "active=false,facing=north" : { "model": "lever_off", "x": 90 },
+    "active=true,facing=down" : { "model": "lever", "x": 180, "y": 180 },
+    "active=true,facing=up": { "model": "lever" },
+    "active=true,facing=east": { "model": "lever", "x": 90, "y": 90 },
+    "active=true,facing=west": { "model": "lever", "x": 90, "y": 270 },
+    "active=true,facing=south": { "model": "lever", "x": 90, "y": 180 },
+    "active=true,facing=north": { "model": "lever", "x": 90 }
+  }
+}

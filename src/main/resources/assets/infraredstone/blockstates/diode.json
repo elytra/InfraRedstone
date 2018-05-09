@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "active=false,facing=north": {
+      "model": "repeater_1tick"
+    },
+    "active=false,facing=east": {
+      "model": "repeater_1tick",
+      "y": 90
+    },
+    "active=false,facing=south": {
+      "model": "repeater_1tick",
+      "y": 180
+    },
+    "acive=false,facing=west": {
+      "model": "repeater_1tick",
+      "y": 270
+    },
+    "active=true,facing=north": {
+      "model": "repeater_on_1tick"
+    },
+    "active=true,facing=east": {
+      "model": "repeater_on_1tick",
+      "y": 90
+    },
+    "active=true,facing=south": {
+      "model": "repeater_on_1tick",
+      "y": 180
+    },
+    "active=true,facing=west": {
+      "model": "repeater_on_1tick",
+      "y": 270
+    }
+  }
+}

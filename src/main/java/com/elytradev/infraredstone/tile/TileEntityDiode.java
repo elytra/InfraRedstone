@@ -3,6 +3,7 @@ package com.elytradev.infraredstone.tile;
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockDiode;
 import com.elytradev.infraredstone.logic.IInfraRedstone;
+import com.elytradev.infraredstone.logic.Search;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 
 import net.minecraft.block.state.IBlockState;
@@ -19,10 +20,8 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
         if (world.isRemote || !hasWorld()) return;
         IBlockState state = world.getBlockState(this.getPos());
         if (state.getBlock() instanceof BlockDiode) {
-            EnumFacing back = EnumFacing.getHorizontal(((BlockDiode) state).getMetaFromState(state)).getOpposite();
-            TileEntity tile = world.getTileEntity(pos.offset(back));
-            IInfraRedstone cap = tile.getCapability(InfraRedstone.CAPABILITY_IR, back.getOpposite());
-            int sig = cap.getSignalValue();
+            EnumFacing back = EnumFacing.getHorizontal((state.getBlock()).getMetaFromState(state)).getOpposite();
+            int sig = Search.forIRValue(world, pos, back);
             signal.setNextSignalValue(sig);
             if (sig != 0) {
                 active = true;
