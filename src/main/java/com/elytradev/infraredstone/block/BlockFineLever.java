@@ -29,13 +29,14 @@ public class BlockFineLever extends BlockModule<TileEntityFineLever> implements 
         setCreativeTab(InfraRedstone.creativeTab);
     }
 
-//    @Override
-//    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-//        if(!world.isRemote && !player.isSneaking()) {
-//            TileEntityFineLever.toggleState();
-//        }
-//        return true;
-//    }
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if(!world.isRemote && !player.isSneaking() && world.getTileEntity(pos) instanceof  TileEntityFineLever) {
+            TileEntityFineLever te = (TileEntityFineLever)world.getTileEntity(pos);
+            te.toggleState();
+        }
+        return true;
+    }
 
     @Override
     public Class<TileEntityFineLever> getTileEntityClass() {
