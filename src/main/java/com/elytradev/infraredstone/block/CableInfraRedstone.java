@@ -26,10 +26,10 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
 
     }
 
-    PropertyEnum NORTH = PropertyEnum.create("north", EnumCableConnection.class);
-    PropertyEnum SOUTH = PropertyEnum.create("south", EnumCableConnection.class);
-    PropertyEnum EAST = PropertyEnum.create("east", EnumCableConnection.class);
-    PropertyEnum WEST = PropertyEnum.create("west", EnumCableConnection.class);
+    public static final PropertyEnum<EnumCableConnection> NORTH = PropertyEnum.create("north", EnumCableConnection.class);
+    public static final PropertyEnum<EnumCableConnection> SOUTH = PropertyEnum.create("south", EnumCableConnection.class);
+    public static final PropertyEnum<EnumCableConnection> EAST = PropertyEnum.create("east", EnumCableConnection.class);
+    public static final PropertyEnum<EnumCableConnection> WEST = PropertyEnum.create("west", EnumCableConnection.class);
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
