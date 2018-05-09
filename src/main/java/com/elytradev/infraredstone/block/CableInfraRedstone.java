@@ -51,7 +51,7 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
         if (world.getBlockState(pos.offset(dir)).getBlock() instanceof IBlockBase) {
             return EnumCableConnection.CONNECTED;
         }
-        if (world.getBlockState(pos.offset(EnumFacing.UP)).getBlock() == Blocks.AIR) {
+        if (world.isAirBlock(pos.offset(EnumFacing.UP))) {
             if (world.getBlockState(pos.offset(dir).offset(EnumFacing.UP)).getBlock() == ModBlocks.INFRA_REDSTONE) {
                 return EnumCableConnection.CONNECTED_UP;
             }
