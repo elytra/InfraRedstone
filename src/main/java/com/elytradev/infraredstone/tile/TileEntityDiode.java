@@ -2,12 +2,10 @@ package com.elytradev.infraredstone.tile;
 
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockDiode;
-import com.elytradev.infraredstone.logic.IInfraRedstone;
 import com.elytradev.infraredstone.logic.Search;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
@@ -25,6 +23,10 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
             signal.setNextSignalValue(sig);
             if (sig != 0) {
                 active = true;
+                world.setBlockState(this.getPos(), world.getBlockState(pos).withProperty(BlockDiode.ACTIVE, true));
+            } else {
+                active = false;
+                world.setBlockState(this.getPos(), world.getBlockState(pos).withProperty(BlockDiode.ACTIVE, false));
             }
         }
     }

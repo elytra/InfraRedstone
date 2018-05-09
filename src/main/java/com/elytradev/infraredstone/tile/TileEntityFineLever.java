@@ -1,22 +1,25 @@
 package com.elytradev.infraredstone.tile;
 
 import com.elytradev.infraredstone.InfraRedstone;
+import com.elytradev.infraredstone.block.BlockFineLever;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
 public class TileEntityFineLever extends TileEntityIRComponent {
-    public boolean active = true;
+    public boolean active = false;
     private InfraRedstoneHandler signal = new InfraRedstoneHandler();
 
     public void toggleState() {
         if (active) {
             active = false;
             signal.setSignalValue(0);
+            world.setBlockState(this.getPos(), world.getBlockState(pos).withProperty(BlockFineLever.ACTIVE, false));
         } else {
             active = true;
             signal.setSignalValue(63);
+            world.setBlockState(this.getPos(), world.getBlockState(pos).withProperty(BlockFineLever.ACTIVE, true));
         }
     }
 
