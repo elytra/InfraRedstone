@@ -15,6 +15,11 @@ import net.minecraft.world.World;
 
 public class CableInfraRedstone extends BlockBase implements IBlockBase {
 
+    public static final PropertyEnum<EnumCableConnection> NORTH = PropertyEnum.create("north", EnumCableConnection.class);
+    public static final PropertyEnum<EnumCableConnection> SOUTH = PropertyEnum.create("south", EnumCableConnection.class);
+    public static final PropertyEnum<EnumCableConnection> EAST = PropertyEnum.create("east", EnumCableConnection.class);
+    public static final PropertyEnum<EnumCableConnection> WEST = PropertyEnum.create("west", EnumCableConnection.class);
+
     public CableInfraRedstone() {
         super(Material.CIRCUITS, "infra_redstone");
 
@@ -25,11 +30,6 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
                 .withProperty(WEST, EnumCableConnection.DISCONNECTED));
 
     }
-
-    public static final PropertyEnum<EnumCableConnection> NORTH = PropertyEnum.create("north", EnumCableConnection.class);
-    public static final PropertyEnum<EnumCableConnection> SOUTH = PropertyEnum.create("south", EnumCableConnection.class);
-    public static final PropertyEnum<EnumCableConnection> EAST = PropertyEnum.create("east", EnumCableConnection.class);
-    public static final PropertyEnum<EnumCableConnection> WEST = PropertyEnum.create("west", EnumCableConnection.class);
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
@@ -54,6 +54,11 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
         if (world.isAirBlock(pos.offset(EnumFacing.UP))) {
             if (world.getBlockState(pos.offset(dir).offset(EnumFacing.UP)).getBlock() == ModBlocks.INFRA_REDSTONE) {
                 return EnumCableConnection.CONNECTED_UP;
+            }
+        }
+        if (world.isAirBlock(pos.offset(dir))) {
+            if (world.getBlockState(pos.offset(dir).offset(EnumFacing.DOWN)).getBlock() == ModBlocks.INFRA_REDSTONE) {
+                return EnumCableConnection.CONNECTED;
             }
         }
         return EnumCableConnection.DISCONNECTED;
@@ -91,6 +96,13 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
                 .withProperty(WEST, getCableConnections(world, pos, EnumFacing.WEST));
     }
 
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+        world.setBlockState(pos, world.getBlockState(pos)
+                .withProperty(NORTH, getCableConnections(world, pos, EnumFacing.NORTH))
+                .withProperty(SOUTH, getCableConnections(world, pos, EnumFacing.SOUTH))
+                .withProperty(EAST, getCableConnections(world, pos, EnumFacing.EAST))
+                .withProperty(WEST, getCableConnections(world, pos, EnumFacing.WEST)));
 
+    }
 
 }
