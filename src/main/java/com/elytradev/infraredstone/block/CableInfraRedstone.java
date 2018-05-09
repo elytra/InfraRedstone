@@ -1,19 +1,24 @@
 package com.elytradev.infraredstone.block;
 
+import com.elytradev.infraredstone.InfraRedstone;
+import com.elytradev.infraredstone.logic.ISimpleInfraRedstone;
 import com.elytradev.infraredstone.tile.TileEntityFineLever;
 import com.elytradev.infraredstone.util.EnumCableConnection;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class CableInfraRedstone extends BlockBase implements IBlockBase {
+public class CableInfraRedstone extends BlockBase implements IBlockBase, IInRedConnectable {
 
     public static final PropertyEnum<EnumCableConnection> NORTH = PropertyEnum.create("north", EnumCableConnection.class);
     public static final PropertyEnum<EnumCableConnection> SOUTH = PropertyEnum.create("south", EnumCableConnection.class);
@@ -47,17 +52,37 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
         return false;
     }
 
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 3/16.0, 1.0D);
+    }
+
+    private Boolean hasInRedCap(IBlockAccess world, BlockPos pos, EnumFacing dir) {
+        if (world.getTileEntity(pos) == null) return false;
+        return world.getTileEntity(pos.offset(dir)).hasCapability(InfraRedstone.CAPABILITY_IR, dir.getOpposite());
+    }
+
+    private Boolean hasInRedCap(IBlockAccess world, BlockPos pos, EnumFacing dir, EnumFacing offset) {
+        if (world.getTileEntity(pos) == null) return false;
+        return world.getTileEntity(pos.offset(dir).offset(offset)).hasCapability(InfraRedstone.CAPABILITY_IR, dir.getOpposite());
+    }
+
     private EnumCableConnection getCableConnections(IBlockAccess world, BlockPos pos, EnumFacing dir) {
-        if (world.getBlockState(pos.offset(dir)).getBlock() instanceof IBlockBase) {
+        if (world.getBlockState(pos.offset(dir)).getBlock() == ModBlocks.INFRA_REDSTONE || hasInRedCap(world, pos, dir) || world.getBlockState(pos.offset(dir)) instanceof ISimpleInfraRedstone) {
             return EnumCableConnection.CONNECTED;
         }
         if (world.isAirBlock(pos.offset(EnumFacing.UP))) {
-            if (world.getBlockState(pos.offset(dir).offset(EnumFacing.UP)).getBlock() == ModBlocks.INFRA_REDSTONE) {
+            if (world.getBlockState(pos.offset(dir).offset(EnumFacing.UP)).getBlock() == ModBlocks.INFRA_REDSTONE || hasInRedCap(world, pos, dir, EnumFacing.UP) || world.getBlockState(pos.offset(dir).offset(EnumFacing.UP)) instanceof ISimpleInfraRedstone) {
                 return EnumCableConnection.CONNECTED_UP;
             }
         }
         if (world.isAirBlock(pos.offset(dir))) {
-            if (world.getBlockState(pos.offset(dir).offset(EnumFacing.DOWN)).getBlock() == ModBlocks.INFRA_REDSTONE) {
+            if (world.getBlockState(pos.offset(dir).offset(EnumFacing.DOWN)).getBlock() == ModBlocks.INFRA_REDSTONE || hasInRedCap(world, pos, dir, EnumFacing.DOWN) || world.getBlockState(pos.offset(dir).offset(EnumFacing.DOWN)) instanceof ISimpleInfraRedstone) {
                 return EnumCableConnection.CONNECTED;
             }
         }

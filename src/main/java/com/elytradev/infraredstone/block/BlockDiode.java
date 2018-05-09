@@ -16,7 +16,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 
-public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBase {
+public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBase, IInRedConnectable {
 
     protected String name;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;

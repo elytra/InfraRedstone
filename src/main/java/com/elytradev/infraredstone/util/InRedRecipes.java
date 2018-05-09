@@ -93,29 +93,29 @@ public class InRedRecipes {
 //        ));
 
 //        Items
-//        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:items"), new ItemStack(ModItems.PCB, 1),
-//                "c", "r", "s",
-//                'c', "dyeCyan",
-//                'r', new ItemStack(ModItems.INFRA_REDSTONE),
-//                's', new ItemStack(Blocks.STONE_SLAB)
-//        ));
-//        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:items"), new ItemStack(ModItems.PCB, 2),
-//                "cc", "rr", "ss",
-//                'c', "dyeCyan",
-//                'r', new ItemStack(ModItems.INFRA_REDSTONE),
-//                's', new ItemStack(Blocks.STONE_SLAB)
-//        ));
-//        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:items"), new ItemStack(ModItems.PCB, 3),
-//                "ccc", "rrr", "sss",
-//                'c', "dyeCyan",
-//                'r', new ItemStack(ModItems.INFRA_REDSTONE),
-//                's', new ItemStack(Blocks.STONE_SLAB)
-//        ));
-//        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:items"), new ItemStack(ModItems.INFRA_REDSTONE, 3),
-//                "rrr", "ggg",
-//                'r', new ItemStack(Items.REDSTONE),
-//                'g', new ItemStack(Blocks.GLASS)
-//        ));
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:items"), new ItemStack(ModItems.PCB, 1),
+                "c", "r", "s",
+                'c', "dyeCyan",
+                'r', new ItemStack(ModBlocks.INFRA_REDSTONE),
+                's', new ItemStack(Blocks.STONE_SLAB)
+        ));
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:items"), new ItemStack(ModItems.PCB, 2),
+                "cc", "rr", "ss",
+                'c', "dyeCyan",
+                'r', new ItemStack(ModBlocks.INFRA_REDSTONE),
+                's', new ItemStack(Blocks.STONE_SLAB)
+        ));
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:items"), new ItemStack(ModItems.PCB, 3),
+                "ccc", "rrr", "sss",
+                'c', "dyeCyan",
+                'r', new ItemStack(ModBlocks.INFRA_REDSTONE),
+                's', new ItemStack(Blocks.STONE_SLAB)
+        ));
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:items"), new ItemStack(ModBlocks.INFRA_REDSTONE, 3),
+                "rrr", "ggg",
+                'r', new ItemStack(Items.REDSTONE),
+                'g', new ItemStack(Blocks.GLASS)
+        ));
 
 
 
