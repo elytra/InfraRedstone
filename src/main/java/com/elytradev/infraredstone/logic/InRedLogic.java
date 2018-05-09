@@ -43,6 +43,21 @@ public class InRedLogic {
 	 */
 	public static int findIRValue(World world, BlockPos device, EnumFacing dir) {
 		BlockPos initialPos = device.offset(dir);
+		
+		if (!checkCandidacy(world, initialPos, dir.getOpposite())) {
+			BlockPos up = initialPos.up();
+			if (checkCandidacy(world, up, dir.getOpposite())) {
+				initialPos = up;
+			} else {
+				BlockPos down = initialPos.down();
+				if (checkCandidacy(world, down, dir.getOpposite())) {
+					initialPos = down;
+				} else {
+					return world.getRedstonePower(initialPos, dir);
+				}
+			}
+		}
+		
 		if (world.isAirBlock(initialPos)) return 0;
 		IBlockState initialState = world.getBlockState(initialPos);
 		if (initialState.getBlock()==ModBlocks.INFRA_REDSTONE) {
@@ -68,6 +83,21 @@ public class InRedLogic {
 		return world.getRedstonePower(initialPos, dir);
 	}
 	
+	private static boolean checkCandidacy(World world, BlockPos pos, EnumFacing side) {
+		if (world.isAirBlock(pos)) return false;
+		
+		IBlockState state = world.getBlockState(pos);
+		if (state.getBlock()==ModBlocks.INFRA_REDSTONE) return true;
+		if (state.getBlock() instanceof ISimpleInfraRedstone) return true;
+		TileEntity te = world.getTileEntity(pos);
+		if (te==null) return false;
+		if (te.hasCapability(InfraRedstone.CAPABILITY_IR, side)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	
 	private static final EnumFacing[] PLANAR_FACINGS = { EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST };
 	private static int wireSearch(World world, BlockPos device, EnumFacing dir) {
@@ -79,8 +109,8 @@ public class InRedLogic {
 		List<Endpoint> next = new ArrayList<>();
 		
 		queue.add(new Endpoint(device.offset(dir), dir.getOpposite()));
-		if (device.getY()<255) queue.add(new Endpoint(device.offset(dir).offset(EnumFacing.UP), dir.getOpposite()));
-		if (device.getY()>0)   queue.add(new Endpoint(device.offset(dir).offset(EnumFacing.DOWN), dir.getOpposite()));
+		if (device.getY()<255) queue.add(new Endpoint(device.offset(dir).up(), dir.getOpposite()));
+		if (device.getY()>0)   queue.add(new Endpoint(device.offset(dir).down(), dir.getOpposite()));
 		
 		while(!queue.isEmpty() || !next.isEmpty()) {
 			if (queue.isEmpty()) {
@@ -103,8 +133,8 @@ public class InRedLogic {
 				for(EnumFacing facing : PLANAR_FACINGS) {
 					BlockPos offset = cur.pos.offset(facing);
 					
-					if (offset.getY()<255) checkAdd(new Endpoint(offset.offset(EnumFacing.DOWN), facing.getOpposite()), next, traversed, rejected);
-					if (offset.getY()>0)   checkAdd(new Endpoint(offset.offset(EnumFacing.DOWN), facing.getOpposite()), next, traversed, rejected);
+					if (offset.getY()<255) checkAdd(new Endpoint(offset.up(), facing.getOpposite()), next, traversed, rejected);
+					if (offset.getY()>0)   checkAdd(new Endpoint(offset.down(), facing.getOpposite()), next, traversed, rejected);
 					if (facing==cur.facing) continue; //Don't try to bounce back to the block we came from
 					checkAdd(new Endpoint(offset, facing.getOpposite()), next, traversed, rejected);
 				}
@@ -174,6 +204,11 @@ public class InRedLogic {
 			if (!(other instanceof Endpoint)) return false;
 			Endpoint otherEnd = (Endpoint)other;
 			return Objects.equal(pos, otherEnd.pos) && Objects.equal(facing, otherEnd.facing);
+		}
+		
+		@Override
+		public String toString() {
+			return "{x:"+pos.getX()+", y:"+pos.getY()+", z:"+pos.getZ()+", dir:"+facing+"}";
 		}
 		
 	}
