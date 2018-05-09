@@ -82,7 +82,7 @@ public class InRedLogic {
 		if (device.getY()<255) queue.add(new Endpoint(device.offset(dir).offset(EnumFacing.UP), dir.getOpposite()));
 		if (device.getY()>0)   queue.add(new Endpoint(device.offset(dir).offset(EnumFacing.DOWN), dir.getOpposite()));
 		
-		while(!queue.isEmpty() && !next.isEmpty()) {
+		while(!queue.isEmpty() || !next.isEmpty()) {
 			if (queue.isEmpty()) {
 				depth++;
 				if (depth>63) return 0; //We've searched too far, there's no signal in range.
@@ -91,7 +91,6 @@ public class InRedLogic {
 			}
 			
 			Endpoint cur = queue.remove(0);
-			//System.out.println("Considering "+cur.pos);
 			
 			if (world.isAirBlock(cur.pos)) continue;
 			IBlockState state = world.getBlockState(cur.pos);
@@ -104,10 +103,10 @@ public class InRedLogic {
 				for(EnumFacing facing : PLANAR_FACINGS) {
 					BlockPos offset = cur.pos.offset(facing);
 					
-					if (offset.getY()<255) next.add(new Endpoint(offset.offset(EnumFacing.UP), facing.getOpposite()));
-					if (offset.getY()>0)   next.add(new Endpoint(offset.offset(EnumFacing.DOWN), facing.getOpposite()));
-					if (facing==cur.facing.getOpposite()) continue; //Don't try to bounce back to the block we came from
-					next.add(new Endpoint(offset, facing.getOpposite()));
+					if (offset.getY()<255) checkAdd(new Endpoint(offset.offset(EnumFacing.DOWN), facing.getOpposite()), next, traversed, rejected);
+					if (offset.getY()>0)   checkAdd(new Endpoint(offset.offset(EnumFacing.DOWN), facing.getOpposite()), next, traversed, rejected);
+					if (facing==cur.facing) continue; //Don't try to bounce back to the block we came from
+					checkAdd(new Endpoint(offset, facing.getOpposite()), next, traversed, rejected);
 				}
 				
 				continue;
@@ -127,9 +126,16 @@ public class InRedLogic {
 		int strongest = 0;
 		for(Endpoint cur : members) {
 			int val = valueDirectlyAt(world, cur.pos, cur.facing);
+			//System.out.println("Endpoint found; strength:"+val+", pos:"+cur.pos+", facing:"+cur.facing);
 			strongest = Math.max(val, strongest);
 		}
 		return strongest;
+	}
+	
+	private static void checkAdd(Endpoint endpoint, List<Endpoint> next, Set<BlockPos> traversed, Set<Endpoint> rejected) {
+		if (traversed.contains(endpoint.pos)) return;
+		if (rejected.contains(endpoint)) return;
+		next.add(endpoint);
 	}
 	
 	private static Integer valueDirectlyAt(World world, BlockPos pos, EnumFacing dir) {

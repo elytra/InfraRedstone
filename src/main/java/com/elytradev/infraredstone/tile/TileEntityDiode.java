@@ -2,6 +2,7 @@ package com.elytradev.infraredstone.tile;
 
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockDiode;
+import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.logic.InRedLogic;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 
@@ -43,7 +44,18 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
     @SuppressWarnings("unchecked")
 	@Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-    	if (capability==InfraRedstone.CAPABILITY_IR) return (T) signal;
+    	if (capability==InfraRedstone.CAPABILITY_IR) {
+    		if (world==null) return (T)InfraRedstoneHandler.ALWAYS_OFF;
+    		if (facing==null) return (T) signal;
+    		
+    		IBlockState state = world.getBlockState(pos);
+    		if (state.getBlock()==ModBlocks.DIODE) {
+    			if (state.getValue(BlockDiode.FACING)==facing) {
+    				return (T) signal;
+    			}
+    		}
+    		return (T)InfraRedstoneHandler.ALWAYS_OFF; //It's not our front face or we can't tell what our front face is, so supply a dummy that's always-off.
+    	}
     	
     	return super.getCapability(capability, facing);
     }

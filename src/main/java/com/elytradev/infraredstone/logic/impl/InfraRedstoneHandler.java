@@ -4,6 +4,16 @@ import com.elytradev.infraredstone.logic.IInfraComparator;
 import com.elytradev.infraredstone.logic.IInfraRedstone;
 
 public class InfraRedstoneHandler implements IInfraRedstone, IInfraComparator {
+	public static final IInfraRedstone ALWAYS_OFF = new IInfraRedstone() {
+		@Override
+		public int getSignalValue() { return 0; }
+	};
+	
+	public static final IInfraRedstone ALWAYS_MAX = new IInfraRedstone() {
+		@Override
+		public int getSignalValue() { return 63; }
+	};
+	
 	private int signalValue;
 	private int nextSignalValue;
 	private Runnable onChanged;
