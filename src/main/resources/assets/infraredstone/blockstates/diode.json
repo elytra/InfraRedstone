@@ -11,7 +11,7 @@
       "model": "repeater_1tick",
       "y": 180
     },
-    "acive=false,facing=west": {
+    "active=false,facing=west": {
       "model": "repeater_1tick",
       "y": 270
     },
