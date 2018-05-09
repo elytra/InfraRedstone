@@ -2,7 +2,7 @@ package com.elytradev.infraredstone.tile;
 
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockDiode;
-import com.elytradev.infraredstone.logic.Search;
+import com.elytradev.infraredstone.logic.InRedLogic;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 
 import net.minecraft.block.state.IBlockState;
@@ -16,18 +16,20 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
 
     public void update() {
         if (world.isRemote || !hasWorld()) return;
+        
         IBlockState state = world.getBlockState(this.getPos());
-        if (state.getBlock() instanceof BlockDiode) {
-            EnumFacing back = EnumFacing.getHorizontal((state.getBlock()).getMetaFromState(state)).getOpposite();
-            int sig = Search.forIRValue(world, pos, back);
-            signal.setNextSignalValue(sig);
-            if (sig != 0) {
-                active = true;
-                world.setBlockState(this.getPos(), world.getBlockState(pos).withProperty(BlockDiode.ACTIVE, true));
-            } else {
-                active = false;
-                world.setBlockState(this.getPos(), world.getBlockState(pos).withProperty(BlockDiode.ACTIVE, false));
+        
+        if (InRedLogic.isIRTick()) {
+        	//IR tick means we're searching for a next value
+            if (state.getBlock() instanceof BlockDiode) {
+                EnumFacing back = state.getValue(BlockDiode.FACING).getOpposite();
+                int sig = InRedLogic.findIRValue(world, pos, back);
+                signal.setNextSignalValue(sig);
             }
+        } else {
+        	//Not an IR tick, so this is a "copy" tick. Adopt the previous tick's "next" value.
+        	signal.setSignalValue(signal.getNextSignalValue());
+        	setActive(state, signal.getSignalValue()!=0); //This is also when we light up
         }
     }
     
@@ -44,5 +46,11 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
     	if (capability==InfraRedstone.CAPABILITY_IR) return (T) signal;
     	
     	return super.getCapability(capability, facing);
+    }
+    
+    
+    public void setActive(IBlockState existing, boolean active) {
+    	if (existing.getValue(BlockDiode.ACTIVE)==active) return;
+    	world.setBlockState(pos, existing.withProperty(BlockDiode.ACTIVE, active));
     }
 }

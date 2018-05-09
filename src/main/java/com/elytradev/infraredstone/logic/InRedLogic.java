@@ -15,8 +15,25 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-public class Search {
+public class InRedLogic {
+	private static final int INTER_IR_TICKS = 1;
+	public static int tickCount = 0;
+	
+	@SubscribeEvent
+	public static void onServerTick(TickEvent.ServerTickEvent event) {
+		if (event.phase!=TickEvent.Phase.END) return;
+		
+		tickCount++;
+		if (tickCount>INTER_IR_TICKS) tickCount = 0;
+	}
+	
+	public static boolean isIRTick() {
+		return (tickCount==0);
+	}
+	
 	/**
 	 * Searches for the highest IR signal which can be delivered to the indicated block face.
 	 * @param world   The world the device resides in
@@ -24,7 +41,7 @@ public class Search {
 	 * @param dir     The direction *from* the device *towards* where the prospective signal is coming from.
 	 * @return        The IR value, or the redstone level if no IR is present, or 0 if nothing is present.
 	 */
-	public static int forIRValue(World world, BlockPos device, EnumFacing dir) {
+	public static int findIRValue(World world, BlockPos device, EnumFacing dir) {
 		BlockPos initialPos = device.offset(dir);
 		if (world.isAirBlock(initialPos)) return 0;
 		IBlockState initialState = world.getBlockState(initialPos);
@@ -46,7 +63,9 @@ public class Search {
 		}
 		
 		//Oh. Okay. No wires or machines. Well, return the vanilla redstone value here and call it a day.
-		return world.isBlockIndirectlyGettingPowered(initialPos);
+		//return world.isBlockIndirectlyGettingPowered(initialPos);
+		
+		return world.getRedstonePower(initialPos, dir);
 	}
 	
 	
@@ -72,6 +91,7 @@ public class Search {
 			}
 			
 			Endpoint cur = queue.remove(0);
+			//System.out.println("Considering "+cur.pos);
 			
 			if (world.isAirBlock(cur.pos)) continue;
 			IBlockState state = world.getBlockState(cur.pos);
@@ -100,6 +120,8 @@ public class Search {
 				continue;
 			}
 		}
+		
+		//System.out.println(""+members.size()+" candidates, "+traversed.size()+" blocks traversed.");
 		
 		//Grab the strongest signal
 		int strongest = 0;

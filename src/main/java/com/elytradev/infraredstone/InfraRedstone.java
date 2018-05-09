@@ -8,6 +8,7 @@ import com.elytradev.infraredstone.client.InRedTab;
 import com.elytradev.infraredstone.item.ModItems;
 import com.elytradev.infraredstone.logic.IInfraComparator;
 import com.elytradev.infraredstone.logic.IInfraRedstone;
+import com.elytradev.infraredstone.logic.InRedLogic;
 import com.elytradev.infraredstone.logic.impl.InfraComparatorSerializer;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneSerializer;
@@ -73,6 +74,7 @@ public class InfraRedstone {
         CapabilityManager.INSTANCE.register(IInfraComparator.class, new InfraComparatorSerializer(), InfraRedstoneHandler::new);
         
         MinecraftForge.EVENT_BUS.register(InRedRecipes.class);
+        MinecraftForge.EVENT_BUS.register(InRedLogic.class);
         config = InRedConfig.createConfig(event);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new IGuiHandler() {

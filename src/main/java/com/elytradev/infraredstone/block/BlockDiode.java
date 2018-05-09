@@ -9,6 +9,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -73,10 +74,26 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
         EnumFacing facing = EnumFacing.getHorizontal(facebits);
         return blockState.getBaseState().withProperty(FACING, facing);
     }
-
+    
+    @Override
+    public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    	return getStrongPower(state, world, pos, side);
+    }
+    
+    @Override
+    public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    	if (side!=state.getValue(FACING).getOpposite()) return 0;
+    	TileEntity te = world.getTileEntity(pos);
+    	if (te!=null && te instanceof TileEntityDiode) {
+    		int result = ((TileEntityDiode)te).getCapability(InfraRedstone.CAPABILITY_IR, null).getSignalValue();
+    		return (result > 16) ? 16 : result;
+    	}
+    	return 0;
+    }
+    /*
     public IBlockState getActualState(IBlockState state, TileEntityDiode te) {
         return state.withProperty(ACTIVE, te.active);
-    }
+    }*/
 
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
