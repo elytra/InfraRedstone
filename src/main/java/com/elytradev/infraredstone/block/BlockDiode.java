@@ -27,8 +27,10 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
         super(Material.CIRCUITS, "diode");
         this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false));
 
-        setCreativeTab(InfraRedstone.creativeTab);
+        this.setHardness(0.5f);
     }
+
+    //TODO: make this pop off when the block it's on is broken, also maybe by water but ¯\_(ツ)_/¯
 
     @Override
     public Class<TileEntityDiode> getTileEntityClass() {

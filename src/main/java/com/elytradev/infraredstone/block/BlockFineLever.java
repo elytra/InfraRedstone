@@ -26,8 +26,10 @@ public class BlockFineLever extends BlockModule<TileEntityFineLever> implements 
         super(Material.CIRCUITS, "fine_lever");
         this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false));
 
-        setCreativeTab(InfraRedstone.creativeTab);
+        this.setHardness(0.5f);
     }
+
+    //TODO: make this pop off when the block it's on is broken
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
@@ -89,7 +91,7 @@ public class BlockFineLever extends BlockModule<TileEntityFineLever> implements 
 
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
-        return this.getDefaultState().withProperty(FACING, facing).withProperty(ACTIVE, true);
+        return this.getDefaultState().withProperty(FACING, facing).withProperty(ACTIVE, false);
     }
 
     public static EnumFacing getFacing(int meta)
