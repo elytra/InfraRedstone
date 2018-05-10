@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -59,6 +60,16 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     }
 
     @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 2/16.0, 1.0D);
+    }
+
+    @Override
     public BlockStateContainer createBlockState(){
         return new BlockStateContainer(this, FACING, ACTIVE);
     }
@@ -87,7 +98,7 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     	if (side!=state.getValue(FACING).getOpposite()) return 0;
     	TileEntity te = world.getTileEntity(pos);
     	if (te!=null && te instanceof TileEntityDiode) {
-    		int result = ((TileEntityDiode)te).getCapability(InfraRedstone.CAPABILITY_IR, null).getSignalValue();
+    		int result = (te).getCapability(InfraRedstone.CAPABILITY_IR, null).getSignalValue();
     		return (result > 16) ? 16 : result;
     	}
     	return 0;
