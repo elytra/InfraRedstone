@@ -36,7 +36,23 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
     
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-    	if (capability==InfraRedstone.CAPABILITY_IR) return true;
+    	if (capability==InfraRedstone.CAPABILITY_IR) {
+    		if (world==null) return true;
+    		if (facing==null) return true;
+    		IBlockState state = world.getBlockState(pos);
+    		if (state.getBlock()==ModBlocks.DIODE) {
+    			EnumFacing diodeFront = state.getValue(BlockDiode.FACING);
+    			if (diodeFront==facing) {
+    				return true;
+    			} else if (diodeFront==facing.getOpposite()) {
+    				return true;
+    			} else {
+    				return false;
+    			}
+    		}
+    		
+    		return false;
+    	}
     	
     	return super.hasCapability(capability, facing);
     }
@@ -50,11 +66,16 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
     		
     		IBlockState state = world.getBlockState(pos);
     		if (state.getBlock()==ModBlocks.DIODE) {
-    			if (state.getValue(BlockDiode.FACING)==facing) {
+    			EnumFacing diodeFront = state.getValue(BlockDiode.FACING);
+    			if (diodeFront==facing) {
     				return (T) signal;
+    			} else if (diodeFront==facing.getOpposite()) {
+    				return (T)InfraRedstoneHandler.ALWAYS_OFF;
+    			} else {
+    				return null;
     			}
     		}
-    		return (T)InfraRedstoneHandler.ALWAYS_OFF; //It's not our front face or we can't tell what our front face is, so supply a dummy that's always-off.
+    		return (T)InfraRedstoneHandler.ALWAYS_OFF; //We can't tell what our front face is, so supply a dummy that's always-off.
     	}
     	
     	return super.getCapability(capability, facing);

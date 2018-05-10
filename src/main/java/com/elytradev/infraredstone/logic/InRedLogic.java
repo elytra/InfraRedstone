@@ -109,8 +109,9 @@ public class InRedLogic {
 		List<Endpoint> next = new ArrayList<>();
 		
 		queue.add(new Endpoint(device.offset(dir), dir.getOpposite()));
-		if (device.getY()<255) queue.add(new Endpoint(device.offset(dir).up(), dir.getOpposite()));
-		if (device.getY()>0)   queue.add(new Endpoint(device.offset(dir).down(), dir.getOpposite()));
+		
+		if (device.getY()<255 && world.isAirBlock(device.up()))        queue.add(new Endpoint(device.offset(dir).up(), dir.getOpposite()));
+		if (device.getY()>0   && world.isAirBlock(device.offset(dir))) queue.add(new Endpoint(device.offset(dir).down(), dir.getOpposite()));
 		
 		while(!queue.isEmpty() || !next.isEmpty()) {
 			if (queue.isEmpty()) {
@@ -133,8 +134,8 @@ public class InRedLogic {
 				for(EnumFacing facing : PLANAR_FACINGS) {
 					BlockPos offset = cur.pos.offset(facing);
 					
-					if (offset.getY()<255) checkAdd(new Endpoint(offset.up(), facing.getOpposite()), next, traversed, rejected);
-					if (offset.getY()>0)   checkAdd(new Endpoint(offset.down(), facing.getOpposite()), next, traversed, rejected);
+					if (offset.getY()<255 && world.isAirBlock(cur.pos.up())) checkAdd(new Endpoint(offset.up(), facing.getOpposite()), next, traversed, rejected);
+					if (offset.getY()>0   && world.isAirBlock(offset))       checkAdd(new Endpoint(offset.down(), facing.getOpposite()), next, traversed, rejected);
 					if (facing==cur.facing) continue; //Don't try to bounce back to the block we came from
 					checkAdd(new Endpoint(offset, facing.getOpposite()), next, traversed, rejected);
 				}

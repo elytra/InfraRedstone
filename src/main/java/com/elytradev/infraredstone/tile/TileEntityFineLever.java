@@ -2,7 +2,6 @@ package com.elytradev.infraredstone.tile;
 
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockFineLever;
-import com.elytradev.infraredstone.block.IInRedConnectable;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
