@@ -1,0 +1,32 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"textures": {
+		"1": "blocks/minecraft:redstone_torch_off"
+	},
+	"elements": [
+		{
+			"from": [8, 2, 11],
+			"to": [10, 4, 13],
+			"faces": {
+				"north": {"uv": [7, 6, 9, 8], "texture": "#light"},
+				"east": {"uv": [7, 6, 9, 8], "texture": "#light"},
+				"south": {"uv": [7, 6, 9, 8], "texture": "#light"},
+				"west": {"uv": [7, 6, 9, 8], "texture": "#light"},
+				"up": {"uv": [7, 6, 9, 8], "texture": "#light"},
+				"down": {"uv": [7, 6, 9, 8], "texture": "#light"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "subtorches",
+			"isOpen": true,
+			"shade": true,
+			"display": {
+				"visibility": true,
+				"autouv": true
+			},
+			"children": [0]
+		}
+	]
+}
