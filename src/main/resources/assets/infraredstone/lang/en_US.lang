@@ -1,6 +1,10 @@
 #items
+item.pcb.name=PCB
 
 #blocks
+tile.infra_redstone.name=Infra-Redstone Cable
+tile.diode.name=Diode
+tile.fine_lever.name=Fine Lever
 
 #tooltips
 

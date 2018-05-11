@@ -1,6 +1,5 @@
 package com.elytradev.infraredstone.tile;
 
-import com.elytradev.infraredstone.InRedLog;
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockDiode;
 import com.elytradev.infraredstone.block.ModBlocks;

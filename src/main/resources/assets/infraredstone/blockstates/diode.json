@@ -4,15 +4,23 @@
     "model":"infraredstone:diode/diode"
   },
   "variants": {
+    "normal": {
+      "model": "infraredstone:diode/diode"
+    },
+    "inventory": {
+      "model": "infraredstone:diode/diode_item"
+    },
     "active": {
       "true": {
         "textures": {
-          "light": "minecraft:blocks/redstone_torch_on"
+          "light": "minecraft:blocks/redstone_torch_on",
+          "base": "infraredstone:blocks/diode_on"
         }
       },
       "false": {
         "textures": {
-          "light": "minecraft:blocks/redstone_torch_off"
+          "light": "minecraft:blocks/redstone_torch_off",
+          "base": "infraredstone:blocks/diode"
         }
       }
     },

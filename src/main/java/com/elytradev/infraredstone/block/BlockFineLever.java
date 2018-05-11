@@ -1,6 +1,5 @@
 package com.elytradev.infraredstone.block;
 
-import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.tile.TileEntityFineLever;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -69,7 +68,7 @@ public class BlockFineLever extends BlockModule<TileEntityFineLever> implements 
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+        return NULL_AABB;
     }
 
     @Override

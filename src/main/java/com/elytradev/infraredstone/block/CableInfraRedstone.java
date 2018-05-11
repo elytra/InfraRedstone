@@ -2,7 +2,6 @@ package com.elytradev.infraredstone.block;
 
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.logic.ISimpleInfraRedstone;
-import com.elytradev.infraredstone.tile.TileEntityDiode;
 import com.elytradev.infraredstone.util.EnumCableConnection;
 
 import net.minecraft.block.Block;
@@ -51,7 +50,7 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+        return NULL_AABB;
     }
 
     @Override
