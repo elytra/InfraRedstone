@@ -1,5 +1,6 @@
 package com.elytradev.infraredstone.block;
 
+import com.elytradev.infraredstone.InRedLog;
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.tile.TileEntityDiode;
 import net.minecraft.block.BlockHorizontal;
@@ -105,10 +106,10 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
     	TileEntity te = world.getTileEntity(pos);
     	if (te==null || !(te instanceof TileEntityDiode)) return state;
-    	
     	TileEntityDiode diode = (TileEntityDiode)te;
+        InRedLog.info(diode.getMark() + ", " + diode.isActive());
     													//TODO XXX FIXME TODO: Uncomment the piece below when the TE is sync'd to the client
-    	return state.withProperty(MARK, diode.getMark());//.withProperty(ACTIVE, diode.isActive());
+    	return state.withProperty(MARK, diode.getMark()).withProperty(ACTIVE, diode.isActive());
     }
     
     @Override

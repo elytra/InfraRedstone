@@ -7,9 +7,17 @@ import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.logic.InRedLogic;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 
+import com.elytradev.infraredstone.logic.impl.InfraRedstoneSerializer;
+import com.google.common.base.Predicates;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 
 public class TileEntityDiode extends TileEntityIRComponent implements ITickable {
@@ -91,7 +99,58 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
     	
     	return super.getCapability(capability, facing);
     }
-    
+
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		NBTTagCompound tag = super.writeToNBT(compound);
+		tag.setInteger("Resistance", resistance);
+		tag.setInteger("Cycle", cycle);
+		InfraRedstone.CAPABILITY_IR.writeNBT(signal, null);
+		return tag;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+		resistance = compound.getInteger("Resistance");
+		cycle = compound.getInteger("Cycle");
+		InfraRedstone.CAPABILITY_IR.readNBT(signal, null, compound);
+	}
+
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		return writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+	}
+
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag) {
+		readFromNBT(tag);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		handleUpdateTag(pkt.getNbtCompound());
+	}
+
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		// again, I've copy-pasted this like 12 times, should probably go into Concrete
+		if (!hasWorld() || getWorld().isRemote) return;
+		WorldServer ws = (WorldServer)getWorld();
+		Chunk c = getWorld().getChunkFromBlockCoords(getPos());
+		SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+		for (EntityPlayerMP player : getWorld().getPlayers(EntityPlayerMP.class, Predicates.alwaysTrue())) {
+			if (ws.getPlayerChunkMap().isPlayerWatchingChunk(player, c.x, c.z)) {
+				player.connection.sendPacket(packet);
+			}
+		}
+	}
     
     public void setActive(IBlockState existing, boolean active) {
     	if (existing.getValue(BlockDiode.ACTIVE)==active) return;
