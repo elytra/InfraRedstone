@@ -6,11 +6,14 @@ import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -23,10 +26,13 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
     public static int FACE = 3;
+    public static final PropertyInteger MARK = PropertyInteger.create("mark",0, 3);
+
+    private boolean active;
 
     public BlockDiode() {
         super(Material.CIRCUITS, "diode");
-        this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false));
+        this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false).withProperty(MARK, 0));
 
         this.setHardness(0.5f);
     }
@@ -41,6 +47,15 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     @Override
     public TileEntityDiode createTileEntity(World world, IBlockState state) {
         return new TileEntityDiode();
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if(!world.isRemote && !player.isSneaking() && world.getTileEntity(pos) instanceof TileEntityDiode) {
+            TileEntityDiode te = (TileEntityDiode)world.getTileEntity(pos);
+            te.cycleDiodeTemp();
+        }
+        return true;
     }
 
     @Override
@@ -71,7 +86,7 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
 
     @Override
     public BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING, ACTIVE);
+        return new BlockStateContainer(this, FACING, ACTIVE, MARK);
     }
 
     @Override
@@ -86,6 +101,11 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
         int facebits = meta & FACE;
         EnumFacing facing = EnumFacing.getHorizontal(facebits);
         return blockState.getBaseState().withProperty(FACING, facing);
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return state.withProperty(MARK, ((TileEntityDiode)world.getTileEntity(pos)).getMark()).withProperty(ACTIVE, active);
     }
     
     @Override
@@ -103,14 +123,14 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     	}
     	return 0;
     }
-    /*
-    public IBlockState getActualState(IBlockState state, TileEntityDiode te) {
-        return state.withProperty(ACTIVE, te.active);
-    }*/
 
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing()).withProperty(ACTIVE, false);
+        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing()).withProperty(ACTIVE, false).withProperty(MARK, 0);
+    }
+
+    public void setActive(boolean state) {
+        active = state;
     }
 
 }

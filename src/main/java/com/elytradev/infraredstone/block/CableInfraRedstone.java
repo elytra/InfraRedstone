@@ -2,6 +2,7 @@ package com.elytradev.infraredstone.block;
 
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.logic.ISimpleInfraRedstone;
+import com.elytradev.infraredstone.tile.TileEntityDiode;
 import com.elytradev.infraredstone.util.EnumCableConnection;
 
 import net.minecraft.block.Block;
@@ -30,7 +31,6 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
                 .withProperty(SOUTH, EnumCableConnection.DISCONNECTED)
                 .withProperty(EAST, EnumCableConnection.DISCONNECTED)
                 .withProperty(WEST, EnumCableConnection.DISCONNECTED));
-
     }
 
     @Override

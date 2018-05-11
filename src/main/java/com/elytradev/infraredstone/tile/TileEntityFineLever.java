@@ -22,7 +22,7 @@ public class TileEntityFineLever extends TileEntityIRComponent {
             world.playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3f, 0.5f);
         } else {
             active = true;
-            signal.setSignalValue(63);
+            signal.setSignalValue(15);
             world.setBlockState(this.getPos(), world.getBlockState(pos).withProperty(BlockFineLever.ACTIVE, true));
             world.playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3f, 0.6f);
         }

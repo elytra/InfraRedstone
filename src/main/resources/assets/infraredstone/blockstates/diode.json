@@ -1,34 +1,54 @@
 {
+  "forge_marker": 1,
+  "defaults": {
+    "model":"infraredstone:diode/diode"
+  },
   "variants": {
-    "active=false,facing=north": {
-      "model": "repeater_1tick"
+    "active": {
+      "true": {
+        "textures": {
+          "light": "minecraft:blocks/redstone_torch_on"
+        }
+      },
+      "false": {
+        "textures": {
+          "light": "minecraft:blocks/redstone_torch_off"
+        }
+      }
     },
-    "active=false,facing=east": {
-      "model": "repeater_1tick",
-      "y": 90
+    "facing": {
+      "north": {},
+      "east": {
+        "y": 90
+      },
+      "south": {
+        "y": 180
+      },
+      "west": {
+        "y": 270
+      }
     },
-    "active=false,facing=south": {
-      "model": "repeater_1tick",
-      "y": 180
-    },
-    "active=false,facing=west": {
-      "model": "repeater_1tick",
-      "y": 270
-    },
-    "active=true,facing=north": {
-      "model": "repeater_on_1tick"
-    },
-    "active=true,facing=east": {
-      "model": "repeater_on_1tick",
-      "y": 90
-    },
-    "active=true,facing=south": {
-      "model": "repeater_on_1tick",
-      "y": 180
-    },
-    "active=true,facing=west": {
-      "model": "repeater_on_1tick",
-      "y": 270
+    "mark": {
+      "0": {
+        "submodel": {
+          "mark": { "model": "infraredstone:diode/diode_subt1" }
+        }
+      },
+      "1": {
+        "submodel": {
+          "mark": { "model": "infraredstone:diode/diode_subt2" }
+        }
+      },
+      "2": {
+        "submodel": {
+          "mark": { "model": "infraredstone:diode/diode_subt3" }
+        }
+      },
+      "3": {
+        "submodel": {
+          "mark": { "model": "infraredstone:diode/diode_subt4" }
+        }
+      }
     }
   }
 }

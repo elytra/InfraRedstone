@@ -1,5 +1,6 @@
 package com.elytradev.infraredstone.tile;
 
+import com.elytradev.infraredstone.InRedLog;
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockDiode;
 import com.elytradev.infraredstone.block.ModBlocks;
@@ -14,6 +15,8 @@ import net.minecraftforge.common.capabilities.Capability;
 public class TileEntityDiode extends TileEntityIRComponent implements ITickable {
     public boolean active;
     private InfraRedstoneHandler signal = new InfraRedstoneHandler();
+    private int resistance = 0;
+    private int cycle = 0;
 
     public void update() {
         if (world.isRemote || !hasWorld()) return;
@@ -25,7 +28,8 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
             if (state.getBlock() instanceof BlockDiode) {
                 EnumFacing back = state.getValue(BlockDiode.FACING).getOpposite();
                 int sig = InRedLogic.findIRValue(world, pos, back);
-                signal.setNextSignalValue(sig);
+                if (sig >= resistance) signal.setNextSignalValue(sig);
+                else signal.setNextSignalValue(0);
             }
         } else {
         	//Not an IR tick, so this is a "copy" tick. Adopt the previous tick's "next" value.
@@ -33,6 +37,14 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
         	setActive(state, signal.getSignalValue()!=0); //This is also when we light up
         }
     }
+
+    public void cycleDiodeTemp() {
+    	cycle++;
+    	if (cycle >= 4) cycle = 0;
+    	resistance = 16*cycle;
+		world.setBlockState(pos, world.getBlockState(pos).withProperty(BlockDiode.MARK, cycle));
+		InRedLog.info(cycle);
+	}
     
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
@@ -84,6 +96,17 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
     
     public void setActive(IBlockState existing, boolean active) {
     	if (existing.getValue(BlockDiode.ACTIVE)==active) return;
-    	world.setBlockState(pos, existing.withProperty(BlockDiode.ACTIVE, active));
+		world.setBlockState(pos, existing.withProperty(BlockDiode.ACTIVE, active));
+    	if (existing.getBlock() == ModBlocks.DIODE) {
+			((BlockDiode)existing.getBlock()).setActive(true);
+		}
     }
+
+    public int getResistance() {
+    	return resistance;
+	}
+
+	public int getMark() {
+    	return cycle;
+	}
 }
