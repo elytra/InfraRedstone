@@ -1,7 +1,5 @@
 package com.elytradev.infraredstone.block;
 
-import com.elytradev.infraredstone.InRedLog;
-import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.tile.TileEntityDiode;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -52,7 +50,7 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!world.isRemote && !player.isSneaking() && world.getTileEntity(pos) instanceof TileEntityDiode) {
             TileEntityDiode te = (TileEntityDiode)world.getTileEntity(pos);
-            te.cycleDiodeTemp();
+            te.cycleResistance();
         }
         return true;
     }
@@ -75,7 +73,7 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+        return NULL_AABB;
     }
 
     @Override
@@ -107,8 +105,6 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     	TileEntity te = world.getTileEntity(pos);
     	if (te==null || !(te instanceof TileEntityDiode)) return state;
     	TileEntityDiode diode = (TileEntityDiode)te;
-        InRedLog.info(diode.getMark() + ", " + diode.isActive());
-    													//TODO XXX FIXME TODO: Uncomment the piece below when the TE is sync'd to the client
     	return state.withProperty(MARK, diode.getMark()).withProperty(ACTIVE, diode.isActive());
     }
     
@@ -122,8 +118,9 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     	if (side!=state.getValue(FACING).getOpposite()) return 0;
     	TileEntity te = world.getTileEntity(pos);
     	if (te!=null && te instanceof TileEntityDiode) {
-    		int result = (te).getCapability(InfraRedstone.CAPABILITY_IR, null).getSignalValue();
-    		return (result > 16) ? 16 : result;
+    		return ((TileEntityDiode)te).isActive()?16:0;
+    		//int result = (te).getCapability(InfraRedstone.CAPABILITY_IR, null).getSignalValue();
+    		//return (result > 16) ? 16 : result;
     	}
     	return 0;
     }
