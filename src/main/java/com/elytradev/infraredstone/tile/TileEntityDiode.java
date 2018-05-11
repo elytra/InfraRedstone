@@ -13,7 +13,6 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 
 public class TileEntityDiode extends TileEntityIRComponent implements ITickable {
-    public boolean active;
     private InfraRedstoneHandler signal = new InfraRedstoneHandler();
     private int resistance = 0;
     private int cycle = 0;
@@ -97,9 +96,6 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
     public void setActive(IBlockState existing, boolean active) {
     	if (existing.getValue(BlockDiode.ACTIVE)==active) return;
 		world.setBlockState(pos, existing.withProperty(BlockDiode.ACTIVE, active));
-    	if (existing.getBlock() == ModBlocks.DIODE) {
-			((BlockDiode)existing.getBlock()).setActive(true);
-		}
     }
 
     public int getResistance() {
@@ -108,5 +104,9 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
 
 	public int getMark() {
     	return cycle;
+	}
+	
+	public boolean isActive() {
+		return signal.getSignalValue()!=0;
 	}
 }

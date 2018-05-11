@@ -28,8 +28,6 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     public static int FACE = 3;
     public static final PropertyInteger MARK = PropertyInteger.create("mark",0, 3);
 
-    private boolean active;
-
     public BlockDiode() {
         super(Material.CIRCUITS, "diode");
         this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false).withProperty(MARK, 0));
@@ -105,7 +103,12 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return state.withProperty(MARK, ((TileEntityDiode)world.getTileEntity(pos)).getMark()).withProperty(ACTIVE, active);
+    	TileEntity te = world.getTileEntity(pos);
+    	if (te==null || !(te instanceof TileEntityDiode)) return state;
+    	
+    	TileEntityDiode diode = (TileEntityDiode)te;
+    													//TODO XXX FIXME TODO: Uncomment the piece below when the TE is sync'd to the client
+    	return state.withProperty(MARK, diode.getMark());//.withProperty(ACTIVE, diode.isActive());
     }
     
     @Override
@@ -128,9 +131,4 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing()).withProperty(ACTIVE, false).withProperty(MARK, 0);
     }
-
-    public void setActive(boolean state) {
-        active = state;
-    }
-
 }
