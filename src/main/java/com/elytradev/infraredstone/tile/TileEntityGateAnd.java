@@ -9,7 +9,6 @@ import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 import com.elytradev.infraredstone.util.EnumInactiveSelection;
 import com.google.common.base.Predicates;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,7 +27,7 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
     private int valBack;
     private int valRight;
     public boolean inverted;
-    public EnumInactiveSelection inactive;
+    public EnumInactiveSelection inactive = EnumInactiveSelection.NONE;
 
     //Transient data to throttle sync down here
     boolean lastActive = false;
@@ -36,7 +35,7 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
     int lastValBack = 0;
     int lastValRight = 0;
     boolean lastInvert = false;
-    EnumInactiveSelection lastInactive;
+    EnumInactiveSelection lastInactive = EnumInactiveSelection.NONE;
 
     public void update() {
         if (world.isRemote || !hasWorld()) return;
