@@ -1,0 +1,37 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"textures": {
+		"side": "infraredstone:blocks/pcb_slate",
+		"base": "infraredstone:blocks/gate_and",
+		"light": "minecraft:blocks/redstone_torch_off",
+		"left": "minecraft:blocks/redstone_torch_off",
+		"right": "minecraft:blocks/redstone_torch_off",
+		"particle": "infraredstone:blocks/gate_and"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 2, 16],
+			"faces": {
+				"north": {"uv": [0, 14, 16, 16], "texture": "#side"},
+				"east": {"uv": [0, 14, 16, 16], "texture": "#side"},
+				"south": {"uv": [0, 14, 16, 16], "texture": "#side"},
+				"west": {"uv": [0, 14, 16, 16], "texture": "#side"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#base"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#side"}
+			}
+		}
+	],
+	"groups": [0, 1,
+		{
+			"name": "subtorches",
+			"isOpen": true,
+			"shade": true,
+			"display": {
+				"visibility": true,
+				"autouv": true
+			},
+			"children": []
+		}
+	]
+}

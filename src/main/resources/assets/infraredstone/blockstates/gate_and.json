@@ -1,19 +1,41 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model":"infraredstone:gate/gate_and"
+    "model":"infraredstone:gate/and/gate_and"
   },
   "variants": {
     "normal": {
-      "model": "infraredstone:gate/gate_and"
+      "model": "infraredstone:gate/and/gate_and"
     },
     "inventory": {
-      "model": "infraredstone:gate/gate_and_item"
+      "model": "infraredstone:gate/and/item"
+    },
+    "inactive": {
+      "none": {
+        "submodel": {
+          "select": { "model": "infraredstone:gate/and/select_none" }
+        }
+      },
+      "left": {
+        "submodel": {
+          "select": { "model": "infraredstone:gate/and/select_left" }
+        }
+      },
+      "back": {
+        "submodel": {
+          "select": { "model": "infraredstone:gate/and/select_back" }
+        }
+      },
+      "right": {
+        "submodel": {
+          "select": { "model": "infraredstone:gate/and/select_right" }
+        }
+      }
     },
     "front_active": {
       "true": {
         "textures": {
-          "light": "minecraft:blocks/redstone_torch_on",
+          "light": "infraredstone:blocks/lights",
           "base": "infraredstone:blocks/gate_and_on"
         }
       },
@@ -24,10 +46,22 @@
         }
       }
     },
+    "back_active": {
+      "true": {
+        "textures": {
+          "back": "infraredstone:blocks/lights"
+        }
+      },
+      "false": {
+        "textures": {
+          "back": "minecraft:blocks/redstone_torch_off"
+        }
+      }
+    },
     "left_active": {
       "true": {
         "textures": {
-          "left": "minecraft:blocks/redstone_torch_on"
+          "left": "infraredstone:blocks/lights"
         }
       },
       "false": {
@@ -39,7 +73,7 @@
     "right_active": {
       "true": {
         "textures": {
-          "right": "minecraft:blocks/redstone_torch_on"
+          "right": "infraredstone:blocks/lights"
         }
       },
       "false": {
@@ -58,6 +92,18 @@
       },
       "west": {
         "y": 270
+      }
+    },
+    "inverted": {
+      "true": {
+        "submodel": {
+          "front": { "model": "infraredstone:gate/and/invert_on" }
+        }
+      },
+      "false": {
+        "submodel": {
+          "front": { "model": "infraredstone:gate/and/invert_off" }
+        }
       }
     }
   }

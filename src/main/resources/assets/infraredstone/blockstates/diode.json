@@ -8,12 +8,12 @@
       "model": "infraredstone:diode/diode"
     },
     "inventory": {
-      "model": "infraredstone:diode/diode_item"
+      "model": "infraredstone:diode/item"
     },
     "active": {
       "true": {
         "textures": {
-          "light": "minecraft:blocks/redstone_torch_on",
+          "light": "infraredstone:blocks/lights",
           "base": "infraredstone:blocks/diode_on"
         }
       },
@@ -39,22 +39,22 @@
     "mark": {
       "0": {
         "submodel": {
-          "mark": { "model": "infraredstone:diode/diode_subt1" }
+          "mark": { "model": "infraredstone:diode/resistance_1" }
         }
       },
       "1": {
         "submodel": {
-          "mark": { "model": "infraredstone:diode/diode_subt2" }
+          "mark": { "model": "infraredstone:diode/resistance_2" }
         }
       },
       "2": {
         "submodel": {
-          "mark": { "model": "infraredstone:diode/diode_subt3" }
+          "mark": { "model": "infraredstone:diode/resistance_3" }
         }
       },
       "3": {
         "submodel": {
-          "mark": { "model": "infraredstone:diode/diode_subt4" }
+          "mark": { "model": "infraredstone:diode/resistance_4" }
         }
       }
     }

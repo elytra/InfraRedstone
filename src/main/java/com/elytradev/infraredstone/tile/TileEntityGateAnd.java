@@ -6,6 +6,7 @@ import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.logic.InRedLogic;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 
+import com.elytradev.infraredstone.util.EnumInactiveSelection;
 import com.google.common.base.Predicates;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,15 +24,19 @@ import net.minecraftforge.common.capabilities.Capability;
 
 public class TileEntityGateAnd extends TileEntityIRComponent implements ITickable {
     private InfraRedstoneHandler signal = new InfraRedstoneHandler();
-    private int valLeft = 0;
-    private int valRight = 0;
-    private boolean inverted;
+    private int valLeft;
+    private int valBack;
+    private int valRight;
+    public boolean inverted;
+    public EnumInactiveSelection inactive;
 
     //Transient data to throttle sync down here
     boolean lastActive = false;
     int lastValLeft = 0;
+    int lastValBack = 0;
     int lastValRight = 0;
     boolean lastInvert = false;
+    EnumInactiveSelection lastInactive;
 
     public void update() {
         if (world.isRemote || !hasWorld()) return;
@@ -43,36 +48,76 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
             if (state.getBlock() instanceof BlockGateAnd) {
                 EnumFacing left = state.getValue(BlockGateAnd.FACING).rotateYCCW();
                 EnumFacing right = state.getValue(BlockGateAnd.FACING).rotateY();
+                EnumFacing back = state.getValue(BlockGateAnd.FACING).getOpposite();
                 int sigLeft = InRedLogic.findIRValue(world, pos, left);
                 int sigRight = InRedLogic.findIRValue(world, pos, right);
+                int sigBack = InRedLogic.findIRValue(world, pos, back);
                 valLeft = sigLeft;
                 valRight = sigRight;
-                if (!inverted) {
-                    if (sigLeft > 0 && sigRight > 0) {
-                        if (sigLeft == sigRight) {
-                            signal.setNextSignalValue(sigLeft);
-                        } else if (sigLeft > sigRight) {
-                            signal.setNextSignalValue(sigLeft);
+                valBack = sigBack;
+                int value1 = 0;
+                int value2 = 0;
+                if (inactive != EnumInactiveSelection.NONE) {
+                    //one side is disabled, so we need to find out what side that is and check the others
+                    switch (inactive) {
+                        case LEFT:
+                            value1 = sigBack;
+                            value2 = sigRight;
+                            break;
+                        case BACK:
+                            value1 = sigLeft;
+                            value2 = sigRight;
+                            break;
+                        case RIGHT:
+                            value1 = sigLeft;
+                            value2 = sigBack;
+                            break;
+                    }
+                    if (!inverted) {
+                        if (value1 > 0 && value2 > 0) {
+                            if (value1 == value2) {
+                                signal.setNextSignalValue(value1);
+                            } else if (value1 > value2) {
+                                signal.setNextSignalValue(value1);
+                            } else {
+                                signal.setNextSignalValue(value2);
+                            }
                         } else {
-                            signal.setNextSignalValue(sigRight);
+                            signal.setNextSignalValue(0);
                         }
                     } else {
-                        signal.setNextSignalValue(0);
+                        if (value1 > 0 && value2 > 0) {
+                            signal.setNextSignalValue(0);
+                        } else {
+                            signal.setNextSignalValue(63);
+                        }
                     }
                 } else {
-                    if (sigLeft > 0 && sigRight > 0) {
-                        signal.setNextSignalValue(0);
+                    //all three sides are on, so we gotta check all three
+                    if (!inverted) {
+                        if (sigLeft > 0 && sigBack > 0 && sigRight > 0) {
+                            int sig = Math.max(sigLeft, sigRight);
+                            sig = Math.max(sig, sigBack);
+                            //there needs to be a better way to Math.max three things than this, right?
+                            signal.setNextSignalValue(sig);
+                        } else {
+                            signal.setNextSignalValue(0);
+                        }
                     } else {
-                        signal.setNextSignalValue(63);
+                        if (sigLeft > 0 && sigBack > 0 && sigRight > 0) {
+                            signal.setNextSignalValue(0);
+                        } else {
+                            signal.setNextSignalValue(63);
+                        }
                     }
                 }
                 markDirty();
             }
+
         } else {
             //Not an IR tick, so this is a "copy" tick. Adopt the previous tick's "next" value.
             signal.setSignalValue(signal.getNextSignalValue());
             markDirty();
-            //setActive(state, signal.getSignalValue()!=0); //This is also when we light up
         }
     }
 
@@ -87,6 +132,8 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
                 if (gateAndFront==facing) {
                     return true;
                 } else if (gateAndFront==facing.rotateYCCW()) {
+                    return true;
+                } else if (gateAndFront==facing.getOpposite()) {
                     return true;
                 } else if (gateAndFront==facing.rotateY()) {
                     return true;
@@ -114,7 +161,9 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
                 if (gateAndFront==facing) {
                     return (T) signal;
                 } else if (gateAndFront==facing.rotateYCCW()) {
-                    return (T)InfraRedstoneHandler.ALWAYS_OFF;
+                    return (T) InfraRedstoneHandler.ALWAYS_OFF;
+                } else if (gateAndFront==facing.getOpposite()) {
+                    return (T) InfraRedstoneHandler.ALWAYS_OFF;
                 } else if (gateAndFront==facing.rotateY()) {
                     return (T)InfraRedstoneHandler.ALWAYS_OFF;
                 } else {
@@ -130,22 +179,32 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
     public void toggleInvert() {
         if (inverted) {
             inverted = false;
-            signal.setSignalValue(0);
-            world.playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.5f);
+            world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.5f);
         } else {
             inverted = true;
-            signal.setSignalValue(15);
-            world.playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.55f);
+            world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.55f);
         }
+    }
+
+    public void toggleInactive(EnumInactiveSelection newInactive) {
+        if (inactive == newInactive) {
+            inactive = EnumInactiveSelection.NONE;
+        } else {
+            inactive = newInactive;
+        }
+        world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.45f);
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tag = super.writeToNBT(compound);
         tag.setTag("Signal", InfraRedstone.CAPABILITY_IR.writeNBT(signal, null));
+        //please forgive me, falk. We'll work on moving these out soon.
         tag.setInteger("Left", valLeft);
+        tag.setInteger("Back", valBack);
         tag.setInteger("Right", valRight);
         tag.setBoolean("Inverted", inverted);
+        tag.setString("Inactive", inactive.getName());
         return tag;
     }
 
@@ -154,8 +213,10 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
         super.readFromNBT(compound);
         if (compound.hasKey("Signal")) InfraRedstone.CAPABILITY_IR.readNBT(signal, null, compound.getTag("Signal"));
         valLeft = compound.getInteger("Left");
+        valBack = compound.getInteger("Back");
         valRight = compound.getInteger("Right");
         inverted = compound.getBoolean("Inverted");
+        inactive = EnumInactiveSelection.forName(compound.getString("Inactive"));
     }
 
     @Override
@@ -183,10 +244,15 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
     @Override
     public void markDirty() {
         super.markDirty();
-        // again, I've copy-pasted this like 12 times, should probably go into Concrete
+        // please excuse the black magic
         if (!hasWorld() || getWorld().isRemote) return;
 
-        if (valLeft!=lastValLeft || valRight != lastValRight || isActive()!=lastActive || inverted != lastInvert) { //Throttle updates - only send when something important changes
+        if (valLeft!=lastValLeft
+                || valBack!=lastValBack
+                || valRight!=lastValRight
+                || isActive()!=lastActive
+                || inverted!=lastInvert
+                || inactive!=lastInactive) { //Throttle updates - only send when something important changes
 
             WorldServer ws = (WorldServer)getWorld();
             Chunk c = getWorld().getChunkFromBlockCoords(getPos());
@@ -198,28 +264,25 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
             }
 
             lastValLeft = valLeft;
+            lastValBack = valBack;
             lastValRight = valRight;
             lastActive = isActive();
             lastInvert = inverted;
+            lastInactive = inactive;
 
             IBlockState state = world.getBlockState(pos);
             ws.markAndNotifyBlock(pos, c, state, state, 1 | 16);
         }
     }
-    
-	/*
-    public void setActive(IBlockState existing, boolean active) {
-    	//if (existing.getValue(BlockGateAnd.ACTIVE)==active) return;
-    	world.setBlockState(pos, world.getBlockState(pos), 3 | 16); //Don't change the blockstate, but *send an update* to the client and prevent observers from caring
-		//world.setBlockState(pos, existing.withProperty(BlockGateAnd.ACTIVE, active));
-    	System.out.println("Set to "+active);
-    }*/
 
     public boolean isActive() {
         return signal.getSignalValue()!=0;
     }
     public boolean isLeftActive() {
         return valLeft!=0;
+    }
+    public boolean isBackActive() {
+        return valBack!=0;
     }
     public boolean isRightActive() {
         return valRight!=0;

@@ -22,6 +22,14 @@ public class BlockFineLever extends BlockModule<TileEntityFineLever> implements 
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
 
+    //stealing from vanilla lever for time being
+    protected static final AxisAlignedBB LEVER_NORTH_AABB = new AxisAlignedBB(0.3125D, 0.20000000298023224D, 0.625D, 0.6875D, 0.800000011920929D, 1.0D);
+    protected static final AxisAlignedBB LEVER_SOUTH_AABB = new AxisAlignedBB(0.3125D, 0.20000000298023224D, 0.0D, 0.6875D, 0.800000011920929D, 0.375D);
+    protected static final AxisAlignedBB LEVER_WEST_AABB = new AxisAlignedBB(0.625D, 0.20000000298023224D, 0.3125D, 1.0D, 0.800000011920929D, 0.6875D);
+    protected static final AxisAlignedBB LEVER_EAST_AABB = new AxisAlignedBB(0.0D, 0.20000000298023224D, 0.3125D, 0.375D, 0.800000011920929D, 0.6875D);
+    protected static final AxisAlignedBB LEVER_UP_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.6000000238418579D, 0.75D);
+    protected static final AxisAlignedBB LEVER_DOWN_AABB = new AxisAlignedBB(0.25D, 0.4000000059604645D, 0.25D, 0.75D, 1.0D, 0.75D);
+
     public BlockFineLever() {
         super(Material.CIRCUITS, "fine_lever");
         this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false));
@@ -69,6 +77,25 @@ public class BlockFineLever extends BlockModule<TileEntityFineLever> implements 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return NULL_AABB;
+    }
+
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+        switch (state.getValue(FACING)) {
+            case EAST:
+            default:
+                return LEVER_EAST_AABB;
+            case WEST:
+                return LEVER_WEST_AABB;
+            case SOUTH:
+                return LEVER_SOUTH_AABB;
+            case NORTH:
+                return LEVER_NORTH_AABB;
+            case UP:
+                return LEVER_UP_AABB;
+            case DOWN:
+                return LEVER_DOWN_AABB;
+        }
     }
 
     @Override

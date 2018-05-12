@@ -1,0 +1,32 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"textures": {
+		"knob": "infraredstone:blocks/lights"
+	},
+	"elements": [
+		{
+			"from": [6, 2, 11],
+			"to": [8, 4, 13],
+			"faces": {
+				"north": {"uv": [5, 6, 7, 8], "texture": "#knob"},
+				"east": {"uv": [5, 6, 7, 8], "texture": "#knob"},
+				"south": {"uv": [5, 6, 7, 8], "texture": "#knob"},
+				"west": {"uv": [5, 6, 7, 8], "texture": "#knob"},
+				"up": {"uv": [5, 6, 7, 8], "texture": "#knob"},
+				"down": {"uv": [5, 6, 7, 8], "texture": "#knob"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "subtorches",
+			"isOpen": true,
+			"shade": true,
+			"display": {
+				"visibility": true,
+				"autouv": true
+			},
+			"children": [0]
+		}
+	]
+}

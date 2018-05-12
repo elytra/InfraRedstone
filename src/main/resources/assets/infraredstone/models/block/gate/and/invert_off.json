@@ -1,12 +1,14 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
-		"1": "blocks/minecraft:redstone_torch_off"
+		"base": "infraredstone:blocks/gate_and",
+		"light": "minecraft:blocks/redstone_torch_off",
+		"particle": "infraredstone:blocks/gate_and"
 	},
 	"elements": [
 		{
-			"from": [8, 2, 11],
-			"to": [10, 4, 13],
+			"from": [7, 2, 4],
+			"to": [9, 4, 6],
 			"faces": {
 				"north": {"uv": [7, 6, 9, 8], "texture": "#light"},
 				"east": {"uv": [7, 6, 9, 8], "texture": "#light"},
@@ -17,7 +19,7 @@
 			}
 		}
 	],
-	"groups": [
+	"groups": [0, 1,
 		{
 			"name": "subtorches",
 			"isOpen": true,
@@ -26,7 +28,7 @@
 				"visibility": true,
 				"autouv": true
 			},
-			"children": [0]
+			"children": []
 		}
 	]
 }
