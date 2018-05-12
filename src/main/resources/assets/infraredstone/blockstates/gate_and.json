@@ -1,0 +1,64 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model":"infraredstone:gate/gate_and"
+  },
+  "variants": {
+    "normal": {
+      "model": "infraredstone:gate/gate_and"
+    },
+    "inventory": {
+      "model": "infraredstone:gate/gate_and_item"
+    },
+    "front_active": {
+      "true": {
+        "textures": {
+          "light": "minecraft:blocks/redstone_torch_on",
+          "base": "infraredstone:blocks/gate_and_on"
+        }
+      },
+      "false": {
+        "textures": {
+          "light": "minecraft:blocks/redstone_torch_off",
+          "base": "infraredstone:blocks/gate_and"
+        }
+      }
+    },
+    "left_active": {
+      "true": {
+        "textures": {
+          "left": "minecraft:blocks/redstone_torch_on"
+        }
+      },
+      "false": {
+        "textures": {
+          "left": "minecraft:blocks/redstone_torch_off"
+        }
+      }
+    },
+    "right_active": {
+      "true": {
+        "textures": {
+          "right": "minecraft:blocks/redstone_torch_on"
+        }
+      },
+      "false": {
+        "textures": {
+          "right": "minecraft:blocks/redstone_torch_off"
+        }
+      }
+    },
+    "facing": {
+      "north": {},
+      "east": {
+        "y": 90
+      },
+      "south": {
+        "y": 180
+      },
+      "west": {
+        "y": 270
+      }
+    }
+  }
+}

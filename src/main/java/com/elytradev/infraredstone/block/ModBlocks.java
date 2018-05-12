@@ -1,10 +1,8 @@
 package com.elytradev.infraredstone.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -13,9 +11,10 @@ public class ModBlocks {
     public static final CableInfraRedstone INFRA_REDSTONE = new CableInfraRedstone();
     public static final BlockFineLever FINE_LEVER = new BlockFineLever();
     public static final BlockDiode DIODE = new BlockDiode();
+    public static final BlockGateAnd GATE_AND = new BlockGateAnd();
 
     public static Block[] allBlocks = {
-            INFRA_REDSTONE, FINE_LEVER, DIODE
+            INFRA_REDSTONE, FINE_LEVER, DIODE, GATE_AND
     };
 
     public static void register(IForgeRegistry<Block> registry) {
@@ -25,6 +24,7 @@ public class ModBlocks {
 
         GameRegistry.registerTileEntity(FINE_LEVER.getTileEntityClass(), FINE_LEVER.getRegistryName().toString());
         GameRegistry.registerTileEntity(DIODE.getTileEntityClass(), DIODE.getRegistryName().toString());
+        GameRegistry.registerTileEntity(GATE_AND.getTileEntityClass(), GATE_AND.getRegistryName().toString());
 
     }
 

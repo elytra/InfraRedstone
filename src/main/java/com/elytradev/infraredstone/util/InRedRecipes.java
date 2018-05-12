@@ -24,12 +24,12 @@ public class InRedRecipes {
 //         Crafting bench recipes
 
 //        Gates
-//        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.AND, 1),
-//                " t ", "trt", "ptp",
-//                'r', new ItemStack(Items.REDSTONE),
-//                't', new ItemStack(Blocks.REDSTONE_TORCH),
-//                'p', new ItemStack(ModItems.PCB)
-//        ));
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.GATE_AND, 1),
+                " t ", "trt", "ptp",
+                'r', new ItemStack(Items.REDSTONE),
+                't', new ItemStack(Blocks.REDSTONE_TORCH),
+                'p', new ItemStack(ModItems.PCB)
+        ));
 
 //        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.NAND, 1),
 //                " t ", "ttt", "ptp",

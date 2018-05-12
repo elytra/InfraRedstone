@@ -5,6 +5,7 @@ item.pcb.name=PCB
 tile.infra_redstone.name=Infra-Redstone Cable
 tile.diode.name=Diode
 tile.fine_lever.name=Fine Lever
+tile.gate_and.name=And Gate
 
 #tooltips
 
