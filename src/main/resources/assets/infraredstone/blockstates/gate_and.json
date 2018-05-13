@@ -41,7 +41,7 @@
       },
       "false": {
         "textures": {
-          "light": "minecraft:blocks/redstone_torch_off",
+          "light": "infraredstone:blocks/lights_dark",
           "base": "infraredstone:blocks/gate_and"
         }
       }
@@ -54,7 +54,7 @@
       },
       "false": {
         "textures": {
-          "back": "minecraft:blocks/redstone_torch_off"
+          "back": "infraredstone:blocks/lights_dark"
         }
       }
     },
@@ -66,7 +66,7 @@
       },
       "false": {
         "textures": {
-          "left": "minecraft:blocks/redstone_torch_off"
+          "left": "infraredstone:blocks/lights_dark"
         }
       }
     },
@@ -78,7 +78,7 @@
       },
       "false": {
         "textures": {
-          "right": "minecraft:blocks/redstone_torch_off"
+          "right": "infraredstone:blocks/lights_dark"
         }
       }
     },

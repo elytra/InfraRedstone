@@ -2,25 +2,25 @@
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
 		"base": "infraredstone:blocks/diode",
-		"light": "minecraft:blocks/redstone_torch_off",
+		"light": "infraredstone:blocks/lights_dark",
 		"particle": "infraredstone:blocks/diode"
 	},
 	"elements": [
 		{
 			"from": [0, 0, 0],
-			"to": [16, 2, 16],
+			"to": [16, 3, 16],
 			"faces": {
-				"north": {"uv": [0, 14, 16, 16], "texture": "#base"},
-				"east": {"uv": [0, 14, 16, 16], "texture": "#base"},
-				"south": {"uv": [0, 14, 16, 16], "texture": "#base"},
-				"west": {"uv": [0, 14, 16, 16], "texture": "#base"},
+				"north": {"uv": [0, 13, 16, 16], "texture": "#base"},
+				"east": {"uv": [0, 13, 16, 16], "texture": "#base"},
+				"south": {"uv": [0, 13, 16, 16], "texture": "#base"},
+				"west": {"uv": [0, 13, 16, 16], "texture": "#base"},
 				"up": {"uv": [0, 0, 16, 16], "texture": "#base"},
 				"down": {"uv": [0, 0, 16, 16], "texture": "#base"}
 			}
 		},
 		{
-			"from": [7, 2, 2],
-			"to": [9, 4, 4],
+			"from": [7, 3, 2],
+			"to": [9, 5, 4],
 			"faces": {
 				"north": {"uv": [7, 6, 9, 8], "texture": "#light"},
 				"east": {"uv": [7, 6, 9, 8], "texture": "#light"},

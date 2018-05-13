@@ -1,14 +1,14 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
-		"back": "minecraft:blocks/redstone_torch_off",
-		"left": "minecraft:blocks/redstone_torch_off",
-		"right": "minecraft:blocks/redstone_torch_off"
+		"back": "infraredstone:blocks/lights_dark",
+		"left": "infraredstone:blocks/lights_dark",
+		"right": "infraredstone:blocks/lights_dark"
 	},
 	"elements": [
 		{
-			"from": [0, 1, 7],
-			"to": [2, 3, 9],
+			"from": [0, 3, 7],
+			"to": [2, 4, 9],
 			"faces": {
 				"north": {"uv": [7, 6, 9, 7], "texture": "#left"},
 				"east": {"uv": [7, 6, 9, 7], "texture": "#left"},
@@ -19,8 +19,8 @@
 			}
 		},
 		{
-			"from": [7, 2, 14],
-			"to": [9, 4, 16],
+			"from": [7, 3, 14],
+			"to": [9, 5, 16],
 			"faces": {
 				"north": {"uv": [7, 6, 9, 8], "texture": "#back"},
 				"east": {"uv": [7, 6, 9, 8], "texture": "#back"},
@@ -31,8 +31,8 @@
 			}
 		},
 		{
-			"from": [14, 2, 7],
-			"to": [16, 4, 9],
+			"from": [14, 3, 7],
+			"to": [16, 5, 9],
 			"faces": {
 				"north": {"uv": [7, 6, 9, 8], "texture": "#right"},
 				"east": {"uv": [7, 6, 9, 8], "texture": "#right"},

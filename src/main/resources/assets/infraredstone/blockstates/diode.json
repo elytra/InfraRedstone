@@ -19,7 +19,7 @@
       },
       "false": {
         "textures": {
-          "light": "minecraft:blocks/redstone_torch_off",
+          "light": "infraredstone:blocks/lights_dark",
           "base": "infraredstone:blocks/diode"
         }
       }

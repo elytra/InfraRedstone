@@ -2,13 +2,13 @@
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
 		"base": "infraredstone:blocks/gate_and",
-		"light": "minecraft:blocks/redstone_torch_off",
+		"light": "infraredstone:blocks/lights_dark",
 		"particle": "infraredstone:blocks/gate_and"
 	},
 	"elements": [
 		{
-			"from": [7, 2, 4],
-			"to": [9, 4, 6],
+			"from": [7, 3, 4],
+			"to": [9, 5, 6],
 			"faces": {
 				"north": {"uv": [7, 6, 9, 8], "texture": "#light"},
 				"east": {"uv": [7, 6, 9, 8], "texture": "#light"},
