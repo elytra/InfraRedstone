@@ -31,32 +31,19 @@ public class InRedRecipes {
                 'p', new ItemStack(ModItems.PCB)
         ));
 
-//        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.NAND, 1),
-//                " t ", "ttt", "ptp",
-//                'r', new ItemStack(Items.REDSTONE),
-//                't', new ItemStack(Blocks.REDSTONE_TORCH),
-//                'p', new ItemStack(ModItems.PCB)
-//        ));
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.GATE_XOR, 1),
+                "tr ", "prp", " rt",
+                'r', new ItemStack(Items.REDSTONE),
+                't', new ItemStack(Blocks.REDSTONE_TORCH),
+                'p', new ItemStack(ModItems.PCB)
+        ));
 
-//        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.OR, 1),
-//                " r ", "rrr", "prp",
-//                'r', new ItemStack(Items.REDSTONE),
-//                'p', new ItemStack(ModItems.PCB)
-//        ));
-
-//        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.XOR, 1),
-//                "tr ", "prp", " rt",
-//                'r', new ItemStack(Items.REDSTONE),
-//                't', new ItemStack(Blocks.REDSTONE_TORCH),
-//                'p', new ItemStack(ModItems.PCB)
-//        ));
-
-//        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.XOR, 1),
-//                " rt", "prp", "tr ",
-//                'r', new ItemStack(Items.REDSTONE),
-//                't', new ItemStack(Blocks.REDSTONE_TORCH),
-//                'p', new ItemStack(ModItems.PCB)
-//        ));
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.GATE_XOR, 1),
+                " rt", "prp", "tr ",
+                'r', new ItemStack(Items.REDSTONE),
+                't', new ItemStack(Blocks.REDSTONE_TORCH),
+                'p', new ItemStack(ModItems.PCB)
+        ));
 
 //        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.NOT, 1),
 //                "t", "p",
