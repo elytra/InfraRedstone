@@ -1,0 +1,40 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model":"infraredstone:gate/not/gate_not"
+  },
+  "variants": {
+    "normal": {
+      "model": "infraredstone:gate/not/gate_not"
+    },
+    "inventory": {
+      "model": "infraredstone:gate/not/item"
+    },
+    "front_active": {
+      "true": {
+        "textures": {
+          "light": "infraredstone:blocks/lights",
+          "base": "infraredstone:blocks/gate_not_outon"
+        }
+      },
+      "false": {
+        "textures": {
+          "light": "infraredstone:blocks/lights_dark",
+          "base": "infraredstone:blocks/gate_not_outoff"
+        }
+      }
+    },
+    "facing": {
+      "north": {},
+      "east": {
+        "y": 90
+      },
+      "south": {
+        "y": 180
+      },
+      "west": {
+        "y": 270
+      }
+    }
+  }
+}
