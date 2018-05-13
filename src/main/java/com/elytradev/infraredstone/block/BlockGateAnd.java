@@ -1,6 +1,5 @@
 package com.elytradev.infraredstone.block;
 
-import com.elytradev.infraredstone.InRedLog;
 import com.elytradev.infraredstone.tile.TileEntityGateAnd;
 import com.elytradev.infraredstone.util.EnumInactiveSelection;
 import net.minecraft.block.BlockHorizontal;
@@ -8,7 +7,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,7 +19,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import scala.sys.Prop;
 
 
 public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlockBase {
@@ -50,9 +47,10 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
         this.setHardness(0.5f);
     }
 
-    private static final AxisAlignedBB LEFT_IN_AABB = new AxisAlignedBB(-1/32d, 3/32d, 13/32d, 5/32d, 9/32d, 19/32d);
-    private static final AxisAlignedBB BACK_IN_AABB = new AxisAlignedBB(13/32d, 3/32d, 27/32d, 19/32d, 9/32d, 33/32d);
-    private static final AxisAlignedBB RIGHT_IN_AABB = new AxisAlignedBB(27/32d, 3/32d, 13/32d, 33/32d, 9/32d, 19/32d);
+    private static final AxisAlignedBB LEFT_AABB   = new AxisAlignedBB( 0/16d, 0d,  6/16d,  3/16d, 0.5d, 10/16d);
+    private static final AxisAlignedBB BACK_AABB   = new AxisAlignedBB( 6/16d, 0d, 13/16d, 10/16d, 0.5d, 16/16d);
+    private static final AxisAlignedBB RIGHT_AABB  = new AxisAlignedBB(13/16d, 0d,  6/16d, 16/16d, 0.5d, 10/16d);
+    private static final AxisAlignedBB INVERT_AABB = new AxisAlignedBB( 6/16d, 0d,  3/16d, 10/16d, 0.5d,  7/16d);
 
     //TODO: make this pop off when the block it's on is broken, also maybe by water but ¯\_(ツ)_/¯
 
@@ -86,14 +84,14 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
                     break;
             }
             blockCenteredHit = blockCenteredHit.addVector(0.5, 0.5, 0.5);
-            if (LEFT_IN_AABB.contains(blockCenteredHit)) {
+            if (LEFT_AABB.contains(blockCenteredHit)) {
                 te.toggleInactive(EnumInactiveSelection.LEFT);
-            } else if (BACK_IN_AABB.contains(blockCenteredHit)) {
+            } else if (BACK_AABB.contains(blockCenteredHit)) {
                 te.toggleInactive(EnumInactiveSelection.BACK);
-            } else if (RIGHT_IN_AABB.contains(blockCenteredHit)) {
+            } else if (RIGHT_AABB.contains(blockCenteredHit)) {
                 te.toggleInactive(EnumInactiveSelection.RIGHT);
-            } else {
-            te.toggleInvert();
+            } else if (INVERT_AABB.contains(blockCenteredHit)) {
+            	te.toggleInvert();
             }
         }
         return true;
