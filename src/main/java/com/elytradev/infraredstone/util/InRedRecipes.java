@@ -60,7 +60,8 @@ public class InRedRecipes {
         ));
 
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.DIODE, 1),
-                "t t", "rpr",
+                "n t", "rpr",
+                'n', new ItemStack(Items.GOLD_NUGGET),
                 'r', new ItemStack(Items.REDSTONE),
                 't', new ItemStack(Blocks.REDSTONE_TORCH),
                 'p', new ItemStack(ModItems.PCB)
