@@ -12,9 +12,10 @@ public class ModBlocks {
     public static final BlockFineLever FINE_LEVER = new BlockFineLever();
     public static final BlockDiode DIODE = new BlockDiode();
     public static final BlockGateAnd GATE_AND = new BlockGateAnd();
+    public static final BlockGateXor GATE_XOR = new BlockGateXor();
 
     public static Block[] allBlocks = {
-            INFRA_REDSTONE, FINE_LEVER, DIODE, GATE_AND
+            INFRA_REDSTONE, FINE_LEVER, DIODE, GATE_AND, GATE_XOR
     };
 
     public static void register(IForgeRegistry<Block> registry) {
@@ -25,6 +26,7 @@ public class ModBlocks {
         GameRegistry.registerTileEntity(FINE_LEVER.getTileEntityClass(), FINE_LEVER.getRegistryName().toString());
         GameRegistry.registerTileEntity(DIODE.getTileEntityClass(), DIODE.getRegistryName().toString());
         GameRegistry.registerTileEntity(GATE_AND.getTileEntityClass(), GATE_AND.getRegistryName().toString());
+        GameRegistry.registerTileEntity(GATE_XOR.getTileEntityClass(), GATE_XOR.getRegistryName().toString());
 
     }
 

@@ -3,9 +3,9 @@
 	"textures": {
 		"side": "infraredstone:blocks/pcb_slate",
 		"base": "infraredstone:blocks/gate_and",
-		"light": "minecraft:blocks/redstone_torch_off",
-		"left": "minecraft:blocks/redstone_torch_off",
-		"right": "minecraft:blocks/redstone_torch_off",
+		"light": "infraredstone:blocks/lights_dark",
+		"left": "infraredstone:blocks/lights_dark",
+		"right": "infraredstone:blocks/lights_dark",
 		"particle": "infraredstone:blocks/gate_and"
 	},
 	"elements": [
