@@ -1,14 +1,14 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model":"infraredstone:diode/diode"
+    "model":"infraredstone:module/diode/diode"
   },
   "variants": {
     "normal": {
-      "model": "infraredstone:diode/diode"
+      "model": "infraredstone:module/diode/diode"
     },
     "inventory": {
-      "model": "infraredstone:diode/item"
+      "model": "infraredstone:module/diode/item"
     },
     "active": {
       "true": {
@@ -39,22 +39,22 @@
     "mark": {
       "0": {
         "submodel": {
-          "mark": { "model": "infraredstone:diode/resistance_1" }
+          "mark": { "model": "infraredstone:module/diode/resistance_1" }
         }
       },
       "1": {
         "submodel": {
-          "mark": { "model": "infraredstone:diode/resistance_2" }
+          "mark": { "model": "infraredstone:module/diode/resistance_2" }
         }
       },
       "2": {
         "submodel": {
-          "mark": { "model": "infraredstone:diode/resistance_3" }
+          "mark": { "model": "infraredstone:module/diode/resistance_3" }
         }
       },
       "3": {
         "submodel": {
-          "mark": { "model": "infraredstone:diode/resistance_4" }
+          "mark": { "model": "infraredstone:module/diode/resistance_4" }
         }
       }
     }

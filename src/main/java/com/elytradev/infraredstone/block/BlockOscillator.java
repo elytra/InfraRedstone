@@ -1,6 +1,6 @@
 package com.elytradev.infraredstone.block;
 
-import com.elytradev.infraredstone.tile.TileEntityGateNot;
+import com.elytradev.infraredstone.tile.TileEntityOscillator;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -16,18 +16,18 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 
-public class BlockGateNot extends BlockModule<TileEntityGateNot> implements IBlockBase {
+public class BlockOscillator extends BlockModule<TileEntityOscillator> implements IBlockBase {
 
     protected String name;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    public static final PropertyBool FRONT_ACTIVE = PropertyBool.create("front_active");
+    public static final PropertyBool ACTIVE = PropertyBool.create("active");
     public static int FACE = 3;
 
-    public BlockGateNot() {
-        super(Material.CIRCUITS, "gate_not");
+    public BlockOscillator() {
+        super(Material.CIRCUITS, "oscillator");
         this.setDefaultState(blockState.getBaseState()
                 .withProperty(FACING, EnumFacing.NORTH)
-                .withProperty(FRONT_ACTIVE, false));
+                .withProperty(ACTIVE, false));
 
         this.setHardness(0.5f);
     }
@@ -35,13 +35,13 @@ public class BlockGateNot extends BlockModule<TileEntityGateNot> implements IBlo
     //TODO: make this pop off when the block it's on is broken, also maybe by water but ¯\_(ツ)_/¯
 
     @Override
-    public Class<TileEntityGateNot> getTileEntityClass() {
-        return TileEntityGateNot.class;
+    public Class<TileEntityOscillator> getTileEntityClass() {
+        return TileEntityOscillator.class;
     }
 
     @Override
-    public TileEntityGateNot createTileEntity(World world, IBlockState state) {
-        return new TileEntityGateNot();
+    public TileEntityOscillator createTileEntity(World world, IBlockState state) {
+        return new TileEntityOscillator();
     }
 
 
@@ -73,7 +73,7 @@ public class BlockGateNot extends BlockModule<TileEntityGateNot> implements IBlo
 
     @Override
     public BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING, FRONT_ACTIVE);
+        return new BlockStateContainer(this, FACING, ACTIVE);
     }
 
     @Override
@@ -93,16 +93,16 @@ public class BlockGateNot extends BlockModule<TileEntityGateNot> implements IBlo
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
-        if (te == null || !(te instanceof TileEntityGateNot)) return state;
-        TileEntityGateNot not = (TileEntityGateNot) te;
+        if (te==null || !(te instanceof TileEntityOscillator)) return state;
+        TileEntityOscillator oscillator = (TileEntityOscillator)te;
         return state
-                .withProperty(FRONT_ACTIVE, not.isActive());
+                .withProperty(ACTIVE, oscillator.isActive());
     }
 
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
         return this.getDefaultState()
                 .withProperty(FACING, placer.getHorizontalFacing())
-                .withProperty(FRONT_ACTIVE, false);
+                .withProperty(ACTIVE, false);
     }
 }

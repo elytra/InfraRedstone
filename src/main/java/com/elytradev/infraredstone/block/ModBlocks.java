@@ -11,12 +11,13 @@ public class ModBlocks {
     public static final CableInfraRedstone INFRA_REDSTONE = new CableInfraRedstone();
     public static final BlockFineLever FINE_LEVER = new BlockFineLever();
     public static final BlockDiode DIODE = new BlockDiode();
+    public static final BlockGateNot GATE_NOT = new BlockGateNot();
     public static final BlockGateAnd GATE_AND = new BlockGateAnd();
     public static final BlockGateXor GATE_XOR = new BlockGateXor();
-    public static final BlockGateNot GATE_NOT = new BlockGateNot();
+    public static final BlockOscillator OSCILLATOR = new BlockOscillator();
 
     public static Block[] allBlocks = {
-            INFRA_REDSTONE, FINE_LEVER, DIODE, GATE_AND, GATE_XOR, GATE_NOT
+            INFRA_REDSTONE, FINE_LEVER, DIODE, GATE_NOT, GATE_AND, GATE_XOR, OSCILLATOR
     };
 
     public static void register(IForgeRegistry<Block> registry) {
@@ -26,9 +27,10 @@ public class ModBlocks {
 
         GameRegistry.registerTileEntity(FINE_LEVER.getTileEntityClass(), FINE_LEVER.getRegistryName().toString());
         GameRegistry.registerTileEntity(DIODE.getTileEntityClass(), DIODE.getRegistryName().toString());
+        GameRegistry.registerTileEntity(GATE_NOT.getTileEntityClass(), GATE_NOT.getRegistryName().toString());
         GameRegistry.registerTileEntity(GATE_AND.getTileEntityClass(), GATE_AND.getRegistryName().toString());
         GameRegistry.registerTileEntity(GATE_XOR.getTileEntityClass(), GATE_XOR.getRegistryName().toString());
-        GameRegistry.registerTileEntity(GATE_NOT.getTileEntityClass(), GATE_NOT.getRegistryName().toString());
+        GameRegistry.registerTileEntity(OSCILLATOR.getTileEntityClass(), OSCILLATOR.getRegistryName().toString());
 
     }
 

@@ -31,8 +31,8 @@
 			}
 		},
 		{
-			"from": [14, 2, 7],
-			"to": [16, 4, 9],
+			"from": [14, 3, 7],
+			"to": [16, 5, 9],
 			"faces": {
 				"north": {"uv": [7, 6, 9, 8], "texture": "#right"},
 				"east": {"uv": [7, 6, 9, 8], "texture": "#right"},
