@@ -66,10 +66,10 @@ public class TileEntityOscillator extends TileEntityIRComponent implements ITick
             if (facing==null) return true;
             IBlockState state = world.getBlockState(pos);
             if (state.getBlock()==ModBlocks.OSCILLATOR) {
-                EnumFacing gateXorFront = state.getValue(BlockOscillator.FACING);
-                if (gateXorFront==facing) {
+                EnumFacing oscillatorFront = state.getValue(BlockOscillator.FACING);
+                if (oscillatorFront==facing) {
                     return true;
-                } else if (gateXorFront==facing.getOpposite()) {
+                } else if (oscillatorFront==facing.getOpposite()) {
                     return true;
                 } else {
                     return false;
@@ -91,10 +91,10 @@ public class TileEntityOscillator extends TileEntityIRComponent implements ITick
 
             IBlockState state = world.getBlockState(pos);
             if (state.getBlock()==ModBlocks.OSCILLATOR) {
-                EnumFacing gateXorFront = state.getValue(BlockOscillator.FACING);
-                if (gateXorFront==facing) {
+                EnumFacing oscillatorFront = state.getValue(BlockOscillator.FACING);
+                if (oscillatorFront==facing) {
                     return (T) signal;
-                } else if (gateXorFront==facing.getOpposite()) {
+                } else if (oscillatorFront==facing.getOpposite()) {
                     return (T) InfraRedstoneHandler.ALWAYS_OFF;
                 } else {
                     return null;
