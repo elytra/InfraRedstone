@@ -54,8 +54,20 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 3/16.0, 1.0D);
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+    	if (state.getBlock()!=this) return NULL_AABB;
+    	double minX =  6/16d;
+    	double minZ =  6/16d;
+    	double maxX = 10/16d;
+    	double maxZ = 10/16d;
+    	state = getActualState(state, world, pos);
+    	
+    	if (state.getValue(WEST)!=EnumCableConnection.DISCONNECTED) minX = 0d;
+    	if (state.getValue(NORTH)!=EnumCableConnection.DISCONNECTED) minZ = 0d;
+    	if (state.getValue(EAST)!=EnumCableConnection.DISCONNECTED) maxX = 1d;
+    	if (state.getValue(SOUTH)!=EnumCableConnection.DISCONNECTED) maxZ = 1d;
+    	
+        return new AxisAlignedBB(minX, 0.0D, minZ, maxX, 3/16.0, maxZ);
     }
 
     private EnumCableConnection getCableConnections(IBlockAccess world, BlockPos pos, EnumFacing dir) {
