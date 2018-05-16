@@ -1,24 +1,24 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model":"infraredstone:module/oscillator/oscillator"
+    "model":"infraredstone:module/transistor/transistor"
   },
   "variants": {
     "normal": {
-      "model": "infraredstone:module/oscillator/oscillator"
+      "model": "infraredstone:module/transistor/transistor"
     },
     "inventory": {
-      "model": "infraredstone:module/oscillator/item"
+      "model": "infraredstone:module/transistor/item"
     },
     "active": {
       "true": {
         "textures": {
-          "base": "infraredstone:blocks/oscillator_on"
+          "base": "infraredstone:blocks/transistor_on"
         }
       },
       "false": {
         "textures": {
-          "base": "infraredstone:blocks/oscillator"
+          "base": "infraredstone:blocks/transistor"
         }
       }
     },

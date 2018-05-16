@@ -15,9 +15,10 @@ public class ModBlocks {
     public static final BlockGateAnd GATE_AND = new BlockGateAnd();
     public static final BlockGateXor GATE_XOR = new BlockGateXor();
     public static final BlockOscillator OSCILLATOR = new BlockOscillator();
+    public static final BlockTransistor TRANSISTOR = new BlockTransistor();
 
     public static Block[] allBlocks = {
-            INFRA_REDSTONE, FINE_LEVER, DIODE, GATE_NOT, GATE_AND, GATE_XOR, OSCILLATOR
+            INFRA_REDSTONE, FINE_LEVER, DIODE, GATE_NOT, GATE_AND, GATE_XOR, OSCILLATOR, TRANSISTOR
     };
 
     public static void register(IForgeRegistry<Block> registry) {
@@ -31,6 +32,7 @@ public class ModBlocks {
         GameRegistry.registerTileEntity(GATE_AND.getTileEntityClass(), GATE_AND.getRegistryName().toString());
         GameRegistry.registerTileEntity(GATE_XOR.getTileEntityClass(), GATE_XOR.getRegistryName().toString());
         GameRegistry.registerTileEntity(OSCILLATOR.getTileEntityClass(), OSCILLATOR.getRegistryName().toString());
+        GameRegistry.registerTileEntity(TRANSISTOR.getTileEntityClass(), TRANSISTOR.getRegistryName().toString());
 
     }
 

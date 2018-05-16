@@ -3,8 +3,8 @@
 	"textures": {
 		"ic": "infraredstone:blocks/ics",
 		"side": "infraredstone:blocks/pcb_slate",
-		"base": "infraredstone:blocks/transistor_off",
-		"particle": "infraredstone:blocks/transistor_off"
+		"base": "infraredstone:blocks/transistor",
+		"particle": "infraredstone:blocks/transistor"
 	},
 	"elements": [
 		{

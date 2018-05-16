@@ -2,9 +2,9 @@
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
 		"ic": "infraredstone:blocks/ics",
-		"particle": "infraredstone:blocks/oscillator_off",
+		"particle": "infraredstone:blocks/oscillator",
 		"side": "infraredstone:blocks/pcb_slate",
-		"base": "infraredstone:blocks/oscillator_off"
+		"base": "infraredstone:blocks/oscillator"
 	},
 	"elements": [
 		{
