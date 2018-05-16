@@ -77,10 +77,8 @@ public class InRedLogic {
 			return cap.getSignalValue();
 		}
 		
-		//Oh. Okay. No wires or machines. Well, return the vanilla redstone value here and call it a day.
-		//return world.isBlockIndirectlyGettingPowered(initialPos);
-		
-		return world.getRedstonePower(initialPos, dir);
+		//Oh. Okay. No wires or machines. Well, return the vanilla redstone value as the bottom bit here and call it a day.
+		return (world.getRedstonePower(initialPos, dir)!=0) ? 1 : 0;
 	}
 	
 	private static boolean checkCandidacy(World world, BlockPos pos, EnumFacing side) {
@@ -151,16 +149,13 @@ public class InRedLogic {
 			}
 		}
 		
-		//System.out.println(""+members.size()+" candidates, "+traversed.size()+" blocks traversed.");
-		
-		//Grab the strongest signal
-		int strongest = 0;
+		//Grab the bitwise OR of all signals
+		int result = 0;
 		for(Endpoint cur : members) {
 			int val = valueDirectlyAt(world, cur.pos, cur.facing);
-			//System.out.println("Endpoint found; strength:"+val+", pos:"+cur.pos+", facing:"+cur.facing);
-			strongest = Math.max(val, strongest);
+			result |= val;
 		}
-		return strongest;
+		return result;
 	}
 	
 	private static void checkAdd(Endpoint endpoint, List<Endpoint> next, Set<BlockPos> traversed, Set<Endpoint> rejected) {
