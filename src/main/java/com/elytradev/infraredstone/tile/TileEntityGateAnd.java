@@ -1,5 +1,8 @@
 package com.elytradev.infraredstone.tile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockGateAnd;
 import com.elytradev.infraredstone.block.ModBlocks;
@@ -51,65 +54,34 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
                 int sigLeft = InRedLogic.findIRValue(world, pos, left);
                 int sigRight = InRedLogic.findIRValue(world, pos, right);
                 int sigBack = InRedLogic.findIRValue(world, pos, back);
-                valLeft = sigLeft;
-                valRight = sigRight;
-                valBack = sigBack;
-                int value1 = 0;
-                int value2 = 0;
-                if (inactive != EnumInactiveSelection.NONE) {
-                    //one side is disabled, so we need to find out what side that is and check the others
-                    switch (inactive) {
-                        case LEFT:
-                            value1 = sigBack;
-                            value2 = sigRight;
-                            break;
-                        case BACK:
-                            value1 = sigLeft;
-                            value2 = sigRight;
-                            break;
-                        case RIGHT:
-                            value1 = sigLeft;
-                            value2 = sigBack;
-                            break;
-                    }
-                    if (!inverted) {
-                        if (value1 > 0 && value2 > 0) {
-                            if (value1 == value2) {
-                                signal.setNextSignalValue(value1);
-                            } else if (value1 > value2) {
-                                signal.setNextSignalValue(value1);
-                            } else {
-                                signal.setNextSignalValue(value2);
-                            }
-                        } else {
-                            signal.setNextSignalValue(0);
-                        }
-                    } else {
-                        if (value1 > 0 && value2 > 0) {
-                            signal.setNextSignalValue(0);
-                        } else {
-                            signal.setNextSignalValue(63);
-                        }
-                    }
-                } else {
-                    //all three sides are on, so we gotta check all three
-                    if (!inverted) {
-                        if (sigLeft > 0 && sigBack > 0 && sigRight > 0) {
-                            int sig = Math.max(sigLeft, sigRight);
-                            sig = Math.max(sig, sigBack);
-                            //there needs to be a better way to Math.max three things than this, right?
-                            signal.setNextSignalValue(sig);
-                        } else {
-                            signal.setNextSignalValue(0);
-                        }
-                    } else {
-                        if (sigLeft > 0 && sigBack > 0 && sigRight > 0) {
-                            signal.setNextSignalValue(0);
-                        } else {
-                            signal.setNextSignalValue(63);
-                        }
-                    }
+                List<Integer> signals = new ArrayList<>();
+                
+                switch (inactive) {
+                case LEFT:
+                    signals.add(sigBack);
+                    signals.add(sigRight);
+                    break;
+                case BACK:
+                    signals.add(sigLeft);
+                    signals.add(sigRight);
+                    break;
+                case RIGHT:
+                    signals.add(sigLeft);
+                    signals.add(sigBack);
+                    break;
+                case NONE:
+                    signals.add(sigLeft);
+                    signals.add(sigBack);
+                    signals.add(sigRight);
                 }
+                
+                int result = 0b11_1111; //63
+                for(int signal : signals) {
+                    result &= signal;
+                }
+                if (inverted) result = (~result) & 0b11_1111;
+                
+                signal.setNextSignalValue(result);
                 markDirty();
             }
 
@@ -246,7 +218,8 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
         // please excuse the black magic
         if (!hasWorld() || getWorld().isRemote) return;
 
-        if (valLeft!=lastValLeft
+        if (
+                   valLeft!=lastValLeft
                 || valBack!=lastValBack
                 || valRight!=lastValRight
                 || isActive()!=lastActive
