@@ -45,7 +45,7 @@
       },
       "connected_up": {
         "submodel": {
-          "south": { "model": "infraredstone:inred_cable_side/up", "y": 180 }
+          "south": { "model": "infraredstone:inred_cable/side_up", "y": 180 }
         }
       }
     },

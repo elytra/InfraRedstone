@@ -24,13 +24,13 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     protected String name;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
-    public static int FACE = 3;
     public static final PropertyBool BIT_0 = PropertyBool.create("bit_0");
     public static final PropertyBool BIT_1 = PropertyBool.create("bit_1");
     public static final PropertyBool BIT_2 = PropertyBool.create("bit_2");
     public static final PropertyBool BIT_3 = PropertyBool.create("bit_3");
     public static final PropertyBool BIT_4 = PropertyBool.create("bit_4");
     public static final PropertyBool BIT_5 = PropertyBool.create("bit_5");
+    public static int FACE = 3;
 
     public BlockDiode() {
         super(Material.CIRCUITS, "diode");
@@ -159,7 +159,8 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     	TileEntity te = world.getTileEntity(pos);
     	if (!(te instanceof TileEntityDiode)) return state;
     	TileEntityDiode diode = (TileEntityDiode)te;
-    	return state.withProperty(ACTIVE, diode.isActive())
+    	return state
+                .withProperty(ACTIVE, diode.isActive())
                 .withProperty(BIT_0, bitToBool(0, world, pos))
                 .withProperty(BIT_1, bitToBool(1, world, pos))
                 .withProperty(BIT_2, bitToBool(2, world, pos))
@@ -196,7 +197,8 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
 
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing())
+        return this.getDefaultState()
+                .withProperty(FACING, placer.getHorizontalFacing())
                 .withProperty(ACTIVE, false)
                 .withProperty(BIT_0, true)
                 .withProperty(BIT_1, true)

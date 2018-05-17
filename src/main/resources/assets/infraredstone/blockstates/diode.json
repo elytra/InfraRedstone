@@ -13,13 +13,11 @@
     "active": {
       "true": {
         "textures": {
-          "light": "infraredstone:blocks/lights",
           "base": "infraredstone:blocks/diode_on"
         }
       },
       "false": {
         "textures": {
-          "light": "infraredstone:blocks/lights_dark",
           "base": "infraredstone:blocks/diode"
         }
       }
@@ -107,6 +105,6 @@
       "west": {
         "y": 270
       }
-    },
+    }
   }
 }
