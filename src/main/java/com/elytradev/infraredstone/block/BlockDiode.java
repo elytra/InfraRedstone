@@ -5,7 +5,6 @@ import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,6 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -25,14 +25,34 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
     public static int FACE = 3;
-    public static final PropertyInteger MARK = PropertyInteger.create("mark",0, 3);
+    public static final PropertyBool BIT_0 = PropertyBool.create("bit_0");
+    public static final PropertyBool BIT_1 = PropertyBool.create("bit_1");
+    public static final PropertyBool BIT_2 = PropertyBool.create("bit_2");
+    public static final PropertyBool BIT_3 = PropertyBool.create("bit_3");
+    public static final PropertyBool BIT_4 = PropertyBool.create("bit_4");
+    public static final PropertyBool BIT_5 = PropertyBool.create("bit_5");
 
     public BlockDiode() {
         super(Material.CIRCUITS, "diode");
-        this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false).withProperty(MARK, 0));
+        this.setDefaultState(blockState.getBaseState()
+                .withProperty(FACING, EnumFacing.NORTH)
+                .withProperty(ACTIVE, false)
+                .withProperty(BIT_0, true)
+                .withProperty(BIT_1, true)
+                .withProperty(BIT_2, true)
+                .withProperty(BIT_3, true)
+                .withProperty(BIT_4, true)
+                .withProperty(BIT_5, true));
 
         this.setHardness(0.5f);
     }
+
+    private static final AxisAlignedBB AABB_BIT_0   = new AxisAlignedBB( 10/16d, 0d,  10/16d,  11/16d, 0.5d, 14/16d);
+    private static final AxisAlignedBB AABB_BIT_1   = new AxisAlignedBB( 9/16d, 0d,  8/16d,  10/16d, 0.5d, 12/16d);
+    private static final AxisAlignedBB AABB_BIT_2   = new AxisAlignedBB( 8/16d, 0d,  10/16d,  9/16d, 0.5d, 14/16d);
+    private static final AxisAlignedBB AABB_BIT_3   = new AxisAlignedBB( 7/16d, 0d,  8/16d,  8/16d, 0.5d, 12/16d);
+    private static final AxisAlignedBB AABB_BIT_4   = new AxisAlignedBB( 6/16d, 0d,  10/16d,  7/16d, 0.5d, 14/16d);
+    private static final AxisAlignedBB AABB_BIT_5   = new AxisAlignedBB( 5/16d, 0d,  8/16d,  6/16d, 0.5d, 12/16d);
 
     //TODO: make this pop off when the block it's on is broken, also maybe by water but ¯\_(ツ)_/¯
 
@@ -48,9 +68,43 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(!world.isRemote && !player.isSneaking() && world.getTileEntity(pos) instanceof TileEntityDiode) {
-            TileEntityDiode te = (TileEntityDiode)world.getTileEntity(pos);
-            te.cycleResistance();
+        TileEntity te = world.getTileEntity(pos);
+        if(!world.isRemote && !player.isSneaking() && te instanceof TileEntityDiode) {
+            Vec3d blockCenteredHit = new Vec3d(hitX, hitY, hitZ);
+            blockCenteredHit = blockCenteredHit.subtract(0.5, 0.5, 0.5);
+            switch (state.getValue(BlockDiode.FACING)) {
+                case SOUTH:
+                    blockCenteredHit = blockCenteredHit.rotateYaw((float)Math.PI);
+                    break;
+                case EAST:
+                    blockCenteredHit = blockCenteredHit.rotateYaw((float)Math.PI/2);
+                    break;
+                case WEST:
+                    blockCenteredHit = blockCenteredHit.rotateYaw(3*(float)Math.PI/2);
+                    break;
+                default:
+                    break;
+            }
+            blockCenteredHit = blockCenteredHit.addVector(0.5, 0.5, 0.5);
+            TileEntityDiode teDiode = (TileEntityDiode)te;
+            if (AABB_BIT_0.contains(blockCenteredHit)) {
+                teDiode.setMask(0);
+            }
+            if (AABB_BIT_1.contains(blockCenteredHit)) {
+                teDiode.setMask(1);
+            }
+            if (AABB_BIT_2.contains(blockCenteredHit)) {
+                teDiode.setMask(2);
+            }
+            if (AABB_BIT_3.contains(blockCenteredHit)) {
+                teDiode.setMask(3);
+            }
+            if (AABB_BIT_4.contains(blockCenteredHit)) {
+                teDiode.setMask(4);
+            }
+            if (AABB_BIT_5.contains(blockCenteredHit)) {
+                teDiode.setMask(5);
+            }
         }
         return true;
     }
@@ -83,7 +137,7 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
 
     @Override
     public BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING, ACTIVE, MARK);
+        return new BlockStateContainer(this, FACING, ACTIVE, BIT_0, BIT_1, BIT_2, BIT_3, BIT_4, BIT_5);
     }
 
     @Override
@@ -103,9 +157,24 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
     	TileEntity te = world.getTileEntity(pos);
-    	if (te==null || !(te instanceof TileEntityDiode)) return state;
+    	if (!(te instanceof TileEntityDiode)) return state;
     	TileEntityDiode diode = (TileEntityDiode)te;
-    	return state.withProperty(MARK, diode.getMark()).withProperty(ACTIVE, diode.isActive());
+    	return state.withProperty(ACTIVE, diode.isActive())
+                .withProperty(BIT_0, bitToBool(0, world, pos))
+                .withProperty(BIT_1, bitToBool(1, world, pos))
+                .withProperty(BIT_2, bitToBool(2, world, pos))
+                .withProperty(BIT_3, bitToBool(3, world, pos))
+                .withProperty(BIT_4, bitToBool(4, world, pos))
+                .withProperty(BIT_5, bitToBool(5, world, pos));
+    }
+
+    public boolean bitToBool(int bit, IBlockAccess world, BlockPos pos) {
+        TileEntity te = world.getTileEntity(pos);
+        if(te instanceof TileEntityDiode) {
+            TileEntityDiode teDiode = (TileEntityDiode)te;
+            return (1<<bit & teDiode.getMask()) > 0;
+        }
+        return false;
     }
     
     @Override
@@ -127,6 +196,13 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
 
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing()).withProperty(ACTIVE, false).withProperty(MARK, 0);
+        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing())
+                .withProperty(ACTIVE, false)
+                .withProperty(BIT_0, true)
+                .withProperty(BIT_1, true)
+                .withProperty(BIT_2, true)
+                .withProperty(BIT_3, true)
+                .withProperty(BIT_4, true)
+                .withProperty(BIT_5, true);
     }
 }

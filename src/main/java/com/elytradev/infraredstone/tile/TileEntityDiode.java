@@ -9,22 +9,24 @@ import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 import com.google.common.base.Predicates;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 
 public class TileEntityDiode extends TileEntityIRComponent implements ITickable {
     private InfraRedstoneHandler signal = new InfraRedstoneHandler();
-    private int resistance = 0;
+    private int mask = 0b11_1111;
     
     //Transient data to throttle sync down here
     boolean lastActive = false;
-    int lastResistance = 0;
+    int lastMask = 0b11_1111;
 
     public void update() {
         if (world.isRemote || !hasWorld()) return;
@@ -36,11 +38,7 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
             if (state.getBlock() instanceof BlockDiode) {
                 EnumFacing back = state.getValue(BlockDiode.FACING).getOpposite();
                 int sig = InRedLogic.findIRValue(world, pos, back);
-                if (sig >= resistance) {
-                	signal.setNextSignalValue(sig);
-                }  else {
-                	signal.setNextSignalValue(0);
-                }
+                signal.setNextSignalValue(sig & mask);
                 markDirty();
             }
         } else {
@@ -51,11 +49,10 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
         }
     }
 
-    public void cycleResistance() {
-    	resistance += 16;
-    	if (resistance>=64) resistance = 0;
+    public void setMask(int bit) {
+        mask ^= (1 << bit);
+        world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.45f);
     	markDirty();
-    	//world.setBlockState(pos, world.getBlockState(pos), 3 | 16); //Don't change the blockstate, but *send an update* to the client and prevent observers from caring
 	}
     
     @Override
@@ -108,7 +105,7 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		NBTTagCompound tag = super.writeToNBT(compound);
-		tag.setInteger("Resistance", resistance);
+		tag.setInteger("Mask", mask);
 		tag.setTag("Signal", InfraRedstone.CAPABILITY_IR.writeNBT(signal, null));
 		return tag;
 	}
@@ -116,7 +113,7 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		resistance = compound.getInteger("Resistance");
+		mask = compound.getInteger("Mask");
 		if (compound.hasKey("Signal")) InfraRedstone.CAPABILITY_IR.readNBT(signal, null, compound.getTag("Signal"));
 	}
 
@@ -148,7 +145,7 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
 		// again, I've copy-pasted this like 12 times, should probably go into Concrete
 		if (!hasWorld() || getWorld().isRemote) return;
 		
-		if (resistance!=lastResistance || isActive()!=lastActive) { //Throttle updates - only send when something important changes
+		if (mask!=lastMask || isActive()!=lastActive) { //Throttle updates - only send when something important changes
 		
 			WorldServer ws = (WorldServer)getWorld();
 			Chunk c = getWorld().getChunkFromBlockCoords(getPos());
@@ -159,7 +156,7 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
 				}
 			}
 			
-			lastResistance = resistance;
+			lastMask = mask;
 			lastActive = isActive();
 			
 			IBlockState state = world.getBlockState(pos);
@@ -175,12 +172,8 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
     	System.out.println("Set to "+active);
     }*/
 
-    public int getResistance() {
-    	return resistance;
-	}
-
-	public int getMark() {
-    	return (int)(resistance * 4/64f);
+    public int getMask() {
+    	return mask;
 	}
 	
 	public boolean isActive() {
