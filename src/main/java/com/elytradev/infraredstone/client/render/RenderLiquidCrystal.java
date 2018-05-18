@@ -4,7 +4,6 @@ import com.elytradev.infraredstone.tile.TileEntityLiquidCrystal;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.animation.FastTESR;
@@ -14,7 +13,6 @@ public class RenderLiquidCrystal extends FastTESR<TileEntityLiquidCrystal> {
     @Override
     public void renderTileEntityFast(TileEntityLiquidCrystal te, double x, double y, double z, float partialTicks, int destroyStage, float partial, BufferBuilder buffer) {
         TextureAtlasSprite dirt = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/dirt");
-        GlStateManager.disableAlpha();
         buffer.setTranslation(x, y, z);
         for (EnumFacing face : EnumFacing.VALUES) {
             renderFace(buffer, dirt, face, te.animationProgress[face.ordinal()], te.getFaceCardinality(face), partialTicks);
