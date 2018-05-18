@@ -1,9 +1,8 @@
 package com.elytradev.infraredstone.proxy;
 
 import com.elytradev.infraredstone.InfraRedstone;
-//import com.elytradev.betterboilers.client.RenderDistiller;
-//import com.elytradev.opaline.tile.TileEntityDistiller;
-import com.elytradev.infraredstone.InfraRedstone;
+import com.elytradev.infraredstone.client.render.RenderLiquidCrystal;
+import com.elytradev.infraredstone.tile.TileEntityLiquidCrystal;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +13,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void preInit() {
-        //ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDistiller.class, new RenderDistiller());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLiquidCrystal.class, new RenderLiquidCrystal());
     }
 
     @Override

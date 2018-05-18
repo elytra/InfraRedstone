@@ -1,6 +1,5 @@
 package com.elytradev.infraredstone.util;
 
-import com.elytradev.infraredstone.InRedLog;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.item.ModItems;
 import net.minecraft.init.Blocks;
@@ -10,7 +9,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -85,6 +83,13 @@ public class InRedRecipes {
                 "rrr", "ggg",
                 'r', new ItemStack(Items.REDSTONE),
                 'g', new ItemStack(Blocks.GLASS)
+        ));
+        
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.DEVICE_LIQUID_CRYSTAL, 8),
+                "ggg", "gqg", "gpg",
+                'q', "gemQuartz",
+                'g', "blockGlass",
+                'p', new ItemStack(ModItems.PCB)
         ));
 
 //        Items
