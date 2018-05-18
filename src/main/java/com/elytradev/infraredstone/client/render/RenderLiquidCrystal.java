@@ -27,6 +27,7 @@ public class RenderLiquidCrystal extends FastTESR<TileEntityLiquidCrystal> {
             prog += (0.025f*cardinality)*partialTicks;
         } else {
             prog -= 0.05f*partialTicks;
+            face = face.getOpposite();
         }
         prog = Math.min(1, Math.max(prog, 0));
         if (prog > 0) {
