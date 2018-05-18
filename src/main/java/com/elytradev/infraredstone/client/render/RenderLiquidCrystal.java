@@ -13,7 +13,6 @@ public class RenderLiquidCrystal extends FastTESR<TileEntityLiquidCrystal> {
 
     @Override
     public void renderTileEntityFast(TileEntityLiquidCrystal te, double x, double y, double z, float partialTicks, int destroyStage, float partial, BufferBuilder buffer) {
-        buffer.setTranslation(0, 0, 0);
         TextureAtlasSprite dirt = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/dirt");
         GlStateManager.disableAlpha();
         buffer.setTranslation(x, y, z);
