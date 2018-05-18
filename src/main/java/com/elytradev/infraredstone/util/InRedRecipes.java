@@ -24,21 +24,21 @@ public class InRedRecipes {
 //        Gates
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.GATE_AND, 1),
                 " t ", "trt", "ptp",
-                'r', new ItemStack(Items.REDSTONE),
+                'r', "dustRedstone",
                 't', new ItemStack(Blocks.REDSTONE_TORCH),
                 'p', new ItemStack(ModItems.PCB)
         ));
 
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.GATE_XOR, 1),
                 "tr ", "prp", " rt",
-                'r', new ItemStack(Items.REDSTONE),
+                'r', "dustRedstone",
                 't', new ItemStack(Blocks.REDSTONE_TORCH),
                 'p', new ItemStack(ModItems.PCB)
         ));
 
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.GATE_XOR, 1),
                 " rt", "prp", "tr ",
-                'r', new ItemStack(Items.REDSTONE),
+                'r', "dustRedstone",
                 't', new ItemStack(Blocks.REDSTONE_TORCH),
                 'p', new ItemStack(ModItems.PCB)
         ));
@@ -52,36 +52,35 @@ public class InRedRecipes {
 //        Modules
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.FINE_LEVER, 1),
                 "r", "l", "p",
-                'r', new ItemStack(Items.REDSTONE),
+                'r', "dustRedstone",
                 'l', new ItemStack(Blocks.LEVER),
                 'p', new ItemStack(ModItems.PCB)
         ));
 
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.DIODE, 1),
-                "n t", "rpr",
-                'n', new ItemStack(Items.GOLD_NUGGET),
-                'r', new ItemStack(Items.REDSTONE),
-                't', new ItemStack(Blocks.REDSTONE_TORCH),
+                "nnn", "rpr",
+                'n', "nuggetGold",
+                'r', "dustRedstone",
                 'p', new ItemStack(ModItems.PCB)
         ));
 
-//        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.TRANSISTOR, 1),
-//                " r ", "rpr", " r ",
-//                'r', new ItemStack(Items.REDSTONE),
-//                'p', new ItemStack(ModItems.PCB)
-//        ));
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.TRANSISTOR, 1),
+                " r ", "rpr", " r ",
+                'r', "dustRedstone",
+                'p', new ItemStack(ModItems.PCB)
+        ));
 
-//        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.OSCILLATOR, 1),
-//                " q ", "rpr",
-//                'r', new ItemStack(Items.REDSTONE),
-//                'q', new ItemStack(Items.QUARTZ),
-//                'p', new ItemStack(ModItems.PCB)
-//        ));
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.OSCILLATOR, 1),
+                " q ", "rpr",
+                'r', "dustRedstone",
+                'q', "gemQuartz",
+                'p', new ItemStack(ModItems.PCB)
+        ));
 
 //        Other
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.INFRA_REDSTONE, 3),
                 "rrr", "ggg",
-                'r', new ItemStack(Items.REDSTONE),
+                'r', "dustRedstone",
                 'g', new ItemStack(Blocks.GLASS)
         ));
         
