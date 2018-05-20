@@ -53,7 +53,7 @@ public class InRedLogic {
 				if (checkCandidacy(world, down, dir.getOpposite())) {
 					initialPos = down;
 				} else {
-					return world.getRedstonePower(initialPos, dir);
+					return (world.getRedstonePower(initialPos, dir)!=0) ? 1 : 0;
 				}
 			}
 		}
