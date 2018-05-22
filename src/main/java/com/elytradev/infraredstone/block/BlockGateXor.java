@@ -1,6 +1,7 @@
 package com.elytradev.infraredstone.block;
 
 import com.elytradev.infraredstone.tile.TileEntityGateXor;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -35,8 +36,6 @@ public class BlockGateXor extends BlockModule<TileEntityGateXor> implements IBlo
 
         this.setHardness(0.5f);
     }
-
-    //TODO: make this pop off when the block it's on is broken, also maybe by water but ¯\_(ツ)_/¯
 
     @Override
     public Class<TileEntityGateXor> getTileEntityClass() {
@@ -112,5 +111,28 @@ public class BlockGateXor extends BlockModule<TileEntityGateXor> implements IBlo
                 .withProperty(FRONT_ACTIVE, false)
                 .withProperty(LEFT_ACTIVE, false)
                 .withProperty(RIGHT_ACTIVE, false);
+    }
+
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
+    {
+        return worldIn.getBlockState(pos.down()).isTopSolid() && super.canPlaceBlockAt(worldIn, pos);
+    }
+
+    public boolean canBlockStay(World worldIn, BlockPos pos)
+    {
+        return worldIn.getBlockState(pos.down()).isTopSolid();
+    }
+
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+    {
+        if (!this.canBlockStay(worldIn, pos)) {
+            this.dropBlockAsItem(worldIn, pos, state, 0);
+            worldIn.setBlockToAir(pos);
+
+            for (EnumFacing enumfacing : EnumFacing.values())
+            {
+                worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this, false);
+            }
+        }
     }
 }

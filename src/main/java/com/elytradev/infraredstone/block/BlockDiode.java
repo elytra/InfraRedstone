@@ -1,6 +1,7 @@
 package com.elytradev.infraredstone.block;
 
 import com.elytradev.infraredstone.tile.TileEntityDiode;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -53,8 +54,6 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     private static final AxisAlignedBB AABB_BIT_3   = new AxisAlignedBB( 7/16d, 0d,  8/16d,  8/16d, 0.5d, 12/16d);
     private static final AxisAlignedBB AABB_BIT_4   = new AxisAlignedBB( 6/16d, 0d,  10/16d,  7/16d, 0.5d, 14/16d);
     private static final AxisAlignedBB AABB_BIT_5   = new AxisAlignedBB( 5/16d, 0d,  8/16d,  6/16d, 0.5d, 12/16d);
-
-    //TODO: make this pop off when the block it's on is broken, also maybe by water but ¯\_(ツ)_/¯
 
     @Override
     public Class<TileEntityDiode> getTileEntityClass() {
@@ -189,8 +188,6 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     	TileEntity te = world.getTileEntity(pos);
     	if (te!=null && te instanceof TileEntityDiode) {
     		return ((TileEntityDiode)te).isActive()?16:0;
-    		//int result = (te).getCapability(InfraRedstone.CAPABILITY_IR, null).getSignalValue();
-    		//return (result > 16) ? 16 : result;
     	}
     	return 0;
     }
@@ -206,5 +203,28 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
                 .withProperty(BIT_3, true)
                 .withProperty(BIT_4, true)
                 .withProperty(BIT_5, true);
+    }
+
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
+    {
+        return worldIn.getBlockState(pos.down()).isTopSolid() && super.canPlaceBlockAt(worldIn, pos);
+    }
+
+    public boolean canBlockStay(World worldIn, BlockPos pos)
+    {
+        return worldIn.getBlockState(pos.down()).isTopSolid();
+    }
+
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+    {
+        if (!this.canBlockStay(worldIn, pos)) {
+            this.dropBlockAsItem(worldIn, pos, state, 0);
+            worldIn.setBlockToAir(pos);
+
+            for (EnumFacing enumfacing : EnumFacing.values())
+            {
+                worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this, false);
+            }
+        }
     }
 }

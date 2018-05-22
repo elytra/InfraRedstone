@@ -55,6 +55,10 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
                 int sigRight = InRedLogic.findIRValue(world, pos, right);
                 int sigBack = InRedLogic.findIRValue(world, pos, back);
                 List<Integer> signals = new ArrayList<>();
+
+                valLeft = sigLeft;
+                valRight = sigRight;
+                valBack = sigBack;
                 
                 switch (inactive) {
                 case LEFT:

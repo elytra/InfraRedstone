@@ -1,9 +1,11 @@
 package com.elytradev.infraredstone.block;
 
 import com.elytradev.infraredstone.tile.TileEntityFineLever;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -36,8 +38,6 @@ public class BlockFineLever extends BlockModule<TileEntityFineLever> implements 
 
         this.setHardness(0.5f);
     }
-
-    //TODO: make this pop off when the block it's on is broken
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
@@ -129,5 +129,38 @@ public class BlockFineLever extends BlockModule<TileEntityFineLever> implements 
     public static EnumFacing getFacing(int meta)
     {
         return EnumFacing.getFront(meta & 7);
+    }
+
+    protected static boolean canPlaceBlock(World world, BlockPos pos, EnumFacing direction) {
+        BlockPos blockpos = pos.offset(direction.getOpposite());
+        IBlockState state = world.getBlockState(blockpos);
+
+        if (direction == EnumFacing.UP)
+        {
+            return state.isTopSolid();
+        }
+        else
+        {
+            return world.getBlockState(blockpos).isFullCube();
+        }
+    }
+
+    public boolean canBlockStay(World world, BlockPos pos)
+    {
+        IBlockState state = world.getBlockState(pos.offset(world.getBlockState(pos).getValue(FACING).getOpposite()));
+        return state.isFullCube() || state.isTopSolid();
+    }
+
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+    {
+        if (!this.canBlockStay(worldIn, pos)) {
+            this.dropBlockAsItem(worldIn, pos, state, 0);
+            worldIn.setBlockToAir(pos);
+
+            for (EnumFacing enumfacing : EnumFacing.values())
+            {
+                worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this, false);
+            }
+        }
     }
 }

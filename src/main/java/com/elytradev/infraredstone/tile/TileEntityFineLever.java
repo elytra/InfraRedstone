@@ -65,7 +65,7 @@ public class TileEntityFineLever extends TileEntityIRComponent {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        active = compound.getBoolean("active");
+        active = compound.getBoolean("Active");
         if (compound.hasKey("Signal")) InfraRedstone.CAPABILITY_IR.readNBT(signal, null, compound.getTag("Signal"));
     }
 

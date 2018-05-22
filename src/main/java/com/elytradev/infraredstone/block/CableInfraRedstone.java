@@ -14,6 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public class CableInfraRedstone extends BlockBase implements IBlockBase {
 
@@ -122,5 +123,28 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
     @Override
     public BlockStateContainer createBlockState(){
         return new BlockStateContainer(this, NORTH, SOUTH, EAST, WEST);
+    }
+
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
+    {
+        return worldIn.getBlockState(pos.down()).isTopSolid() && super.canPlaceBlockAt(worldIn, pos);
+    }
+
+    public boolean canBlockStay(World worldIn, BlockPos pos)
+    {
+        return worldIn.getBlockState(pos.down()).isTopSolid();
+    }
+
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+    {
+        if (!this.canBlockStay(worldIn, pos)) {
+            this.dropBlockAsItem(worldIn, pos, state, 0);
+            worldIn.setBlockToAir(pos);
+
+            for (EnumFacing enumfacing : EnumFacing.values())
+            {
+                worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this, false);
+            }
+        }
     }
 }

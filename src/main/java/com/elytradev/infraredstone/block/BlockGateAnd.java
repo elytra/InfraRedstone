@@ -2,6 +2,7 @@ package com.elytradev.infraredstone.block;
 
 import com.elytradev.infraredstone.tile.TileEntityGateAnd;
 import com.elytradev.infraredstone.util.EnumInactiveSelection;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -51,8 +52,6 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
     private static final AxisAlignedBB BACK_AABB   = new AxisAlignedBB( 6/16d, 0d, 13/16d, 10/16d, 0.5d, 16/16d);
     private static final AxisAlignedBB RIGHT_AABB  = new AxisAlignedBB(13/16d, 0d,  6/16d, 16/16d, 0.5d, 10/16d);
     private static final AxisAlignedBB INVERT_AABB = new AxisAlignedBB( 6/16d, 0d,  3/16d, 10/16d, 0.5d,  7/16d);
-
-    //TODO: make this pop off when the block it's on is broken, also maybe by water but ¯\_(ツ)_/¯
 
     @Override
     public Class<TileEntityGateAnd> getTileEntityClass() {
@@ -145,7 +144,7 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
-        if (te==null || !(te instanceof TileEntityGateAnd)) return state;
+        if (!(te instanceof TileEntityGateAnd)) return state;
         TileEntityGateAnd and = (TileEntityGateAnd)te;
         return state
                 .withProperty(FRONT_ACTIVE, and.isActive())
@@ -153,7 +152,7 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
                 .withProperty(BACK_ACTIVE, and.isBackActive())
                 .withProperty(RIGHT_ACTIVE, and.isRightActive())
                 .withProperty(INVERTED, and.inverted)
-                .withProperty(INACTIVE, and.inactive); //TODO: change once button selection is in
+                .withProperty(INACTIVE, and.inactive);
     }
 
     @Override
@@ -166,5 +165,28 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
                 .withProperty(RIGHT_ACTIVE, false)
                 .withProperty(INVERTED, false)
                 .withProperty(INACTIVE, EnumInactiveSelection.NONE);
+    }
+
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
+    {
+        return worldIn.getBlockState(pos.down()).isTopSolid() && super.canPlaceBlockAt(worldIn, pos);
+    }
+
+    public boolean canBlockStay(World worldIn, BlockPos pos)
+    {
+        return worldIn.getBlockState(pos.down()).isTopSolid();
+    }
+
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+    {
+        if (!this.canBlockStay(worldIn, pos)) {
+            this.dropBlockAsItem(worldIn, pos, state, 0);
+            worldIn.setBlockToAir(pos);
+
+            for (EnumFacing enumfacing : EnumFacing.values())
+            {
+                worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing), this, false);
+            }
+        }
     }
 }
