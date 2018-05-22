@@ -73,15 +73,15 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
 
     private EnumCableConnection getCableConnections(IBlockAccess world, BlockPos pos, EnumFacing dir) {
     	if (canConnect(world, pos.offset(dir), dir.getOpposite())) return EnumCableConnection.CONNECTED;
-    	
-        if (world.isAirBlock(pos.offset(EnumFacing.UP))) {
-        	if (canConnect(world, pos.offset(dir).up(), dir.getOpposite())) return EnumCableConnection.CONNECTED_UP;
+
+        if (!world.isSideSolid(pos.offset(EnumFacing.UP), EnumFacing.DOWN, false)) {
+            if (canConnect(world, pos.offset(dir).up(), dir.getOpposite())) return EnumCableConnection.CONNECTED_UP;
         }
-        
-        if (world.isAirBlock(pos.offset(dir))) {
-        	if (canConnect(world, pos.offset(dir).down(), dir.getOpposite())) return EnumCableConnection.CONNECTED;
+
+        if (!world.isSideSolid(pos.offset(dir), dir.getOpposite(), false)) {
+            if (canConnect(world, pos.offset(dir).down(), dir.getOpposite())) return EnumCableConnection.CONNECTED;
         }
-        
+
         return EnumCableConnection.DISCONNECTED;
     }
 
