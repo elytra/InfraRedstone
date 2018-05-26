@@ -65,7 +65,7 @@ public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlo
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileEntityShifter) {
             TileEntityShifter teShifter = (TileEntityShifter)te;
-            if (!teShifter.isActive()) return EnumShifterSelection.NONE;
+            if (!teShifter.isEject()) return EnumShifterSelection.NONE;
             else return teShifter.selection;
         }
         return EnumShifterSelection.NONE;

@@ -1,5 +1,6 @@
 package com.elytradev.infraredstone.tile;
 
+import com.elytradev.infraredstone.InRedLog;
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockShifter;
 import com.elytradev.infraredstone.block.ModBlocks;
@@ -28,6 +29,7 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
 
     //Transient data to throttle sync down here
     boolean lastActive = false;
+    boolean lastEject = false;
     EnumShifterSelection lastSelection = EnumShifterSelection.LEFT;
 
     public void update() {
@@ -92,7 +94,6 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
 
             return false;
         }
-
         return super.hasCapability(capability, facing);
     }
 
@@ -134,6 +135,7 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
             selection = EnumShifterSelection.LEFT;
             world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.55f);
         }
+        eject.setSignalValue(0);
         markDirty();
     }
 
@@ -182,7 +184,7 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
         // please excuse the black magic
         if (!hasWorld() || getWorld().isRemote) return;
 
-        if (isActive()!=lastActive || selection!=lastSelection) { //Throttle updates - only send when something important changes
+        if (isActive()!=lastActive || isEject() != lastEject || selection!=lastSelection) { //Throttle updates - only send when something important changes
 
             WorldServer ws = (WorldServer)getWorld();
             Chunk c = getWorld().getChunkFromBlockCoords(getPos());
@@ -194,6 +196,7 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
             }
 
             lastActive = isActive();
+            lastEject = isEject();
             lastSelection = selection;
 
             IBlockState state = world.getBlockState(pos);
