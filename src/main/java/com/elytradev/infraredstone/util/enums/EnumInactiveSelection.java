@@ -1,4 +1,4 @@
-package com.elytradev.infraredstone.util;
+package com.elytradev.infraredstone.util.enums;
 
 import net.minecraft.util.IStringSerializable;
 

@@ -1,15 +1,12 @@
 package com.elytradev.infraredstone.tile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.elytradev.infraredstone.InfraRedstone;
-import com.elytradev.infraredstone.block.BlockGateAnd;
+import com.elytradev.infraredstone.block.BlockShifter;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.logic.InRedLogic;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 
-import com.elytradev.infraredstone.util.enums.EnumInactiveSelection;
+import com.elytradev.infraredstone.util.enums.EnumShifterSelection;
 import com.google.common.base.Predicates;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,21 +21,14 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 
-public class TileEntityGateAnd extends TileEntityIRComponent implements ITickable {
+public class TileEntityShifter extends TileEntityIRComponent implements ITickable {
     private InfraRedstoneHandler signal = new InfraRedstoneHandler();
-    private int valLeft;
-    private int valBack;
-    private int valRight;
-    public boolean inverted;
-    public EnumInactiveSelection inactive = EnumInactiveSelection.NONE;
+    private InfraRedstoneHandler eject = new InfraRedstoneHandler();
+    public EnumShifterSelection selection = EnumShifterSelection.LEFT;
 
     //Transient data to throttle sync down here
     boolean lastActive = false;
-    int lastValLeft = 0;
-    int lastValBack = 0;
-    int lastValRight = 0;
-    boolean lastInvert = false;
-    EnumInactiveSelection lastInactive = EnumInactiveSelection.NONE;
+    EnumShifterSelection lastSelection = EnumShifterSelection.LEFT;
 
     public void update() {
         if (world.isRemote || !hasWorld()) return;
@@ -47,45 +37,25 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
 
         if (InRedLogic.isIRTick()) {
             //IR tick means we're searching for a next value
-            if (state.getBlock() instanceof BlockGateAnd) {
-                EnumFacing left = state.getValue(BlockGateAnd.FACING).rotateYCCW();
-                EnumFacing right = state.getValue(BlockGateAnd.FACING).rotateY();
-                EnumFacing back = state.getValue(BlockGateAnd.FACING).getOpposite();
-                int sigLeft = InRedLogic.findIRValue(world, pos, left);
-                int sigRight = InRedLogic.findIRValue(world, pos, right);
-                int sigBack = InRedLogic.findIRValue(world, pos, back);
-                List<Integer> signals = new ArrayList<>();
+            if (state.getBlock() instanceof BlockShifter) {
+                EnumFacing back = state.getValue(BlockShifter.FACING).getOpposite();
+                int sig = InRedLogic.findIRValue(world, pos, back);
+                int ej = 0;
 
-                valLeft = sigLeft;
-                valRight = sigRight;
-                valBack = sigBack;
-                
-                switch (inactive) {
-                case LEFT:
-                    signals.add(sigBack);
-                    signals.add(sigRight);
-                    break;
-                case BACK:
-                    signals.add(sigLeft);
-                    signals.add(sigRight);
-                    break;
-                case RIGHT:
-                    signals.add(sigLeft);
-                    signals.add(sigBack);
-                    break;
-                case NONE:
-                    signals.add(sigLeft);
-                    signals.add(sigBack);
-                    signals.add(sigRight);
+                if (selection == EnumShifterSelection.LEFT) {
+                    ej = (sig & 0b10_0000);
+                    ej = (ej != 0) ? 1 : 0;
+                    sig <<= 1;
+                    sig &= 0b011_1111;
+                } else {
+                    ej = (sig & 0b00_0001);
+                    ej = (ej != 0) ? 1 : 0;
+                    sig >>>= 1;
+                    sig &= 0b011_1111;
                 }
-                
-                int result = 0b11_1111; //63
-                for(int signal : signals) {
-                    result &= signal;
-                }
-                if (inverted) result = (~result) & 0b11_1111;
-                
-                signal.setNextSignalValue(result);
+
+                signal.setNextSignalValue(sig);
+                eject.setNextSignalValue(ej);
                 markDirty();
             }
 
@@ -102,15 +72,17 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
             if (world==null) return true;
             if (facing==null) return true;
             IBlockState state = world.getBlockState(pos);
-            if (state.getBlock()==ModBlocks.GATE_AND) {
-                EnumFacing gateAndFront = state.getValue(BlockGateAnd.FACING);
-                if (gateAndFront==facing) {
+            if (state.getBlock()==ModBlocks.SHIFTER) {
+                EnumFacing shifterFront = state.getValue(BlockShifter.FACING);
+                if (shifterFront==facing) {
                     return true;
-                } else if (gateAndFront==facing.rotateYCCW()) {
-                    return true;
-                } else if (gateAndFront==facing.getOpposite()) {
-                    return true;
-                } else if (gateAndFront==facing.rotateY()) {
+                } else if (shifterFront==facing.rotateYCCW()) {
+                    if (selection == EnumShifterSelection.LEFT) return true;
+                    else return false;
+                } else if (shifterFront==facing.getOpposite()) {
+                    if (selection == EnumShifterSelection.RIGHT) return true;
+                    else return false;
+                } else if (shifterFront==facing.rotateY()) {
                     return true;
                 } else {
                     return false;
@@ -131,15 +103,17 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
             if (facing==null) return (T) signal;
 
             IBlockState state = world.getBlockState(pos);
-            if (state.getBlock()==ModBlocks.GATE_AND) {
-                EnumFacing gateAndFront = state.getValue(BlockGateAnd.FACING);
-                if (gateAndFront==facing) {
+            if (state.getBlock()==ModBlocks.SHIFTER) {
+                EnumFacing shifterFront = state.getValue(BlockShifter.FACING);
+                if (shifterFront==facing) {
                     return (T) signal;
-                } else if (gateAndFront==facing.rotateYCCW()) {
-                    return (T) InfraRedstoneHandler.ALWAYS_OFF;
-                } else if (gateAndFront==facing.getOpposite()) {
-                    return (T) InfraRedstoneHandler.ALWAYS_OFF;
-                } else if (gateAndFront==facing.rotateY()) {
+                } else if (shifterFront==facing.rotateYCCW()) {
+                    if (selection == EnumShifterSelection.LEFT) return (T) eject;
+                    else return (T) InfraRedstoneHandler.ALWAYS_OFF;
+                } else if (shifterFront==facing.getOpposite()) {
+                    if (selection == EnumShifterSelection.RIGHT) return (T) eject;
+                    else return (T) InfraRedstoneHandler.ALWAYS_OFF;
+                } else if (shifterFront==facing.rotateY()) {
                     return (T)InfraRedstoneHandler.ALWAYS_OFF;
                 } else {
                     return null;
@@ -151,35 +125,22 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
         return super.getCapability(capability, facing);
     }
 
-    public void toggleInvert() {
-        if (inverted) {
-            inverted = false;
-            world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.5f);
+    public void toggleSelection() {
+        if (selection == EnumShifterSelection.LEFT) {
+            selection = EnumShifterSelection.RIGHT;
+            world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.55f);
         } else {
-            inverted = true;
+            selection = EnumShifterSelection.LEFT;
             world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.55f);
         }
-    }
-
-    public void toggleInactive(EnumInactiveSelection newInactive) {
-        if (inactive == newInactive) {
-            inactive = EnumInactiveSelection.NONE;
-        } else {
-            inactive = newInactive;
-        }
-        world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.45f);
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tag = super.writeToNBT(compound);
         tag.setTag("Signal", InfraRedstone.CAPABILITY_IR.writeNBT(signal, null));
-        //please forgive me, falk. We'll work on moving these out soon.
-        tag.setInteger("Left", valLeft);
-        tag.setInteger("Back", valBack);
-        tag.setInteger("Right", valRight);
-        tag.setBoolean("Inverted", inverted);
-        tag.setString("Inactive", inactive.getName());
+        tag.setTag("Eject", InfraRedstone.CAPABILITY_IR.writeNBT(eject, null));
+        tag.setString("Selection", selection.getName());
         return tag;
     }
 
@@ -187,11 +148,8 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         if (compound.hasKey("Signal")) InfraRedstone.CAPABILITY_IR.readNBT(signal, null, compound.getTag("Signal"));
-        valLeft = compound.getInteger("Left");
-        valBack = compound.getInteger("Back");
-        valRight = compound.getInteger("Right");
-        inverted = compound.getBoolean("Inverted");
-        inactive = EnumInactiveSelection.forName(compound.getString("Inactive"));
+        if (compound.hasKey("Eject")) InfraRedstone.CAPABILITY_IR.readNBT(signal, null, compound.getTag("Eject"));
+        selection = EnumShifterSelection.forName(compound.getString("Selection"));
     }
 
     @Override
@@ -222,13 +180,7 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
         // please excuse the black magic
         if (!hasWorld() || getWorld().isRemote) return;
 
-        if (
-                   valLeft!=lastValLeft
-                || valBack!=lastValBack
-                || valRight!=lastValRight
-                || isActive()!=lastActive
-                || inverted!=lastInvert
-                || inactive!=lastInactive) { //Throttle updates - only send when something important changes
+        if (isActive()!=lastActive || selection!=lastSelection) { //Throttle updates - only send when something important changes
 
             WorldServer ws = (WorldServer)getWorld();
             Chunk c = getWorld().getChunkFromBlockCoords(getPos());
@@ -239,12 +191,8 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
                 }
             }
 
-            lastValLeft = valLeft;
-            lastValBack = valBack;
-            lastValRight = valRight;
             lastActive = isActive();
-            lastInvert = inverted;
-            lastInactive = inactive;
+            lastSelection = selection;
 
             IBlockState state = world.getBlockState(pos);
             ws.markAndNotifyBlock(pos, c, state, state, 1 | 16);
@@ -253,14 +201,5 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
 
     public boolean isActive() {
         return signal.getSignalValue()!=0;
-    }
-    public boolean isLeftActive() {
-        return valLeft!=0;
-    }
-    public boolean isBackActive() {
-        return valBack!=0;
-    }
-    public boolean isRightActive() {
-        return valRight!=0;
     }
 }

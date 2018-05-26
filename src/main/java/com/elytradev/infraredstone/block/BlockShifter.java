@@ -1,7 +1,7 @@
 package com.elytradev.infraredstone.block;
 
-import com.elytradev.infraredstone.tile.TileEntityGateAnd;
-import com.elytradev.infraredstone.util.enums.EnumInactiveSelection;
+import com.elytradev.infraredstone.tile.TileEntityShifter;
+import com.elytradev.infraredstone.util.enums.EnumShifterSelection;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -22,28 +22,20 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 
-public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlockBase {
+public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlockBase {
 
     protected String name;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    public static final PropertyBool FRONT_ACTIVE = PropertyBool.create("front_active");
-    public static final PropertyBool LEFT_ACTIVE = PropertyBool.create("left_active");
-    public static final PropertyBool BACK_ACTIVE = PropertyBool.create("back_active");
-    public static final PropertyBool RIGHT_ACTIVE = PropertyBool.create("right_active");
-    public static final PropertyBool INVERTED = PropertyBool.create("inverted");
-    public static final PropertyEnum<EnumInactiveSelection> INACTIVE = PropertyEnum.create("inactive", EnumInactiveSelection.class);
+    public static final PropertyBool ACTIVE = PropertyBool.create("active");
+    public static final PropertyEnum<EnumShifterSelection> SELECTION = PropertyEnum.create("selection", EnumShifterSelection.class);
     public static int FACE = 3;
 
-    public BlockGateAnd() {
-        super(Material.CIRCUITS, "gate_and");
+    public BlockShifter() {
+        super(Material.CIRCUITS, "shifter");
         this.setDefaultState(blockState.getBaseState()
                 .withProperty(FACING, EnumFacing.NORTH)
-                .withProperty(FRONT_ACTIVE, false)
-                .withProperty(LEFT_ACTIVE, false)
-                .withProperty(BACK_ACTIVE, false)
-                .withProperty(RIGHT_ACTIVE, false)
-                .withProperty(INVERTED, false)
-                .withProperty(INACTIVE, EnumInactiveSelection.NONE));
+                .withProperty(ACTIVE, false)
+                .withProperty(SELECTION, EnumShifterSelection.LEFT));
 
         this.setHardness(0.5f);
     }
@@ -54,44 +46,20 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
     private static final AxisAlignedBB INVERT_AABB = new AxisAlignedBB( 6/16d, 0d,  3/16d, 10/16d, 0.5d,  7/16d);
 
     @Override
-    public Class<TileEntityGateAnd> getTileEntityClass() {
-        return TileEntityGateAnd.class;
+    public Class<TileEntityShifter> getTileEntityClass() {
+        return TileEntityShifter.class;
     }
 
     @Override
-    public TileEntityGateAnd createTileEntity(World world, IBlockState state) {
-        return new TileEntityGateAnd();
+    public TileEntityShifter createTileEntity(World world, IBlockState state) {
+        return new TileEntityShifter();
     }
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(!world.isRemote && !player.isSneaking() && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityGateAnd) {
-            TileEntityGateAnd te = (TileEntityGateAnd) world.getTileEntity(pos);
-            Vec3d blockCenteredHit = new Vec3d(hitX, hitY, hitZ);
-            blockCenteredHit = blockCenteredHit.subtract(0.5, 0.5, 0.5);
-            switch (state.getValue(BlockGateAnd.FACING)) {
-                case SOUTH:
-                    blockCenteredHit = blockCenteredHit.rotateYaw((float)Math.PI);
-                    break;
-                case EAST:
-                    blockCenteredHit = blockCenteredHit.rotateYaw((float)Math.PI/2);
-                    break;
-                case WEST:
-                    blockCenteredHit = blockCenteredHit.rotateYaw(3*(float)Math.PI/2);
-                    break;
-                default:
-                    break;
-            }
-            blockCenteredHit = blockCenteredHit.addVector(0.5, 0.5, 0.5);
-            if (LEFT_AABB.contains(blockCenteredHit)) {
-                te.toggleInactive(EnumInactiveSelection.LEFT);
-            } else if (BACK_AABB.contains(blockCenteredHit)) {
-                te.toggleInactive(EnumInactiveSelection.BACK);
-            } else if (RIGHT_AABB.contains(blockCenteredHit)) {
-                te.toggleInactive(EnumInactiveSelection.RIGHT);
-            } else if (INVERT_AABB.contains(blockCenteredHit)) {
-            	te.toggleInvert();
-            }
+        if(!world.isRemote && !player.isSneaking() && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityShifter) {
+            TileEntityShifter te = (TileEntityShifter) world.getTileEntity(pos);
+            te.toggleSelection();
         }
         return true;
     }
@@ -124,7 +92,7 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
 
     @Override
     public BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING, FRONT_ACTIVE, LEFT_ACTIVE, BACK_ACTIVE, RIGHT_ACTIVE, INVERTED, INACTIVE);
+        return new BlockStateContainer(this, FACING, ACTIVE, SELECTION);
     }
 
     @Override
@@ -144,27 +112,19 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
-        if (!(te instanceof TileEntityGateAnd)) return state;
-        TileEntityGateAnd and = (TileEntityGateAnd)te;
+        if (!(te instanceof TileEntityShifter)) return state;
+        TileEntityShifter shifter = (TileEntityShifter)te;
         return state
-                .withProperty(FRONT_ACTIVE, and.isActive())
-                .withProperty(LEFT_ACTIVE, and.isLeftActive())
-                .withProperty(BACK_ACTIVE, and.isBackActive())
-                .withProperty(RIGHT_ACTIVE, and.isRightActive())
-                .withProperty(INVERTED, and.inverted)
-                .withProperty(INACTIVE, and.inactive);
+                .withProperty(ACTIVE, shifter.isActive())
+                .withProperty(SELECTION, shifter.selection);
     }
 
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
         return this.getDefaultState()
                 .withProperty(FACING, placer.getHorizontalFacing())
-                .withProperty(FRONT_ACTIVE, false)
-                .withProperty(LEFT_ACTIVE, false)
-                .withProperty(BACK_ACTIVE, false)
-                .withProperty(RIGHT_ACTIVE, false)
-                .withProperty(INVERTED, false)
-                .withProperty(INACTIVE, EnumInactiveSelection.NONE);
+                .withProperty(ACTIVE, false)
+                .withProperty(SELECTION, EnumShifterSelection.LEFT);
     }
 
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
