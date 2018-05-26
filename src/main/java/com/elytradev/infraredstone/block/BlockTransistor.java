@@ -29,7 +29,6 @@ public class BlockTransistor extends BlockModule<TileEntityTransistor> implement
         this.setDefaultState(blockState.getBaseState()
                 .withProperty(FACING, EnumFacing.NORTH)
                 .withProperty(ACTIVE, false));
-
         this.setHardness(0.5f);
     }
 

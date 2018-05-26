@@ -17,7 +17,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -28,6 +27,7 @@ public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlo
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
     public static final PropertyEnum<EnumShifterSelection> SELECTION = PropertyEnum.create("selection", EnumShifterSelection.class);
+    public static final PropertyEnum<EnumShifterSelection> EJECTION = PropertyEnum.create("ejection", EnumShifterSelection.class);
     public static int FACE = 3;
 
     public BlockShifter() {
@@ -35,15 +35,11 @@ public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlo
         this.setDefaultState(blockState.getBaseState()
                 .withProperty(FACING, EnumFacing.NORTH)
                 .withProperty(ACTIVE, false)
-                .withProperty(SELECTION, EnumShifterSelection.LEFT));
+                .withProperty(SELECTION, EnumShifterSelection.LEFT)
+                .withProperty(EJECTION, EnumShifterSelection.NONE));
 
         this.setHardness(0.5f);
     }
-
-    private static final AxisAlignedBB LEFT_AABB   = new AxisAlignedBB( 0/16d, 0d,  6/16d,  3/16d, 0.5d, 10/16d);
-    private static final AxisAlignedBB BACK_AABB   = new AxisAlignedBB( 6/16d, 0d, 13/16d, 10/16d, 0.5d, 16/16d);
-    private static final AxisAlignedBB RIGHT_AABB  = new AxisAlignedBB(13/16d, 0d,  6/16d, 16/16d, 0.5d, 10/16d);
-    private static final AxisAlignedBB INVERT_AABB = new AxisAlignedBB( 6/16d, 0d,  3/16d, 10/16d, 0.5d,  7/16d);
 
     @Override
     public Class<TileEntityShifter> getTileEntityClass() {
@@ -57,11 +53,22 @@ public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlo
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(!world.isRemote && !player.isSneaking() && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityShifter) {
-            TileEntityShifter te = (TileEntityShifter) world.getTileEntity(pos);
-            te.toggleSelection();
+        TileEntity te = world.getTileEntity(pos);
+        if(!world.isRemote && !player.isSneaking() && te instanceof  TileEntityShifter) {
+            TileEntityShifter teShifter = (TileEntityShifter) world.getTileEntity(pos);
+            teShifter.toggleSelection();
         }
         return true;
+    }
+
+    public EnumShifterSelection getEjection(IBlockAccess world, BlockPos pos) {
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof TileEntityShifter) {
+            TileEntityShifter teShifter = (TileEntityShifter)te;
+            if (!teShifter.isActive()) return EnumShifterSelection.NONE;
+            else return teShifter.selection;
+        }
+        return EnumShifterSelection.NONE;
     }
 
     @Override
@@ -92,7 +99,7 @@ public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlo
 
     @Override
     public BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING, ACTIVE, SELECTION);
+        return new BlockStateContainer(this, FACING, ACTIVE, SELECTION, EJECTION);
     }
 
     @Override
@@ -116,7 +123,8 @@ public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlo
         TileEntityShifter shifter = (TileEntityShifter)te;
         return state
                 .withProperty(ACTIVE, shifter.isActive())
-                .withProperty(SELECTION, shifter.selection);
+                .withProperty(SELECTION, shifter.selection)
+                .withProperty(EJECTION, getEjection(world, pos));
     }
 
     @Override
@@ -124,7 +132,8 @@ public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlo
         return this.getDefaultState()
                 .withProperty(FACING, placer.getHorizontalFacing())
                 .withProperty(ACTIVE, false)
-                .withProperty(SELECTION, EnumShifterSelection.LEFT);
+                .withProperty(SELECTION, EnumShifterSelection.LEFT)
+                .withProperty(EJECTION, EnumShifterSelection.NONE);
     }
 
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos)

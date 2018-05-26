@@ -159,6 +159,7 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
             inverted = true;
             world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.55f);
         }
+        markDirty();
     }
 
     public void toggleInactive(EnumInactiveSelection newInactive) {
@@ -168,6 +169,7 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
             inactive = newInactive;
         }
         world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.45f);
+        markDirty();
     }
 
     @Override

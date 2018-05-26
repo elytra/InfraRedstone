@@ -3,7 +3,7 @@ package com.elytradev.infraredstone.util.enums;
 import net.minecraft.util.IStringSerializable;
 
 public enum EnumShifterSelection implements IStringSerializable {
-    LEFT("left"), RIGHT("right");
+    LEFT("left"), RIGHT("right"), NONE("none");
 
     private final String name;
 

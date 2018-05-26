@@ -1,0 +1,64 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model":"infraredstone:module/shifter/shifter"
+  },
+  "variants": {
+    "normal": {
+      "model": "infraredstone:module/shifter/shifter"
+    },
+    "inventory": {
+      "model": "infraredstone:module/shifter/item"
+    },
+    "ejection": {
+      "none": {},
+      "left": {
+          "textures": {
+            "left": "infraredstone:blocks/shifter_on"
+          }
+      },
+      "right": {
+          "textures": {
+            "right": "infraredstone:blocks/shifter_on"
+          }
+      }
+    },
+    "selection": {
+      "left": {
+        "submodel": {
+          "select": { "model": "infraredstone:module/shifter/select_left" }
+        }
+      },
+      "right": {
+        "submodel": {
+          "select": { "model": "infraredstone:module/shifter/select_right" }
+        }
+      }
+    },
+    "active": {
+      "true": {
+        "textures": {
+          "base": "infraredstone:blocks/shifter_on"
+        }
+      },
+      "false": {
+        "textures": {
+          "base": "infraredstone:blocks/shifter"
+        }
+      }
+    },
+
+    "facing": {
+      "north": {},
+      "east": {
+        "y": 90
+      },
+      "south": {
+        "y": 180
+      },
+      "west": {
+        "y": 270
+      }
+    }
+  }
+}

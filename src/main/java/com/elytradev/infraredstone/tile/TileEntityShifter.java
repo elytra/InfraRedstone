@@ -62,6 +62,7 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
         } else {
             //Not an IR tick, so this is a "copy" tick. Adopt the previous tick's "next" value.
             signal.setSignalValue(signal.getNextSignalValue());
+            eject.setSignalValue(eject.getNextSignalValue());
             markDirty();
         }
     }
@@ -133,6 +134,7 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
             selection = EnumShifterSelection.LEFT;
             world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.55f);
         }
+        markDirty();
     }
 
     @Override
@@ -201,5 +203,8 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
 
     public boolean isActive() {
         return signal.getSignalValue()!=0;
+    }
+    public boolean isEject() {
+        return eject.getSignalValue()!=0;
     }
 }
