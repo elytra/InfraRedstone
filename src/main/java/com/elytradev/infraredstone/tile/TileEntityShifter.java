@@ -43,7 +43,7 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
                 EnumFacing back = state.getValue(BlockShifter.FACING).getOpposite();
                 int sig = InRedLogic.findIRValue(world, pos, back);
                 int ej = 0;
-
+                
                 if (selection == EnumShifterSelection.LEFT) {
                     ej = (sig & 0b10_0000);
                     ej = (ej != 0) ? 1 : 0;
@@ -55,7 +55,7 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
                     sig >>>= 1;
                     sig &= 0b011_1111;
                 }
-
+                
                 signal.setNextSignalValue(sig);
                 eject.setNextSignalValue(ej);
                 markDirty();
@@ -79,13 +79,11 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
                 EnumFacing shifterFront = state.getValue(BlockShifter.FACING);
                 if (shifterFront==facing) {
                     return true;
-                } else if (shifterFront==facing.rotateYCCW()) {
-                    if (selection == EnumShifterSelection.LEFT) return true;
-                    else return false;
-                } else if (shifterFront==facing.getOpposite()) {
-                    if (selection == EnumShifterSelection.RIGHT) return true;
-                    else return false;
-                } else if (shifterFront==facing.rotateY()) {
+                } else if (shifterFront.rotateYCCW()==facing) {
+                    return selection == EnumShifterSelection.LEFT;
+                } else if (shifterFront.rotateY()==facing) {
+                    return selection == EnumShifterSelection.RIGHT;
+                } else if (shifterFront.getOpposite()==facing) {
                     return true;
                 } else {
                     return false;
@@ -109,13 +107,13 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
                 EnumFacing shifterFront = state.getValue(BlockShifter.FACING);
                 if (shifterFront==facing) {
                     return (T) signal;
-                } else if (shifterFront==facing.rotateYCCW()) {
+                } else if (shifterFront.rotateYCCW()==facing) {
                     if (selection == EnumShifterSelection.LEFT) return (T) eject;
                     else return (T) InfraRedstoneHandler.ALWAYS_OFF;
-                } else if (shifterFront==facing.getOpposite()) {
+                } else if (shifterFront.rotateY()==facing) {
                     if (selection == EnumShifterSelection.RIGHT) return (T) eject;
                     else return (T) InfraRedstoneHandler.ALWAYS_OFF;
-                } else if (shifterFront==facing.rotateY()) {
+                } else if (shifterFront.getOpposite()==facing) {
                     return (T)InfraRedstoneHandler.ALWAYS_OFF;
                 } else {
                     return null;
