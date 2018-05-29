@@ -110,7 +110,7 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
     	
     	IBlockState state = world.getBlockState(pos);
     	Block block = state.getBlock();
-    	if (block==ModBlocks.INFRA_REDSTONE) return true;
+    	if (block==ModBlocks.INFRA_REDSTONE || block==ModBlocks.IN_RED_SCAFFOLD) return true;
     	if (block instanceof ISimpleInfraRedstone) {
     		return ((ISimpleInfraRedstone)block).canConnectIR(world, pos, state, from);
     	}
@@ -127,12 +127,12 @@ public class CableInfraRedstone extends BlockBase implements IBlockBase {
 
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
     {
-        return worldIn.getBlockState(pos.down()).isTopSolid() && super.canPlaceBlockAt(worldIn, pos);
+        return (worldIn.getBlockState(pos.down()).isTopSolid() || worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.IN_RED_SCAFFOLD) && super.canPlaceBlockAt(worldIn, pos);
     }
 
     public boolean canBlockStay(World worldIn, BlockPos pos)
     {
-        return worldIn.getBlockState(pos.down()).isTopSolid();
+        return worldIn.getBlockState(pos.down()).isTopSolid() || worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.IN_RED_SCAFFOLD;
     }
 
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)

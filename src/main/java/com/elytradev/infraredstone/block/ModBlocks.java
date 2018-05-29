@@ -9,6 +9,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class ModBlocks {
 
     public static final CableInfraRedstone INFRA_REDSTONE = new CableInfraRedstone();
+    public static final CableInRedScaffold IN_RED_SCAFFOLD = new CableInRedScaffold();
     public static final BlockFineLever FINE_LEVER = new BlockFineLever();
     public static final BlockDiode DIODE = new BlockDiode();
     public static final BlockGateNot GATE_NOT = new BlockGateNot();
@@ -20,7 +21,7 @@ public class ModBlocks {
     public static final BlockLiquidCrystal DEVICE_LIQUID_CRYSTAL = new BlockLiquidCrystal();
 
     public static Block[] allBlocks = {
-            INFRA_REDSTONE, FINE_LEVER, DIODE, GATE_NOT, GATE_AND, GATE_XOR, OSCILLATOR, TRANSISTOR, SHIFTER, DEVICE_LIQUID_CRYSTAL
+            INFRA_REDSTONE, IN_RED_SCAFFOLD, FINE_LEVER, DIODE, GATE_NOT, GATE_AND, GATE_XOR, OSCILLATOR, TRANSISTOR, SHIFTER, DEVICE_LIQUID_CRYSTAL
     };
 
     public static void register(IForgeRegistry<Block> registry) {

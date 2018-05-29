@@ -1,25 +1,25 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model":"infraredstone:inred_cable/none"
+    "model":"infraredstone:cable/none"
   },
   "variants": {
     "normal": {
-      "model": "infraredstone:inred_cable/none"
+      "model": "infraredstone:cable/none"
     },
     "inventory": {
-      "model": "infraredstone:inred_cable/item"
+      "model": "infraredstone:cable/item"
     },
     "east": {
       "disconnected": {},
       "connected": {
         "submodel": {
-          "east": { "model": "infraredstone:inred_cable/side", "y": 90 }
+          "east": { "model": "infraredstone:cable/side", "y": 90 }
         }
       },
       "connected_up": {
         "submodel": {
-          "east": { "model": "infraredstone:inred_cable/side_up", "y": 90 }
+          "east": { "model": "infraredstone:cable/side_up", "y": 90 }
         }
       }
     },
@@ -27,12 +27,12 @@
       "disconnected": {},
       "connected": {
         "submodel": {
-          "north": { "model": "infraredstone:inred_cable/side" }
+          "north": { "model": "infraredstone:cable/side" }
         }
       },
       "connected_up": {
         "submodel": {
-          "north": { "model": "infraredstone:inred_cable/side_up" }
+          "north": { "model": "infraredstone:cable/side_up" }
         }
       }
     },
@@ -40,12 +40,12 @@
       "disconnected": {},
       "connected": {
         "submodel": {
-          "south": { "model": "infraredstone:inred_cable/side", "y": 180 }
+          "south": { "model": "infraredstone:cable/side", "y": 180 }
         }
       },
       "connected_up": {
         "submodel": {
-          "south": { "model": "infraredstone:inred_cable/side_up", "y": 180 }
+          "south": { "model": "infraredstone:cable/side_up", "y": 180 }
         }
       }
     },
@@ -53,12 +53,12 @@
       "disconnected": {},
       "connected": {
         "submodel": {
-          "west": { "model": "infraredstone:inred_cable/side", "y": 270 }
+          "west": { "model": "infraredstone:cable/side", "y": 270 }
         }
       },
       "connected_up": {
         "submodel": {
-          "west": { "model": "infraredstone:inred_cable/side_up", "y": 270 }
+          "west": { "model": "infraredstone:cable/side_up", "y": 270 }
         }
       }
     }

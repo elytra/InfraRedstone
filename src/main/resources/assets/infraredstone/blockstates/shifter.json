@@ -33,7 +33,8 @@
         "submodel": {
           "select": { "model": "infraredstone:module/shifter/select_right" }
         }
-      }
+      },
+      "none": {}
     },
     "active": {
       "true": {

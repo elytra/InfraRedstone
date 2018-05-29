@@ -125,7 +125,7 @@ public class InRedLogic {
 			IBlockState state = world.getBlockState(cur.pos);
 			
 			Block block = state.getBlock();
-			if (block==ModBlocks.INFRA_REDSTONE) {
+			if (block==ModBlocks.INFRA_REDSTONE || block==ModBlocks.IN_RED_SCAFFOLD) {
 				traversed.add(cur.pos);
 				
 				//Add neighbors
@@ -168,7 +168,7 @@ public class InRedLogic {
 		if (world.isAirBlock(pos)) return null;
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		if (block==ModBlocks.INFRA_REDSTONE) return null; //wires don't carry power directly
+		if (block==ModBlocks.INFRA_REDSTONE || block==ModBlocks.IN_RED_SCAFFOLD) return null; //wires don't carry power directly
 		if (block instanceof ISimpleInfraRedstone) {
 			return ((ISimpleInfraRedstone)block).getSignalValue(world, pos, state, dir);
 		}
