@@ -83,6 +83,13 @@ public class InRedRecipes {
                 'r', "dustRedstone",
                 'g', new ItemStack(Blocks.GLASS)
         ));
+
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.IN_RED_SCAFFOLD, 1),
+                "sss", "prp", "sss",
+                's', "stickWood",
+                'p', "plankWood",
+                'r', new ItemStack(ModBlocks.INFRA_REDSTONE)
+        ));
         
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.DEVICE_LIQUID_CRYSTAL, 8),
                 "ggg", "gqg", "gpg",

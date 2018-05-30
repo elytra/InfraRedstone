@@ -150,7 +150,7 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         if (compound.hasKey("Signal")) InfraRedstone.CAPABILITY_IR.readNBT(signal, null, compound.getTag("Signal"));
-        if (compound.hasKey("Eject")) InfraRedstone.CAPABILITY_IR.readNBT(signal, null, compound.getTag("Eject"));
+        if (compound.hasKey("Eject")) InfraRedstone.CAPABILITY_IR.readNBT(eject, null, compound.getTag("Eject"));
         selection = EnumShifterSelection.forName(compound.getString("Selection"));
     }
 

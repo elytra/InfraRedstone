@@ -3,6 +3,7 @@ item.pcb.name=PCB
 
 #blocks
 tile.infra_redstone.name=Infra-Redstone Cable
+tile.infra_redstone_scaffold.name=Infra-Redstone Scaffold
 tile.diode.name=Diode
 tile.fine_lever.name=Fine Lever
 tile.gate_not.name=NOT Gate
