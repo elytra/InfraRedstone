@@ -10,18 +10,6 @@
     "inventory": {
       "model": "infraredstone:module/diode/item"
     },
-    "active": {
-      "true": {
-        "textures": {
-          "base": "infraredstone:blocks/diode_on"
-        }
-      },
-      "false": {
-        "textures": {
-          "base": "infraredstone:blocks/diode"
-        }
-      }
-    },
     "bit_0": {
       "true": {
           "submodel": {

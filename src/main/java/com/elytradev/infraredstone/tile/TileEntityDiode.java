@@ -1,6 +1,7 @@
 package com.elytradev.infraredstone.tile;
 
 import com.elytradev.infraredstone.InfraRedstone;
+import com.elytradev.infraredstone.block.BlockBase;
 import com.elytradev.infraredstone.block.BlockDiode;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.logic.InRedLogic;
@@ -16,6 +17,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
@@ -130,8 +132,6 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
 	@Override
 	public void handleUpdateTag(NBTTagCompound tag) {
 		readFromNBT(tag);
-		IBlockState state = world.getBlockState(pos);
-		getWorld().markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 1 | 2 | 16);
 	}
 
 	@Override
@@ -139,39 +139,46 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
 		handleUpdateTag(pkt.getNbtCompound());
 	}
 
-	@Override
-	public void markDirty() {
-		super.markDirty();
-		// again, I've copy-pasted this like 12 times, should probably go into Concrete
-		if (!hasWorld() || getWorld().isRemote) return;
-		
-		if (mask!=lastMask || isActive()!=lastActive) { //Throttle updates - only send when something important changes
-		
-			WorldServer ws = (WorldServer)getWorld();
-			Chunk c = getWorld().getChunkFromBlockCoords(getPos());
-			SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
-			for (EntityPlayerMP player : getWorld().getPlayers(EntityPlayerMP.class, Predicates.alwaysTrue())) {
-				if (ws.getPlayerChunkMap().isPlayerWatchingChunk(player, c.x, c.z)) {
-					player.connection.sendPacket(packet);
-				}
-			}
-			
-			lastMask = mask;
-			lastActive = isActive();
-			
-			IBlockState state = world.getBlockState(pos);
-			ws.markAndNotifyBlock(pos, c, state, state, 1 | 16);
-		}
-	}
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        // again, I've copy-pasted this like 12 times, should probably go into Concrete
+        if (!hasWorld() || getWorld().isRemote) return;
+        boolean active = isActive();
+        if (mask!=lastMask || active!=lastActive) { //Throttle updates - only send when something important changes
+            
+            WorldServer ws = (WorldServer)getWorld();
+            Chunk c = getWorld().getChunkFromBlockCoords(getPos());
+            SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+            for (EntityPlayerMP player : getWorld().getPlayers(EntityPlayerMP.class, Predicates.alwaysTrue())) {
+                if (ws.getPlayerChunkMap().isPlayerWatchingChunk(player, c.x, c.z)) {
+                    player.connection.sendPacket(packet);
+                }
+            }
+            
+            if (lastMask!=mask) {
+                IBlockState state = world.getBlockState(pos);
+                ws.markAndNotifyBlock(pos, c, state, state, 1 | 16);
+            } else if (lastActive!=active) {
+                //BlockState isn't changing, but we need to notify the block in front of us so that vanilla redstone updates
+                IBlockState state = world.getBlockState(pos);
+                if (state.getBlock()==ModBlocks.DIODE) {
+                    EnumFacing facing = state.getValue(BlockDiode.FACING);
+                    BlockPos targetPos = pos.offset(facing);
+                    IBlockState targetState = world.getBlockState(targetPos);
+                    if (!(targetState.getBlock() instanceof BlockBase)) {
+                        //Not one of ours. Update its redstone, and let observers see the fact that we updated too
+                        world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 0);
+                        world.markAndNotifyBlock(targetPos, world.getChunkFromBlockCoords(targetPos), targetState, targetState, 1); // 1 : Just cuase a BUD and notify observers
+                    }
+                }
+            }
+            
+            lastMask = mask;
+            lastActive = active;
+        }
+    }
     
-	/*
-    public void setActive(IBlockState existing, boolean active) {
-    	//if (existing.getValue(BlockDiode.ACTIVE)==active) return;
-    	world.setBlockState(pos, world.getBlockState(pos), 3 | 16); //Don't change the blockstate, but *send an update* to the client and prevent observers from caring
-		//world.setBlockState(pos, existing.withProperty(BlockDiode.ACTIVE, active));
-    	System.out.println("Set to "+active);
-    }*/
-
     public int getMask() {
     	return mask;
 	}

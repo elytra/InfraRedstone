@@ -24,7 +24,7 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
 
     protected String name;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    public static final PropertyBool ACTIVE = PropertyBool.create("active");
+    //public static final PropertyBool ACTIVE = PropertyBool.create("active");
     public static final PropertyBool BIT_0 = PropertyBool.create("bit_0");
     public static final PropertyBool BIT_1 = PropertyBool.create("bit_1");
     public static final PropertyBool BIT_2 = PropertyBool.create("bit_2");
@@ -37,7 +37,7 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
         super(Material.CIRCUITS, "diode");
         this.setDefaultState(blockState.getBaseState()
                 .withProperty(FACING, EnumFacing.NORTH)
-                .withProperty(ACTIVE, false)
+                //.withProperty(ACTIVE, false)
                 .withProperty(BIT_0, true)
                 .withProperty(BIT_1, true)
                 .withProperty(BIT_2, true)
@@ -136,7 +136,9 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
 
     @Override
     public BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING, ACTIVE, BIT_0, BIT_1, BIT_2, BIT_3, BIT_4, BIT_5);
+        return new BlockStateContainer(this, FACING,
+                //ACTIVE,
+                BIT_0, BIT_1, BIT_2, BIT_3, BIT_4, BIT_5);
     }
 
     @Override
@@ -157,9 +159,9 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
     	TileEntity te = world.getTileEntity(pos);
     	if (!(te instanceof TileEntityDiode)) return state;
-    	TileEntityDiode diode = (TileEntityDiode)te;
+    	//TileEntityDiode diode = (TileEntityDiode)te;
     	return state
-                .withProperty(ACTIVE, diode.isActive())
+                //.withProperty(ACTIVE, diode.isActive())
                 .withProperty(BIT_0, bitToBool(0, world, pos))
                 .withProperty(BIT_1, bitToBool(1, world, pos))
                 .withProperty(BIT_2, bitToBool(2, world, pos))
@@ -196,7 +198,7 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
         return this.getDefaultState()
                 .withProperty(FACING, placer.getHorizontalFacing())
-                .withProperty(ACTIVE, false)
+                //.withProperty(ACTIVE, false)
                 .withProperty(BIT_0, true)
                 .withProperty(BIT_1, true)
                 .withProperty(BIT_2, true)

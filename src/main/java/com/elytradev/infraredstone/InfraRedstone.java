@@ -75,6 +75,7 @@ public class InfraRedstone {
         
         MinecraftForge.EVENT_BUS.register(InRedRecipes.class);
         MinecraftForge.EVENT_BUS.register(InRedLogic.class);
+        MinecraftForge.EVENT_BUS.register(proxy);
         config = InRedConfig.createConfig(event);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new IGuiHandler() {
