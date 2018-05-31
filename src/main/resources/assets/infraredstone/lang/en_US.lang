@@ -5,12 +5,13 @@ item.pcb.name=PCB
 tile.infra_redstone.name=Infra-Redstone Cable
 tile.infra_redstone_scaffold.name=Infra-Redstone Scaffold
 tile.diode.name=Diode
-tile.fine_lever.name=Fine Lever
+tile.infra_redstone_block.name=Infra-Redstone Block
 tile.gate_not.name=NOT Gate
 tile.gate_and.name=AND Gate
 tile.gate_xor.name=XOR Gate
 tile.oscillator.name=Quartz Oscillator
 tile.transistor.name=Transistor
+tile.shifter.name=Shifter
 tile.device_liquid_crystal.name=Liquid Crystal Block
 
 #tooltips

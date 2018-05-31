@@ -10,7 +10,7 @@ public class ModBlocks {
 
     public static final CableInfraRedstone INFRA_REDSTONE = new CableInfraRedstone();
     public static final CableInRedScaffold IN_RED_SCAFFOLD = new CableInRedScaffold();
-    public static final BlockFineLever FINE_LEVER = new BlockFineLever();
+    public static final BlockInfraRedstone IN_RED_BLOCK = new BlockInfraRedstone();
     public static final BlockDiode DIODE = new BlockDiode();
     public static final BlockGateNot GATE_NOT = new BlockGateNot();
     public static final BlockGateAnd GATE_AND = new BlockGateAnd();
@@ -21,7 +21,7 @@ public class ModBlocks {
     public static final BlockLiquidCrystal DEVICE_LIQUID_CRYSTAL = new BlockLiquidCrystal();
 
     public static Block[] allBlocks = {
-            INFRA_REDSTONE, IN_RED_SCAFFOLD, FINE_LEVER, DIODE, GATE_NOT, GATE_AND, GATE_XOR, OSCILLATOR, TRANSISTOR, SHIFTER, DEVICE_LIQUID_CRYSTAL
+            INFRA_REDSTONE, IN_RED_SCAFFOLD, IN_RED_BLOCK, DIODE, GATE_NOT, GATE_AND, GATE_XOR, OSCILLATOR, TRANSISTOR, SHIFTER, DEVICE_LIQUID_CRYSTAL
     };
 
     public static void register(IForgeRegistry<Block> registry) {
@@ -29,7 +29,7 @@ public class ModBlocks {
             registry.register(block);
         }
 
-        GameRegistry.registerTileEntity(FINE_LEVER.getTileEntityClass(), FINE_LEVER.getRegistryName().toString());
+        GameRegistry.registerTileEntity(IN_RED_BLOCK.getTileEntityClass(), IN_RED_BLOCK.getRegistryName().toString());
         GameRegistry.registerTileEntity(DIODE.getTileEntityClass(), DIODE.getRegistryName().toString());
         GameRegistry.registerTileEntity(GATE_NOT.getTileEntityClass(), GATE_NOT.getRegistryName().toString());
         GameRegistry.registerTileEntity(GATE_AND.getTileEntityClass(), GATE_AND.getRegistryName().toString());

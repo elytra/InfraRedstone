@@ -43,6 +43,9 @@ public class CableInRedScaffold extends BlockBase implements IBlockBase {
                 .withProperty(EAST, EnumCableConnection.DISCONNECTED)
                 .withProperty(WEST, EnumCableConnection.DISCONNECTED)
                 .withProperty(UP, EnumCableConnection.DISCONNECTED));
+
+        this.setHardness(0.5f);
+        this.setHarvestLevel("axe", 0);
     }
 
     public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entity, boolean b) {

@@ -50,11 +50,13 @@ public class InRedRecipes {
         ));
 
 //        Modules
-        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.FINE_LEVER, 1),
-                "r", "l", "p",
-                'r', "dustRedstone",
-                'l', new ItemStack(Blocks.LEVER),
-                'p', new ItemStack(ModItems.PCB)
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.IN_RED_BLOCK, 1),
+                "rrr", "rrr", "rrr",
+                'r', new ItemStack(ModBlocks.INFRA_REDSTONE)
+        ));
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.INFRA_REDSTONE, 9),
+                "b",
+                'b', new ItemStack(ModBlocks.IN_RED_BLOCK)
         ));
 
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.DIODE, 1),
