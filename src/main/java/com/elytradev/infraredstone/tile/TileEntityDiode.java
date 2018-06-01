@@ -132,6 +132,10 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
 	@Override
 	public void handleUpdateTag(NBTTagCompound tag) {
 		readFromNBT(tag);
+		if (lastMask!=mask) {
+		    world.markBlockRangeForRenderUpdate(pos, pos);
+		    lastMask = mask;
+		}
 	}
 
 	@Override
@@ -157,8 +161,8 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
             }
             
             if (lastMask!=mask) {
-                IBlockState state = world.getBlockState(pos);
-                ws.markAndNotifyBlock(pos, c, state, state, 1 | 16);
+                //IBlockState state = world.getBlockState(pos);
+                //ws.markAndNotifyBlock(pos, c, state, state, 1 | 2 | 16);
             } else if (lastActive!=active) {
                 //BlockState isn't changing, but we need to notify the block in front of us so that vanilla redstone updates
                 IBlockState state = world.getBlockState(pos);
@@ -168,8 +172,8 @@ public class TileEntityDiode extends TileEntityIRComponent implements ITickable 
                     IBlockState targetState = world.getBlockState(targetPos);
                     if (!(targetState.getBlock() instanceof BlockBase)) {
                         //Not one of ours. Update its redstone, and let observers see the fact that we updated too
-                        world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 0);
-                        world.markAndNotifyBlock(targetPos, world.getChunkFromBlockCoords(targetPos), targetState, targetState, 1); // 1 : Just cuase a BUD and notify observers
+                        world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 1);
+                        world.markAndNotifyBlock(targetPos, world.getChunkFromBlockCoords(targetPos), targetState, targetState, 3); // 1 : Just cuase a BUD and notify observers
                     }
                 }
             }
