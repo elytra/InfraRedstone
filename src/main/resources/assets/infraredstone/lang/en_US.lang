@@ -1,5 +1,6 @@
 #items
 item.pcb.name=PCB
+item.multimeter.name=Multimeter
 
 #blocks
 tile.infra_redstone.name=Infra-Redstone Cable
@@ -17,6 +18,8 @@ tile.device_liquid_crystal.name=Liquid Crystal Block
 #tooltips
 
 #messages
+msg.inred.multimeter.direction=Signal input from
+msg.inred.multimeter.cable=Signal passing through cable
 
 #misc
 itemGroup.infraredstone=Infra-Redstone

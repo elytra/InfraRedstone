@@ -119,6 +119,11 @@ public class InRedRecipes {
                 'r', new ItemStack(ModBlocks.INFRA_REDSTONE),
                 's', new ItemStack(Blocks.STONE_SLAB)
         ));
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:items"), new ItemStack(ModItems.MULTIMETER, 1),
+                "r r", "rpr", " r ",
+                'r', new ItemStack(ModBlocks.INFRA_REDSTONE),
+                'p', new ItemStack(ModItems.PCB)
+        ));
 
     }
 

@@ -6,8 +6,9 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class ModItems {
 
     public static ItemBase PCB = new ItemBase("pcb");
+    public static ItemBase MULTIMETER = new ItemMultimeter();
     public static ItemBase[] allItems = {
-            PCB
+            PCB, MULTIMETER
     };
 
     public static void register(IForgeRegistry<Item> registry) {
