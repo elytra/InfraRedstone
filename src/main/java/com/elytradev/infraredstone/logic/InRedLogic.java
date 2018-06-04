@@ -93,7 +93,7 @@ public class InRedLogic {
         return (world.getRedstonePower(initialPos, dir) != 0) ? 1 : 0;
     }
 
-    private static boolean checkCandidacy(World world, BlockPos pos, EnumFacing side) {
+    public static boolean checkCandidacy(World world, BlockPos pos, EnumFacing side) {
         if (world.isAirBlock(pos)) return false;
         
         IBlockState state = world.getBlockState(pos);

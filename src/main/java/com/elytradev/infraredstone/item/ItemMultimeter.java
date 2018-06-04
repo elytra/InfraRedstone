@@ -1,5 +1,7 @@
 package com.elytradev.infraredstone.item;
 
+import com.elytradev.infraredstone.InRedLog;
+import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.logic.InRedLogic;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -23,28 +25,39 @@ public class ItemMultimeter extends ItemBase {
         EnumFacing face;
         TextComponentTranslation note;
         String dir;
+        boolean needSneak;
+        if (!(InRedLogic.checkCandidacy(world, pos, facing)
+                || InRedLogic.checkCandidacy(world, pos, player.getAdjustedHorizontalFacing()))) return EnumActionResult.PASS;
         if (world.getTileEntity(pos) != null) {
-            face = player.getAdjustedHorizontalFacing();
+            if (world.getTileEntity(pos).hasCapability(InfraRedstone.CAPABILITY_IR, facing)) face = facing;
+            else face = player.getAdjustedHorizontalFacing();
             note = new TextComponentTranslation("msg.inred.multimeter.direction");
             dir=" "+face+": ";
+            needSneak = true;
         } else {
             face = facing;
             note = new TextComponentTranslation("msg.inred.multimeter.cable");
             dir=": ";
+            needSneak = false;
         }
-        if (player.isSneaking()) {
+        if (player.isSneaking() == needSneak) {
             int signal = InRedLogic.findIRValue(world, pos, face.getOpposite());
-            int bit1 = ((signal & 0b00_0001) != 0) ? 1:0;
-            int bit2 = ((signal & 0b00_0010) != 0) ? 1:0;
-            int bit3 = ((signal & 0b00_0100) != 0) ? 1:0;
-            int bit4 = ((signal & 0b00_1000) != 0) ? 1:0;
-            int bit5 = ((signal & 0b01_0000) != 0) ? 1:0;
-            int bit6 = ((signal & 0b10_0000) != 0) ? 1:0;
-            TextComponentString string = new TextComponentString(note.getFormattedText()+dir+signal+" ("+bit6+bit5+bit4+bit3+bit2+bit1+")");
+            TextComponentString string = new TextComponentString(note.getFormattedText()+dir+signal+getBits(world, pos, face));
             if (!world.isRemote) player.sendMessage(string);
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.PASS;
+    }
+
+    private String getBits(World world, BlockPos pos, EnumFacing face) {
+        int signal = InRedLogic.findIRValue(world, pos, face.getOpposite());
+        int bit1 = ((signal & 0b00_0001) != 0) ? 1:0;
+        int bit2 = ((signal & 0b00_0010) != 0) ? 1:0;
+        int bit3 = ((signal & 0b00_0100) != 0) ? 1:0;
+        int bit4 = ((signal & 0b00_1000) != 0) ? 1:0;
+        int bit5 = ((signal & 0b01_0000) != 0) ? 1:0;
+        int bit6 = ((signal & 0b10_0000) != 0) ? 1:0;
+        return " (0b"+bit6+bit5+"_"+bit4+bit3+bit2+bit1+")";
     }
 
 }
