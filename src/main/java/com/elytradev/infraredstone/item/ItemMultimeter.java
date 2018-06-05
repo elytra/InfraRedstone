@@ -29,7 +29,7 @@ public class ItemMultimeter extends ItemBase {
         if (!(InRedLogic.checkCandidacy(world, pos, facing)
                 || InRedLogic.checkCandidacy(world, pos, player.getAdjustedHorizontalFacing()))) return EnumActionResult.PASS;
         if (world.getTileEntity(pos) != null) {
-            if (world.getTileEntity(pos).hasCapability(InfraRedstone.CAPABILITY_IR, facing)) face = facing;
+            if (world.getTileEntity(pos).hasCapability(InfraRedstone.CAPABILITY_IR, facing)) face = facing.getOpposite();
             else face = player.getAdjustedHorizontalFacing();
             note = new TextComponentTranslation("msg.inred.multimeter.direction");
             dir=" "+face+": ";
@@ -41,7 +41,7 @@ public class ItemMultimeter extends ItemBase {
             needSneak = false;
         }
         if (player.isSneaking() == needSneak) {
-            int signal = InRedLogic.findIRValue(world, pos, face.getOpposite());
+            int signal = InRedLogic.findIRValue(world, pos, face);
             TextComponentString string = new TextComponentString(note.getFormattedText()+dir+signal+getBits(world, pos, face));
             if (!world.isRemote) player.sendMessage(string);
             return EnumActionResult.SUCCESS;

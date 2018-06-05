@@ -46,8 +46,8 @@ public class BlockBase extends Block implements IBlockBase {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         if (GuiScreen.isShiftKeyDown()) {
-            C28n.formatList(tooltip, "tooltip.ir." + name);
-        } else C28n.formatList(tooltip,"preview.ir." + name);
+            C28n.formatList(tooltip, "tooltip.inred." + name);
+        } else C28n.formatList(tooltip,"preview.inred." + name);
     }
 
     public Block toBlock() {

@@ -55,7 +55,7 @@ public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlo
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity te = world.getTileEntity(pos);
         if(!world.isRemote && !player.isSneaking() && te instanceof  TileEntityShifter) {
-            TileEntityShifter teShifter = (TileEntityShifter) world.getTileEntity(pos);
+            TileEntityShifter teShifter = (TileEntityShifter)te;
             teShifter.toggleSelection();
         }
         return true;

@@ -16,10 +16,13 @@ tile.shifter.name=Shifter
 tile.device_liquid_crystal.name=Liquid Crystal Block
 
 #tooltips
+preview.inred.oscillator.0=§cWork in progress!
 
 #messages
 msg.inred.multimeter.direction=Signal input from
 msg.inred.multimeter.cable=Signal passing through cable
+msg.inred.oscillator.value=Delay:
+msg.inred.oscillator.time=/10 second
 
 #misc
 itemGroup.infraredstone=Infra-Redstone

@@ -9,10 +9,14 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -43,6 +47,21 @@ public class BlockOscillator extends BlockModule<TileEntityOscillator> implement
         return new TileEntityOscillator();
     }
 
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        TileEntity te = world.getTileEntity(pos);
+        if(!world.isRemote && te instanceof  TileEntityOscillator) {
+            TileEntityOscillator teOscil = (TileEntityOscillator)te;
+            if (!player.isSneaking()) {
+                teOscil.setDelay();
+            }
+            TextComponentTranslation val = new TextComponentTranslation("msg.inred.oscillator.value");
+            TextComponentTranslation time = new TextComponentTranslation("msg.inred.oscillator.time");
+            TextComponentString string = new TextComponentString(val.getUnformattedText()+" "+teOscil.maxRefreshTicks+time.getUnformattedText());
+            player.sendMessage(string);
+        }
+        return true;
+    }
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {

@@ -1,5 +1,6 @@
 package com.elytradev.infraredstone.tile;
 
+import com.elytradev.infraredstone.InRedLog;
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockOscillator;
 import com.elytradev.infraredstone.block.ModBlocks;
@@ -9,11 +10,13 @@ import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 import com.google.common.base.Predicates;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
@@ -21,7 +24,7 @@ import net.minecraftforge.common.capabilities.Capability;
 public class TileEntityOscillator extends TileEntityIRComponent implements ITickable {
     private InfraRedstoneHandler signal = new InfraRedstoneHandler();
     private int refreshTicks;
-    private int maxRefreshTicks = 4;
+    public int maxRefreshTicks = 4;
     private int sigToWrite;
 
     //Transient data to throttle sync down here
@@ -57,6 +60,17 @@ public class TileEntityOscillator extends TileEntityIRComponent implements ITick
             signal.setSignalValue(signal.getNextSignalValue());
             markDirty();
         }
+    }
+
+    public void setDelay() {
+        if (maxRefreshTicks < 10) {
+            maxRefreshTicks++;
+        } else {
+            maxRefreshTicks = 1;
+        }
+        refreshTicks = maxRefreshTicks;
+        world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.55f);
+        markDirty();
     }
 
     @Override
