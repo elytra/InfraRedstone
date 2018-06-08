@@ -10,18 +10,6 @@
     "inventory": {
       "model": "infraredstone:module/transistor/item"
     },
-    "active": {
-      "true": {
-        "textures": {
-          "base": "infraredstone:blocks/transistor_on"
-        }
-      },
-      "false": {
-        "textures": {
-          "base": "infraredstone:blocks/transistor"
-        }
-      }
-    },
     "facing": {
       "north": {},
       "east": {

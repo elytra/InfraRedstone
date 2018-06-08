@@ -2,6 +2,7 @@ package com.elytradev.infraredstone.tile;
 
 import com.elytradev.infraredstone.InRedLog;
 import com.elytradev.infraredstone.InfraRedstone;
+import com.elytradev.infraredstone.block.BlockBase;
 import com.elytradev.infraredstone.block.BlockShifter;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.logic.InRedLogic;
@@ -18,6 +19,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
@@ -167,8 +169,10 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
     @Override
     public void handleUpdateTag(NBTTagCompound tag) {
         readFromNBT(tag);
-        IBlockState state = world.getBlockState(pos);
-        getWorld().markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 1 | 2 | 16);
+        if (lastSelection!=selection) {
+            world.markBlockRangeForRenderUpdate(pos, pos);
+            lastSelection = selection;
+        }
     }
 
     @Override
@@ -181,7 +185,8 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
         super.markDirty();
         // please excuse the black magic
         if (!hasWorld() || getWorld().isRemote) return;
-
+        boolean active = isActive();
+        boolean eject = isEject();
         if (isActive()!=lastActive || isEject() != lastEject || selection!=lastSelection) { //Throttle updates - only send when something important changes
 
             WorldServer ws = (WorldServer)getWorld();
@@ -190,6 +195,24 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
             for (EntityPlayerMP player : getWorld().getPlayers(EntityPlayerMP.class, Predicates.alwaysTrue())) {
                 if (ws.getPlayerChunkMap().isPlayerWatchingChunk(player, c.x, c.z)) {
                     player.connection.sendPacket(packet);
+                }
+            }
+
+            if (lastSelection!=selection) {
+                //IBlockState state = world.getBlockState(pos);
+                //ws.markAndNotifyBlock(pos, c, state, state, 1 | 2 | 16);
+            } else if (lastActive!=active || lastEject!= eject) {
+                //BlockState isn't changing, but we need to notify the block in front of us so that vanilla redstone updates
+                IBlockState state = world.getBlockState(pos);
+                if (state.getBlock()==ModBlocks.SHIFTER) {
+                    EnumFacing facing = state.getValue(BlockShifter.FACING);
+                    BlockPos targetPos = pos.offset(facing);
+                    IBlockState targetState = world.getBlockState(targetPos);
+                    if (!(targetState.getBlock() instanceof BlockBase)) {
+                        //Not one of ours. Update its redstone, and let observers see the fact that we updated too
+                        world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 1);
+                        world.markAndNotifyBlock(targetPos, world.getChunkFromBlockCoords(targetPos), targetState, targetState, 3); // 1 : Just cuase a BUD and notify observers
+                    }
                 }
             }
 

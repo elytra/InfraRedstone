@@ -5,7 +5,6 @@ import com.elytradev.infraredstone.util.enums.EnumShifterSelection;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -25,18 +24,14 @@ public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlo
 
     protected String name;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    public static final PropertyBool ACTIVE = PropertyBool.create("active");
     public static final PropertyEnum<EnumShifterSelection> SELECTION = PropertyEnum.create("selection", EnumShifterSelection.class);
-    public static final PropertyEnum<EnumShifterSelection> EJECTION = PropertyEnum.create("ejection", EnumShifterSelection.class);
     public static int FACE = 3;
 
     public BlockShifter() {
         super(Material.CIRCUITS, "shifter");
         this.setDefaultState(blockState.getBaseState()
                 .withProperty(FACING, EnumFacing.NORTH)
-                .withProperty(ACTIVE, false)
-                .withProperty(SELECTION, EnumShifterSelection.LEFT)
-                .withProperty(EJECTION, EnumShifterSelection.NONE));
+                .withProperty(SELECTION, EnumShifterSelection.LEFT));
 
         this.setHardness(0.5f);
     }
@@ -59,16 +54,6 @@ public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlo
             teShifter.toggleSelection();
         }
         return true;
-    }
-
-    public EnumShifterSelection getEjection(IBlockAccess world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityShifter) {
-            TileEntityShifter teShifter = (TileEntityShifter)te;
-            if (!teShifter.isEject()) return EnumShifterSelection.NONE;
-            else return teShifter.selection;
-        }
-        return EnumShifterSelection.NONE;
     }
 
     @Override
@@ -99,7 +84,7 @@ public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlo
 
     @Override
     public BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING, ACTIVE, SELECTION, EJECTION);
+        return new BlockStateContainer(this, FACING, SELECTION);
     }
 
     @Override
@@ -121,19 +106,14 @@ public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlo
         TileEntity te = world.getTileEntity(pos);
         if (!(te instanceof TileEntityShifter)) return state;
         TileEntityShifter shifter = (TileEntityShifter)te;
-        return state
-                .withProperty(ACTIVE, shifter.isActive())
-                .withProperty(SELECTION, shifter.selection)
-                .withProperty(EJECTION, getEjection(world, pos));
+        return state.withProperty(SELECTION, shifter.selection);
     }
 
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
         return this.getDefaultState()
                 .withProperty(FACING, placer.getHorizontalFacing())
-                .withProperty(ACTIVE, false)
-                .withProperty(SELECTION, EnumShifterSelection.LEFT)
-                .withProperty(EJECTION, EnumShifterSelection.NONE);
+                .withProperty(SELECTION, EnumShifterSelection.LEFT);
     }
 
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos)

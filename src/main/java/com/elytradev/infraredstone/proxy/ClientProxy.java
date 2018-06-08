@@ -1,10 +1,8 @@
 package com.elytradev.infraredstone.proxy;
 
 import com.elytradev.infraredstone.InfraRedstone;
-import com.elytradev.infraredstone.client.render.RenderDiode;
-import com.elytradev.infraredstone.client.render.RenderLiquidCrystal;
-import com.elytradev.infraredstone.tile.TileEntityDiode;
-import com.elytradev.infraredstone.tile.TileEntityLiquidCrystal;
+import com.elytradev.infraredstone.client.render.*;
+import com.elytradev.infraredstone.tile.*;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -20,11 +18,21 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLiquidCrystal.class, new RenderLiquidCrystal());
         
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDiode.class, new RenderDiode());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOscillator.class, new RenderOscillator());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTransistor.class, new RenderTransistor());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityShifter.class, new RenderShifter());
     }
     
     @SubscribeEvent
     public void onStitchTexture(TextureStitchEvent.Pre event) {
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/diode_glow"));
+        event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/oscillator_glow"));
+        event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/transistor_glow"));
+        event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/shifter_glow_left"));
+        event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/shifter_glow_right"));
+        event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/shifter_glow_center"));
+        event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/shifter_glow_center_left"));
+        event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/shifter_glow_center_right"));
     }
     
     @Override

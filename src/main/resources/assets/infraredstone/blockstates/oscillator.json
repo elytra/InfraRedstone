@@ -10,18 +10,6 @@
     "inventory": {
       "model": "infraredstone:module/oscillator/item"
     },
-    "active": {
-      "true": {
-        "textures": {
-          "base": "infraredstone:blocks/oscillator_on"
-        }
-      },
-      "false": {
-        "textures": {
-          "base": "infraredstone:blocks/oscillator"
-        }
-      }
-    },
     "facing": {
       "north": {},
       "east": {

@@ -1,6 +1,7 @@
 package com.elytradev.infraredstone.tile;
 
 import com.elytradev.infraredstone.InfraRedstone;
+import com.elytradev.infraredstone.block.BlockBase;
 import com.elytradev.infraredstone.block.BlockTransistor;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.logic.InRedLogic;
@@ -14,6 +15,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
@@ -142,10 +144,10 @@ public class TileEntityTransistor extends TileEntityIRComponent implements ITick
     @Override
     public void markDirty() {
         super.markDirty();
-        // please excuse the black magic
+        // again, I've copy-pasted this like 12 times, should probably go into Concrete
         if (!hasWorld() || getWorld().isRemote) return;
-
-        if (isActive()!=lastActive) { //Throttle updates - only send when something important changes
+        boolean active = isActive();
+        if (active!=lastActive) { //Throttle updates - only send when something important changes
 
             WorldServer ws = (WorldServer)getWorld();
             Chunk c = getWorld().getChunkFromBlockCoords(getPos());
@@ -156,10 +158,22 @@ public class TileEntityTransistor extends TileEntityIRComponent implements ITick
                 }
             }
 
-            lastActive = isActive();
+            if (lastActive!=active) {
+                //BlockState isn't changing, but we need to notify the block in front of us so that vanilla redstone updates
+                IBlockState state = world.getBlockState(pos);
+                if (state.getBlock()==ModBlocks.TRANSISTOR) {
+                    EnumFacing facing = state.getValue(BlockTransistor.FACING);
+                    BlockPos targetPos = pos.offset(facing);
+                    IBlockState targetState = world.getBlockState(targetPos);
+                    if (!(targetState.getBlock() instanceof BlockBase)) {
+                        //Not one of ours. Update its redstone, and let observers see the fact that we updated too
+                        world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 1);
+                        world.markAndNotifyBlock(targetPos, world.getChunkFromBlockCoords(targetPos), targetState, targetState, 3); // 1 : Just cuase a BUD and notify observers
+                    }
+                }
+            }
 
-            IBlockState state = world.getBlockState(pos);
-            ws.markAndNotifyBlock(pos, c, state, state, 1 | 16);
+            lastActive = active;
         }
     }
 

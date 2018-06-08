@@ -10,19 +10,6 @@
     "inventory": {
       "model": "infraredstone:module/shifter/item"
     },
-    "ejection": {
-      "none": {},
-      "left": {
-          "textures": {
-            "left": "infraredstone:blocks/shifter_on"
-          }
-      },
-      "right": {
-          "textures": {
-            "right": "infraredstone:blocks/shifter_on"
-          }
-      }
-    },
     "selection": {
       "left": {
         "submodel": {
@@ -36,19 +23,6 @@
       },
       "none": {}
     },
-    "active": {
-      "true": {
-        "textures": {
-          "base": "infraredstone:blocks/shifter_on"
-        }
-      },
-      "false": {
-        "textures": {
-          "base": "infraredstone:blocks/shifter"
-        }
-      }
-    },
-
     "facing": {
       "north": {},
       "east": {

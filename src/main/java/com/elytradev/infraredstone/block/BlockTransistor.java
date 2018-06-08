@@ -21,14 +21,11 @@ public class BlockTransistor extends BlockModule<TileEntityTransistor> implement
 
     protected String name;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    public static final PropertyBool ACTIVE = PropertyBool.create("active");
     public static int FACE = 3;
 
     public BlockTransistor() {
         super(Material.CIRCUITS, "transistor");
-        this.setDefaultState(blockState.getBaseState()
-                .withProperty(FACING, EnumFacing.NORTH)
-                .withProperty(ACTIVE, false));
+        this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         this.setHardness(0.5f);
     }
 
@@ -71,7 +68,7 @@ public class BlockTransistor extends BlockModule<TileEntityTransistor> implement
 
     @Override
     public BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING, ACTIVE);
+        return new BlockStateContainer(this, FACING);
     }
 
     @Override
@@ -89,19 +86,9 @@ public class BlockTransistor extends BlockModule<TileEntityTransistor> implement
     }
 
     @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if (te==null || !(te instanceof TileEntityTransistor)) return state;
-        TileEntityTransistor transistor = (TileEntityTransistor)te;
-        return state
-                .withProperty(ACTIVE, transistor.isActive());
-    }
-
-    @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
         return this.getDefaultState()
-                .withProperty(FACING, placer.getHorizontalFacing())
-                .withProperty(ACTIVE, false);
+                .withProperty(FACING, placer.getHorizontalFacing());
     }
 
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
