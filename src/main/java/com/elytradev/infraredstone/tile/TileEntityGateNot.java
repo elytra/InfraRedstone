@@ -1,6 +1,7 @@
 package com.elytradev.infraredstone.tile;
 
 import com.elytradev.infraredstone.InfraRedstone;
+import com.elytradev.infraredstone.block.BlockBase;
 import com.elytradev.infraredstone.block.BlockGateNot;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.logic.InRedLogic;
@@ -14,6 +15,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
@@ -148,10 +150,20 @@ public class TileEntityGateNot extends TileEntityIRComponent implements ITickabl
                 }
             }
 
+            IBlockState state = world.getBlockState(pos);
+            if (state.getBlock()==ModBlocks.GATE_NOT) {
+                EnumFacing facing = state.getValue(BlockGateNot.FACING);
+                BlockPos targetPos = pos.offset(facing);
+                IBlockState targetState = world.getBlockState(targetPos);
+                if (!(targetState.getBlock() instanceof BlockBase)) {
+                    //Not one of ours. Update its redstone, and let observers see the fact that we updated too
+                    world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 1);
+                    world.markAndNotifyBlock(targetPos, world.getChunkFromBlockCoords(targetPos), targetState, targetState, 3); // 1 : Just cuase a BUD and notify observers
+                }
+            }
+
             lastActive = isActive();
 
-            IBlockState state = world.getBlockState(pos);
-            ws.markAndNotifyBlock(pos, c, state, state, 1 | 16);
         }
     }
 

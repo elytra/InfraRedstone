@@ -2,9 +2,9 @@
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
 		"side": "infraredstone:blocks/pcb_slate",
-		"base": "infraredstone:blocks/gate_not_outoff",
+		"base": "infraredstone:blocks/gate_not",
 		"light": "infraredstone:blocks/lights_dark",
-		"particle": "infraredstone:blocks/gate_not_outoff"
+		"particle": "infraredstone:blocks/gate_not"
 	},
 	"elements": [
 		{

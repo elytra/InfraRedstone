@@ -22,19 +22,27 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTransistor.class, new RenderTransistor());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityShifter.class, new RenderShifter());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInRedBlock.class, new RenderInRedBlock<>());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGateNot.class, new RenderGateNot());
     }
     
     @SubscribeEvent
     public void onStitchTexture(TextureStitchEvent.Pre event) {
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/diode_glow"));
+
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/oscillator_glow"));
+
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/transistor_glow"));
+
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/shifter_glow_left"));
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/shifter_glow_right"));
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/shifter_glow_center"));
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/shifter_glow_center_left"));
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/shifter_glow_center_right"));
+
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/infra_redstone_block"));
+
+        event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/gate_not_glow_in"));
+        event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/gate_not_glow_out"));
     }
     
     @Override

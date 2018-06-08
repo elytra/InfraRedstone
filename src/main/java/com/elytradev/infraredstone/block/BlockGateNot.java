@@ -21,14 +21,12 @@ public class BlockGateNot extends BlockModule<TileEntityGateNot> implements IBlo
 
     protected String name;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    public static final PropertyBool FRONT_ACTIVE = PropertyBool.create("front_active");
     public static int FACE = 3;
 
     public BlockGateNot() {
         super(Material.CIRCUITS, "gate_not");
         this.setDefaultState(blockState.getBaseState()
-                .withProperty(FACING, EnumFacing.NORTH)
-                .withProperty(FRONT_ACTIVE, false));
+                .withProperty(FACING, EnumFacing.NORTH));
 
         this.setHardness(0.5f);
     }
@@ -72,7 +70,7 @@ public class BlockGateNot extends BlockModule<TileEntityGateNot> implements IBlo
 
     @Override
     public BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING, FRONT_ACTIVE);
+        return new BlockStateContainer(this, FACING);
     }
 
     @Override
@@ -89,20 +87,12 @@ public class BlockGateNot extends BlockModule<TileEntityGateNot> implements IBlo
         return blockState.getBaseState().withProperty(FACING, facing);
     }
 
-    @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if (te == null || !(te instanceof TileEntityGateNot)) return state;
-        TileEntityGateNot not = (TileEntityGateNot) te;
-        return state
-                .withProperty(FRONT_ACTIVE, not.isActive());
-    }
+
 
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
         return this.getDefaultState()
-                .withProperty(FACING, placer.getHorizontalFacing())
-                .withProperty(FRONT_ACTIVE, false);
+                .withProperty(FACING, placer.getHorizontalFacing());
     }
 
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos)

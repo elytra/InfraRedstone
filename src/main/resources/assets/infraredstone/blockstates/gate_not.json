@@ -10,20 +10,6 @@
     "inventory": {
       "model": "infraredstone:gate/not/item"
     },
-    "front_active": {
-      "true": {
-        "textures": {
-          "light": "infraredstone:blocks/lights",
-          "base": "infraredstone:blocks/gate_not_outon"
-        }
-      },
-      "false": {
-        "textures": {
-          "light": "infraredstone:blocks/lights_dark",
-          "base": "infraredstone:blocks/gate_not_outoff"
-        }
-      }
-    },
     "facing": {
       "north": {},
       "east": {
