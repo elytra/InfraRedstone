@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.animation.FastTESR;
 
-public abstract class RenderInredBase<T extends TileEntityIRComponent> extends FastTESR<T>{
+public abstract class RenderInRedBase<T extends TileEntityIRComponent> extends FastTESR<T>{
 
     @Override
     public void renderTileEntityFast(T te, double x, double y, double z, float partialTicks, int destroyStage, float partial, BufferBuilder buffer) {

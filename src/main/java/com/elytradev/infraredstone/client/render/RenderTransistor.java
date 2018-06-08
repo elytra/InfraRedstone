@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 
-public class RenderTransistor extends RenderInredBase<TileEntityTransistor> {
+public class RenderTransistor extends RenderInRedBase<TileEntityTransistor> {
     public static final String LIT = "infraredstone:blocks/transistor_glow";
 
     @Override

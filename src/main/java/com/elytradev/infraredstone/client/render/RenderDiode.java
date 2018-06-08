@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 
-public class RenderDiode extends RenderInredBase<TileEntityDiode> {
+public class RenderDiode extends RenderInRedBase<TileEntityDiode> {
     public static final String LIT = "infraredstone:blocks/diode_glow";
     
     @Override

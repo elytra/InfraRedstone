@@ -1,6 +1,5 @@
 package com.elytradev.infraredstone.client.render;
 
-import com.elytradev.infraredstone.InRedLog;
 import com.elytradev.infraredstone.block.BlockShifter;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.tile.TileEntityShifter;
@@ -11,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 
-public class RenderShifter extends RenderInredBase<TileEntityShifter> {
+public class RenderShifter extends RenderInRedBase<TileEntityShifter> {
     public static final String LIT = "infraredstone:blocks/shifter_glow";
     public static final String CENTER = "_center";
     public static final String LEFT = "_left";
@@ -36,7 +35,6 @@ public class RenderShifter extends RenderInredBase<TileEntityShifter> {
                 phrase += RIGHT;
             }
         }
-        InRedLog.info(phrase);
         return (!phrase.equals(LIT)) ? Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(phrase) : null;
     }
 }

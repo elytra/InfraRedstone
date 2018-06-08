@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 
-public class RenderOscillator extends RenderInredBase<TileEntityOscillator> {
+public class RenderOscillator extends RenderInRedBase<TileEntityOscillator> {
     public static final String LIT = "infraredstone:blocks/oscillator_glow";
 
     @Override
