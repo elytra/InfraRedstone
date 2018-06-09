@@ -38,31 +38,31 @@ public class RenderInRedBlock<T extends TileEntityInRedBlock> extends FastTESR<T
     }
 
     public void renderNorth(BufferBuilder buffer, TextureAtlasSprite tex) {
-        buffer.pos(minDist, 0, 0).color(1f, 1f, 1f, 1f).tex(tex.getMinU(), tex.getMinV()).lightmap(240, 240).endVertex();
-        buffer.pos(minDist, 0, 1).color(1f, 1f, 1f, 1f).tex(tex.getMaxU(), tex.getMinV()).lightmap(240, 240).endVertex();
-        buffer.pos(minDist, 1, 1).color(1f, 1f, 1f, 1f).tex(tex.getMaxU(), tex.getMaxV()).lightmap(240, 240).endVertex();
-        buffer.pos(minDist, 1, 0).color(1f, 1f, 1f, 1f).tex(tex.getMinU(), tex.getMaxV()).lightmap(240, 240).endVertex();
-    }
-
-    public void renderSouth(BufferBuilder buffer, TextureAtlasSprite tex) {
-        buffer.pos(maxDist, 0, 0).color(1f, 1f, 1f, 1f).tex(tex.getMinU(), tex.getMinV()).lightmap(240, 240).endVertex();
-        buffer.pos(maxDist, 0, 1).color(1f, 1f, 1f, 1f).tex(tex.getMaxU(), tex.getMinV()).lightmap(240, 240).endVertex();
-        buffer.pos(maxDist, 1, 1).color(1f, 1f, 1f, 1f).tex(tex.getMaxU(), tex.getMaxV()).lightmap(240, 240).endVertex();
-        buffer.pos(maxDist, 1, 0).color(1f, 1f, 1f, 1f).tex(tex.getMinU(), tex.getMaxV()).lightmap(240, 240).endVertex();
-    }
-
-    public void renderEast(BufferBuilder buffer, TextureAtlasSprite tex) {
         buffer.pos(0, 0, maxDist).color(1f, 1f, 1f, 1f).tex(tex.getMinU(), tex.getMinV()).lightmap(240, 240).endVertex();
         buffer.pos(1, 0, maxDist).color(1f, 1f, 1f, 1f).tex(tex.getMaxU(), tex.getMinV()).lightmap(240, 240).endVertex();
         buffer.pos(1, 1, maxDist).color(1f, 1f, 1f, 1f).tex(tex.getMaxU(), tex.getMaxV()).lightmap(240, 240).endVertex();
         buffer.pos(0, 1, maxDist).color(1f, 1f, 1f, 1f).tex(tex.getMinU(), tex.getMaxV()).lightmap(240, 240).endVertex();
     }
 
-    public void renderWest(BufferBuilder buffer, TextureAtlasSprite tex) {
+    public void renderSouth(BufferBuilder buffer, TextureAtlasSprite tex) {
         buffer.pos(0, 0, minDist).color(1f, 1f, 1f, 1f).tex(tex.getMinU(), tex.getMinV()).lightmap(240, 240).endVertex();
         buffer.pos(1, 0, minDist).color(1f, 1f, 1f, 1f).tex(tex.getMaxU(), tex.getMinV()).lightmap(240, 240).endVertex();
         buffer.pos(1, 1, minDist).color(1f, 1f, 1f, 1f).tex(tex.getMaxU(), tex.getMaxV()).lightmap(240, 240).endVertex();
         buffer.pos(0, 1, minDist).color(1f, 1f, 1f, 1f).tex(tex.getMinU(), tex.getMaxV()).lightmap(240, 240).endVertex();
+    }
+
+    public void renderEast(BufferBuilder buffer, TextureAtlasSprite tex) {
+        buffer.pos(minDist, 0, 0).color(1f, 1f, 1f, 1f).tex(tex.getMinU(), tex.getMinV()).lightmap(240, 240).endVertex();
+        buffer.pos(minDist, 0, 1).color(1f, 1f, 1f, 1f).tex(tex.getMaxU(), tex.getMinV()).lightmap(240, 240).endVertex();
+        buffer.pos(minDist, 1, 1).color(1f, 1f, 1f, 1f).tex(tex.getMaxU(), tex.getMaxV()).lightmap(240, 240).endVertex();
+        buffer.pos(minDist, 1, 0).color(1f, 1f, 1f, 1f).tex(tex.getMinU(), tex.getMaxV()).lightmap(240, 240).endVertex();
+    }
+
+    public void renderWest(BufferBuilder buffer, TextureAtlasSprite tex) {
+        buffer.pos(maxDist, 0, 0).color(1f, 1f, 1f, 1f).tex(tex.getMinU(), tex.getMinV()).lightmap(240, 240).endVertex();
+        buffer.pos(maxDist, 0, 1).color(1f, 1f, 1f, 1f).tex(tex.getMaxU(), tex.getMinV()).lightmap(240, 240).endVertex();
+        buffer.pos(maxDist, 1, 1).color(1f, 1f, 1f, 1f).tex(tex.getMaxU(), tex.getMaxV()).lightmap(240, 240).endVertex();
+        buffer.pos(maxDist, 1, 0).color(1f, 1f, 1f, 1f).tex(tex.getMinU(), tex.getMaxV()).lightmap(240, 240).endVertex();
     }
 
 }

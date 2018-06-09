@@ -4,6 +4,7 @@ import com.elytradev.infraredstone.block.BlockGateNot;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.tile.TileEntityGateNot;
 
+import com.elytradev.infraredstone.util.Torch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -12,6 +13,9 @@ import net.minecraft.util.EnumFacing;
 public class RenderGateNot extends RenderInRedBase<TileEntityGateNot> {
     public static final String IN = "infraredstone:blocks/gate_not_glow_in";
     public static final String OUT = "infraredstone:blocks/gate_not_glow_out";
+    public Torch[] torches = {
+            new Torch(7/16, 2/16, true, true)
+    };
 
     @Override
     public EnumFacing getFacing(TileEntityGateNot tile) {
@@ -23,7 +27,12 @@ public class RenderGateNot extends RenderInRedBase<TileEntityGateNot> {
 
     @Override
     public TextureAtlasSprite getLightupTexture(TileEntityGateNot tile) {
-        return (tile.isActive()) ? Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(OUT) : Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(IN);
+        if (tile.isActive()) {
+            torches[0].isLit=true;
+            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(OUT);
+        } else {
+            torches[0].isLit = false;
+            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(IN);
+        }
     }
-
 }
