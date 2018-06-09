@@ -13,9 +13,11 @@ import net.minecraft.util.EnumFacing;
 public class RenderGateNot extends RenderInRedBase<TileEntityGateNot> {
     public static final String IN = "infraredstone:blocks/gate_not_glow_in";
     public static final String OUT = "infraredstone:blocks/gate_not_glow_out";
-    public Torch[] torches = {
-            new Torch(7/16, 2/16, true, true)
-    };
+
+    public RenderGateNot() {
+        torches = new Torch[1];
+        torches[0] = new Torch(7/16d, 2/16d, true, true);
+    }
 
     @Override
     public EnumFacing getFacing(TileEntityGateNot tile) {
