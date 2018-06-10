@@ -248,13 +248,13 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
             if (inverted!=lastInvert || inactive!=lastInactive) {
                 //IBlockState state = world.getBlockState(pos);
                 //ws.markAndNotifyBlock(pos, c, state, state, 1 | 2 | 16);
-            } else if (lastActive!=active
+            } else if (isActive()!=lastActive
                     || valLeft!=lastValLeft
                     || valRight!=lastValRight
                     || valBack!=lastValBack) {
                 //BlockState isn't changing, but we need to notify the block in front of us so that vanilla redstone updates
                 IBlockState state = world.getBlockState(pos);
-                if (state.getBlock()==ModBlocks.DIODE) {
+                if (state.getBlock()==ModBlocks.GATE_AND) {
                     EnumFacing facing = state.getValue(BlockGateAnd.FACING);
                     BlockPos targetPos = pos.offset(facing);
                     IBlockState targetState = world.getBlockState(targetPos);

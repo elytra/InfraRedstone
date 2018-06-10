@@ -16,8 +16,8 @@ public class RenderGateXor extends RenderInRedBase<TileEntityGateXor> {
     public RenderGateXor() {
         torches = new Torch[3];
         torches[0] = new Torch(7/16d, 4/16d, true, true); // output torch
-        torches[1] = new Torch(0d, 7/16d, true, true); // left torch
-        torches[2] = new Torch(14/16d, 7/16d, true, true); // right torch
+        torches[1] = new Torch(14/16d, 7/16d, true, true); // left torch
+        torches[2] = new Torch(0/16d, 7/16d, true, true); // right torch
     }
 
     @Override

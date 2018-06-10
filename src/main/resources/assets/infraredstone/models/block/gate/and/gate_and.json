@@ -3,7 +3,6 @@
 	"textures": {
 		"side": "infraredstone:blocks/pcb_slate",
 		"base": "infraredstone:blocks/gate_and",
-		"light": "infraredstone:blocks/lights_dark",
 		"particle": "infraredstone:blocks/gate_and"
 	},
 	"elements": [

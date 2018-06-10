@@ -18,13 +18,11 @@ public abstract class RenderInRedBase<T extends TileEntityIRComponent> extends F
     public void renderTileEntityFast(T te, double x, double y, double z, float partialTicks, int destroyStage, float partial, BufferBuilder buffer) {
         buffer.setTranslation(x, y, z);
         TextureAtlasSprite sprite = getLightupTexture(te);
-        if (sprite==null) return;
-        renderTopFace(buffer, sprite, getFacing(te));
+        if (sprite!=null) renderTopFace(buffer, sprite, getFacing(te));
         if (torches != null && torches.length != 0) {
             for (Torch torch : torches) {
                 TextureAtlasSprite light = (torch.isLit) ? Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("infraredstone:blocks/lights") : null;
-                if (light == null) return;
-                renderLight(buffer, light, torch.cornerX, torch.cornerZ, torch.isFullHeight, getFacing(te));
+                if (light != null) renderLight(buffer, light, torch.cornerX, torch.cornerZ, torch.isFullHeight, getFacing(te));
             }
         }
     }
@@ -67,14 +65,14 @@ public abstract class RenderInRedBase<T extends TileEntityIRComponent> extends F
         double adaptedZ = cornerZ;
         switch(facing) {
             case EAST:
-                adaptedX = cornerZ;
+                adaptedX = cornerZ+10/16d;
                 adaptedZ = cornerX;
                 break;
             case SOUTH:
                 adaptedZ += 10/16d;
                 break;
             case WEST:
-                adaptedX = cornerZ+10/16d;
+                adaptedX = cornerZ;
                 adaptedZ = cornerX;
                 break;
             default:

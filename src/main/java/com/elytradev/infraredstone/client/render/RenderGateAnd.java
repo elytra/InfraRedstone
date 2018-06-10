@@ -17,9 +17,9 @@ public class RenderGateAnd extends RenderInRedBase<TileEntityGateAnd> {
     public RenderGateAnd() {
         torches = new Torch[4];
         torches[0] = new Torch(7/16d, 4/16d, true, true); // output torch
-        torches[1] = new Torch(0d, 7/16d, true, true); // left torch
+        torches[1] = new Torch(14/16d, 7/16d, true, true); // left torch
         torches[2] = new Torch(7/16d, 14/16d, true, true); // back torch
-        torches[3] = new Torch(14/16d, 7/16d, true, true); // right torch
+        torches[3] = new Torch(0/16d, 7/16d, true, true); // right torch
     }
 
     @Override
