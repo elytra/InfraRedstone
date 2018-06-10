@@ -32,56 +32,6 @@
         }
       }
     },
-    "front_active": {
-      "true": {
-        "textures": {
-          "light": "infraredstone:blocks/lights",
-          "base": "infraredstone:blocks/gate_and_on"
-        }
-      },
-      "false": {
-        "textures": {
-          "light": "infraredstone:blocks/lights_dark",
-          "base": "infraredstone:blocks/gate_and"
-        }
-      }
-    },
-    "back_active": {
-      "true": {
-        "textures": {
-          "back": "infraredstone:blocks/lights"
-        }
-      },
-      "false": {
-        "textures": {
-          "back": "infraredstone:blocks/lights_dark"
-        }
-      }
-    },
-    "left_active": {
-      "true": {
-        "textures": {
-          "left": "infraredstone:blocks/lights"
-        }
-      },
-      "false": {
-        "textures": {
-          "left": "infraredstone:blocks/lights_dark"
-        }
-      }
-    },
-    "right_active": {
-      "true": {
-        "textures": {
-          "right": "infraredstone:blocks/lights"
-        }
-      },
-      "false": {
-        "textures": {
-          "right": "infraredstone:blocks/lights_dark"
-        }
-      }
-    },
     "facing": {
       "north": {},
       "east": {

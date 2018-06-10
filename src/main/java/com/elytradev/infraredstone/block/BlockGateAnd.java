@@ -26,10 +26,6 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
 
     protected String name;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    public static final PropertyBool FRONT_ACTIVE = PropertyBool.create("front_active");
-    public static final PropertyBool LEFT_ACTIVE = PropertyBool.create("left_active");
-    public static final PropertyBool BACK_ACTIVE = PropertyBool.create("back_active");
-    public static final PropertyBool RIGHT_ACTIVE = PropertyBool.create("right_active");
     public static final PropertyBool INVERTED = PropertyBool.create("inverted");
     public static final PropertyEnum<EnumInactiveSelection> INACTIVE = PropertyEnum.create("inactive", EnumInactiveSelection.class);
     public static int FACE = 3;
@@ -38,10 +34,6 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
         super(Material.CIRCUITS, "gate_and");
         this.setDefaultState(blockState.getBaseState()
                 .withProperty(FACING, EnumFacing.NORTH)
-                .withProperty(FRONT_ACTIVE, false)
-                .withProperty(LEFT_ACTIVE, false)
-                .withProperty(BACK_ACTIVE, false)
-                .withProperty(RIGHT_ACTIVE, false)
                 .withProperty(INVERTED, false)
                 .withProperty(INACTIVE, EnumInactiveSelection.NONE));
 
@@ -124,7 +116,7 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
 
     @Override
     public BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING, FRONT_ACTIVE, LEFT_ACTIVE, BACK_ACTIVE, RIGHT_ACTIVE, INVERTED, INACTIVE);
+        return new BlockStateContainer(this, FACING, INVERTED, INACTIVE);
     }
 
     @Override
@@ -147,10 +139,6 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
         if (!(te instanceof TileEntityGateAnd)) return state;
         TileEntityGateAnd and = (TileEntityGateAnd)te;
         return state
-                .withProperty(FRONT_ACTIVE, and.isActive())
-                .withProperty(LEFT_ACTIVE, and.isLeftActive())
-                .withProperty(BACK_ACTIVE, and.isBackActive())
-                .withProperty(RIGHT_ACTIVE, and.isRightActive())
                 .withProperty(INVERTED, and.inverted)
                 .withProperty(INACTIVE, and.inactive);
     }
@@ -159,10 +147,6 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
         return this.getDefaultState()
                 .withProperty(FACING, placer.getHorizontalFacing())
-                .withProperty(FRONT_ACTIVE, false)
-                .withProperty(LEFT_ACTIVE, false)
-                .withProperty(BACK_ACTIVE, false)
-                .withProperty(RIGHT_ACTIVE, false)
                 .withProperty(INVERTED, false)
                 .withProperty(INACTIVE, EnumInactiveSelection.NONE);
     }

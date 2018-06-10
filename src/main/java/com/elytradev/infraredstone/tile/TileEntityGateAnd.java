@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.elytradev.infraredstone.InfraRedstone;
+import com.elytradev.infraredstone.block.BlockBase;
 import com.elytradev.infraredstone.block.BlockGateAnd;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.logic.InRedLogic;
@@ -20,6 +21,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
@@ -209,8 +211,11 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
     @Override
     public void handleUpdateTag(NBTTagCompound tag) {
         readFromNBT(tag);
-        IBlockState state = world.getBlockState(pos);
-        getWorld().markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 1 | 2 | 16);
+        if (lastInvert!=inverted || lastInactive!= inactive) {
+            world.markBlockRangeForRenderUpdate(pos, pos);
+            lastInvert = inverted;
+            lastInactive = inactive;
+        }
     }
 
     @Override
@@ -221,16 +226,15 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
     @Override
     public void markDirty() {
         super.markDirty();
-        // please excuse the black magic
+        // again, I've copy-pasted this like 12 times, should probably go into Concrete
         if (!hasWorld() || getWorld().isRemote) return;
-
-        if (
-                   valLeft!=lastValLeft
-                || valBack!=lastValBack
-                || valRight!=lastValRight
-                || isActive()!=lastActive
+        boolean active = isActive();
+        if (active!=lastActive
                 || inverted!=lastInvert
-                || inactive!=lastInactive) { //Throttle updates - only send when something important changes
+                || inactive!=lastInactive
+                || valLeft!=lastValLeft
+                || valRight!=lastValRight
+                || valBack!=lastValBack) { //Throttle updates - only send when something important changes
 
             WorldServer ws = (WorldServer)getWorld();
             Chunk c = getWorld().getChunkFromBlockCoords(getPos());
@@ -241,15 +245,33 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
                 }
             }
 
-            lastValLeft = valLeft;
-            lastValBack = valBack;
-            lastValRight = valRight;
-            lastActive = isActive();
-            lastInvert = inverted;
-            lastInactive = inactive;
+            if (inverted!=lastInvert || inactive!=lastInactive) {
+                //IBlockState state = world.getBlockState(pos);
+                //ws.markAndNotifyBlock(pos, c, state, state, 1 | 2 | 16);
+            } else if (lastActive!=active
+                    || valLeft!=lastValLeft
+                    || valRight!=lastValRight
+                    || valBack!=lastValBack) {
+                //BlockState isn't changing, but we need to notify the block in front of us so that vanilla redstone updates
+                IBlockState state = world.getBlockState(pos);
+                if (state.getBlock()==ModBlocks.DIODE) {
+                    EnumFacing facing = state.getValue(BlockGateAnd.FACING);
+                    BlockPos targetPos = pos.offset(facing);
+                    IBlockState targetState = world.getBlockState(targetPos);
+                    if (!(targetState.getBlock() instanceof BlockBase)) {
+                        //Not one of ours. Update its redstone, and let observers see the fact that we updated too
+                        world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 1);
+                        world.markAndNotifyBlock(targetPos, world.getChunkFromBlockCoords(targetPos), targetState, targetState, 3); // 1 : Just cuase a BUD and notify observers
+                    }
+                }
+            }
 
-            IBlockState state = world.getBlockState(pos);
-            ws.markAndNotifyBlock(pos, c, state, state, 1 | 16);
+            lastInactive = inactive;
+            lastInvert = inverted;
+            lastActive = active;
+            lastValLeft = valLeft;
+            lastValRight = valRight;
+            lastValBack = valBack;
         }
     }
 

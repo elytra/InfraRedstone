@@ -4,8 +4,6 @@
 		"side": "infraredstone:blocks/pcb_slate",
 		"base": "infraredstone:blocks/gate_and",
 		"light": "infraredstone:blocks/lights_dark",
-		"left": "infraredstone:blocks/lights_dark",
-		"right": "infraredstone:blocks/lights_dark",
 		"particle": "infraredstone:blocks/gate_and"
 	},
 	"elements": [
@@ -20,18 +18,6 @@
 				"up": {"uv": [0, 0, 16, 16], "texture": "#base"},
 				"down": {"uv": [0, 0, 16, 16], "texture": "#side"}
 			}
-		}
-	],
-	"groups": [0, 1,
-		{
-			"name": "subtorches",
-			"isOpen": true,
-			"shade": true,
-			"display": {
-				"visibility": true,
-				"autouv": true
-			},
-			"children": []
 		}
 	]
 }

@@ -10,44 +10,6 @@
     "inventory": {
       "model": "infraredstone:gate/xor/item"
     },
-    "front_active": {
-      "true": {
-        "textures": {
-          "light": "infraredstone:blocks/lights",
-          "base": "infraredstone:blocks/gate_xor_on"
-        }
-      },
-      "false": {
-        "textures": {
-          "light": "infraredstone:blocks/lights_dark",
-          "base": "infraredstone:blocks/gate_xor"
-        }
-      }
-    },
-    "left_active": {
-      "true": {
-        "textures": {
-          "left": "infraredstone:blocks/lights"
-        }
-      },
-      "false": {
-        "textures": {
-          "left": "infraredstone:blocks/lights_dark"
-        }
-      }
-    },
-    "right_active": {
-      "true": {
-        "textures": {
-          "right": "infraredstone:blocks/lights"
-        }
-      },
-      "false": {
-        "textures": {
-          "right": "infraredstone:blocks/lights_dark"
-        }
-      }
-    },
     "facing": {
       "north": {},
       "east": {

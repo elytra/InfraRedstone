@@ -1,34 +1,20 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
-		"base": "infraredstone:blocks/gate_and",
-		"light": "infraredstone:blocks/lights_dark",
-		"particle": "infraredstone:blocks/gate_and"
+		"light": "infraredstone:blocks/lights"
 	},
 	"elements": [
 		{
 			"from": [7, 3, 4],
 			"to": [9, 4, 6],
 			"faces": {
-				"north": {"uv": [7, 6, 9, 8], "texture": "#light"},
-				"east": {"uv": [7, 6, 9, 8], "texture": "#light"},
-				"south": {"uv": [7, 6, 9, 8], "texture": "#light"},
-				"west": {"uv": [7, 6, 9, 8], "texture": "#light"},
-				"up": {"uv": [7, 6, 9, 8], "texture": "#light"},
-				"down": {"uv": [7, 6, 9, 8], "texture": "#light"}
+				"north": {"uv": [9, 7, 11, 8], "texture": "#light"},
+				"east": {"uv": [9, 7, 11, 8], "texture": "#light"},
+				"south": {"uv": [9, 7, 11, 8], "texture": "#light"},
+				"west": {"uv": [9, 7, 11, 8], "texture": "#light"},
+				"up": {"uv": [9, 7, 11, 8], "texture": "#light"},
+				"down": {"uv": [9, 7, 11, 8], "texture": "#light"}
 			}
-		}
-	],
-	"groups": [0, 1,
-		{
-			"name": "subtorches",
-			"isOpen": true,
-			"shade": true,
-			"display": {
-				"visibility": true,
-				"autouv": true
-			},
-			"children": []
 		}
 	]
 }

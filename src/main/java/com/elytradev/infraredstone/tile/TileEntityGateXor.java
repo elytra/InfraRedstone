@@ -1,6 +1,7 @@
 package com.elytradev.infraredstone.tile;
 
 import com.elytradev.infraredstone.InfraRedstone;
+import com.elytradev.infraredstone.block.BlockBase;
 import com.elytradev.infraredstone.block.BlockGateXor;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.logic.InRedLogic;
@@ -14,6 +15,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
@@ -156,9 +158,9 @@ public class TileEntityGateXor extends TileEntityIRComponent implements ITickabl
         // please excuse the black magic
         if (!hasWorld() || getWorld().isRemote) return;
 
-        if (valLeft!=lastValLeft
-                || valRight!=lastValRight
-                || isActive()!=lastActive) { //Throttle updates - only send when something important changes
+        if (isActive()!=lastActive
+                ||valLeft!=lastValLeft
+                || valRight!=lastValRight) { //Throttle updates - only send when something important changes
 
             WorldServer ws = (WorldServer)getWorld();
             Chunk c = getWorld().getChunkFromBlockCoords(getPos());
@@ -169,12 +171,22 @@ public class TileEntityGateXor extends TileEntityIRComponent implements ITickabl
                 }
             }
 
+            IBlockState state = world.getBlockState(pos);
+            if (state.getBlock()==ModBlocks.GATE_XOR) {
+                EnumFacing facing = state.getValue(BlockGateXor.FACING);
+                BlockPos targetPos = pos.offset(facing);
+                IBlockState targetState = world.getBlockState(targetPos);
+                if (!(targetState.getBlock() instanceof BlockBase)) {
+                    //Not one of ours. Update its redstone, and let observers see the fact that we updated too
+                    world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 1);
+                    world.markAndNotifyBlock(targetPos, world.getChunkFromBlockCoords(targetPos), targetState, targetState, 3); // 1 : Just cuase a BUD and notify observers
+                }
+            }
+
+            lastActive = isActive();
             lastValLeft = valLeft;
             lastValRight = valRight;
-            lastActive = isActive();
 
-            IBlockState state = world.getBlockState(pos);
-            ws.markAndNotifyBlock(pos, c, state, state, 1 | 16);
         }
     }
 
