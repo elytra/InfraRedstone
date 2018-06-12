@@ -1,5 +1,6 @@
 package com.elytradev.infraredstone.block;
 
+import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.tile.TileEntityOscillator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
@@ -46,15 +47,8 @@ public class BlockOscillator extends BlockModule<TileEntityOscillator> implement
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity te = world.getTileEntity(pos);
-        if(!world.isRemote && te instanceof  TileEntityOscillator) {
-            TileEntityOscillator teOscil = (TileEntityOscillator)te;
-            if (!player.isSneaking()) {
-                teOscil.setDelay();
-            }
-            TextComponentTranslation val = new TextComponentTranslation("msg.inred.oscillator.value");
-            TextComponentTranslation time = new TextComponentTranslation("msg.inred.oscillator.time");
-            TextComponentString string = new TextComponentString(val.getUnformattedText()+" "+teOscil.maxRefreshTicks+time.getUnformattedText());
-            player.sendMessage(string);
+        if(!world.isRemote && !player.isSneaking() && te instanceof  TileEntityOscillator) {
+            player.openGui(InfraRedstone.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
     }

@@ -1,5 +1,8 @@
 package com.elytradev.infraredstone.tile;
 
+import com.elytradev.concrete.inventory.ConcreteItemStorage;
+import com.elytradev.concrete.inventory.IContainerInventoryHolder;
+import com.elytradev.concrete.inventory.ValidatedInventoryView;
 import com.elytradev.infraredstone.InRedLog;
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockBase;
@@ -12,6 +15,7 @@ import com.google.common.base.Predicates;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -23,14 +27,19 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 
-public class TileEntityOscillator extends TileEntityIRComponent implements ITickable {
+public class TileEntityOscillator extends TileEntityIRComponent implements ITickable, IContainerInventoryHolder {
     private InfraRedstoneHandler signal = new InfraRedstoneHandler();
     private int refreshTicks;
     public int maxRefreshTicks = 4;
     private int sigToWrite;
+    public ConcreteItemStorage inv;
 
     //Transient data to throttle sync down here
     boolean lastActive = false;
+
+    public TileEntityOscillator() {
+        this.inv = new ConcreteItemStorage(0).withName(ModBlocks.OSCILLATOR.getUnlocalizedName() + ".name");
+    }
 
     public void update() {
         if (world.isRemote || !hasWorld()) return;
@@ -65,13 +74,9 @@ public class TileEntityOscillator extends TileEntityIRComponent implements ITick
     }
 
     public void setDelay() {
-        if (maxRefreshTicks < 10) {
-            maxRefreshTicks++;
-        } else {
-            maxRefreshTicks = 1;
-        }
+        if (maxRefreshTicks >= 100) maxRefreshTicks = 100;
+        if (maxRefreshTicks < 1) maxRefreshTicks = 1;
         refreshTicks = maxRefreshTicks;
-        world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.55f);
         markDirty();
     }
 
@@ -197,6 +202,18 @@ public class TileEntityOscillator extends TileEntityIRComponent implements ITick
             }
 
             lastActive = active;
+        }
+    }
+
+    @Override
+    public IInventory getContainerInventory() {
+        ValidatedInventoryView view = new ValidatedInventoryView(inv);
+        if(world.isRemote) {
+            return view;
+        }
+        else {
+            return view.withField(0, () -> maxRefreshTicks)
+                    .withField(1, () -> (maxRefreshTicks != 10)? 1 : 0);
         }
     }
 

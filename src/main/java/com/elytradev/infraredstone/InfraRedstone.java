@@ -1,5 +1,9 @@
 package com.elytradev.infraredstone;
 
+import com.elytradev.concrete.network.NetworkContext;
+import com.elytradev.infraredstone.container.OscillatorContainer;
+import com.elytradev.infraredstone.logic.network.PacketButtonClick;
+import com.elytradev.infraredstone.tile.TileEntityOscillator;
 import com.elytradev.infraredstone.util.InRedConfig;
 import com.elytradev.concrete.inventory.IContainerInventoryHolder;
 import com.elytradev.concrete.inventory.gui.client.ConcreteGui;
@@ -48,6 +52,8 @@ public class InfraRedstone {
     public static final String version = "@VERSION@";
     public static InRedConfig config;
 
+    public static NetworkContext CONTEXT;
+
     @Mod.Instance(modId)
     public static InfraRedstone instance;
 
@@ -69,6 +75,9 @@ public class InfraRedstone {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         InRedLog.info(name + " is loading!");
+
+        CONTEXT = NetworkContext.forChannel("inred");
+        CONTEXT.register(PacketButtonClick.class);
         
         CapabilityManager.INSTANCE.register(IInfraRedstone.class, new InfraRedstoneSerializer(), InfraRedstoneHandler::new);
         CapabilityManager.INSTANCE.register(IInfraComparator.class, new InfraComparatorSerializer(), InfraRedstoneHandler::new);
@@ -79,16 +88,16 @@ public class InfraRedstone {
         config = InRedConfig.createConfig(event);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new IGuiHandler() {
-//            public static final int BOILER = 0;
+            public static final int OSCILLATOR = 0;
 
             @Nullable
             @Override
             public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
                 switch (ID) {
-//                    case BOILER:
-//                        return new BoilerContainer(
-//                                player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
-//                                (TileEntityBoilerController)world.getTileEntity(new BlockPos(x,y,z)));
+                    case OSCILLATOR:
+                        return new OscillatorContainer(
+                                player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
+                                (TileEntityOscillator) world.getTileEntity(new BlockPos(x,y,z)));
                     default:
                         return null;
                 }
@@ -100,11 +109,11 @@ public class InfraRedstone {
             @SideOnly(Side.CLIENT)
             public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
                 switch (ID) {
-//                    case BOILER:
-//                        BoilerContainer boilerContainer = new BoilerContainer(
-//                                player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
-//                                (TileEntityBoilerController)world.getTileEntity(new BlockPos(x,y,z)));
-//                        return new ConcreteGui(boilerContainer);
+                    case OSCILLATOR:
+                        OscillatorContainer oscillatorContainer = new OscillatorContainer(
+                                player.inventory, ((IContainerInventoryHolder)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory(),
+                                (TileEntityOscillator) world.getTileEntity(new BlockPos(x,y,z)));
+                        return new ConcreteGui(oscillatorContainer);
                     default:
                         return null;
                 }
