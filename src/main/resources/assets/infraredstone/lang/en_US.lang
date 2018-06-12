@@ -20,6 +20,7 @@ tile.device_liquid_crystal.name=Liquid Crystal Block
 #messages
 msg.inred.multimeter.direction=Signal input from
 msg.inred.multimeter.cable=Signal passing through cable
+msg.inred.multimeter.directly=Signal directly at
 
 #misc
 itemGroup.infraredstone=Infra-Redstone

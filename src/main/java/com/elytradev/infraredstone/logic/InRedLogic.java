@@ -186,7 +186,7 @@ public class InRedLogic {
         next.add(endpoint);
     }
 
-    private static Integer valueDirectlyAt(World world, BlockPos pos, EnumFacing dir) {
+    public static Integer valueDirectlyAt(World world, BlockPos pos, EnumFacing dir) {
         if (world.isAirBlock(pos)) return null;
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
