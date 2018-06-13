@@ -2,7 +2,10 @@ package com.elytradev.infraredstone.item;
 
 import com.elytradev.infraredstone.InRedLog;
 import com.elytradev.infraredstone.InfraRedstone;
+import com.elytradev.infraredstone.block.ModBlocks;
+import com.elytradev.infraredstone.logic.IMultimeterProbe;
 import com.elytradev.infraredstone.logic.InRedLogic;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
@@ -22,40 +25,37 @@ public class ItemMultimeter extends ItemBase {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        EnumFacing face;
-        TextComponentTranslation note;
-        String dir;
-        boolean needSneak = false;
-        if (!(InRedLogic.checkCandidacy(world, pos, player.getAdjustedHorizontalFacing())
-                || InRedLogic.checkCandidacy(world, pos, facing))) return EnumActionResult.PASS;
-        if (world.getTileEntity(pos) != null) {
-            if (world.getTileEntity(pos).hasCapability(InfraRedstone.CAPABILITY_IR, facing)) face = facing.getOpposite();
-            else face = player.getAdjustedHorizontalFacing();
-            note = new TextComponentTranslation("msg.inred.multimeter.direction");
-            dir=" "+face+": ";
-            needSneak = true;
+        Block block = world.getBlockState(pos).getBlock();
+        TileEntity te = world.getTileEntity(pos);
+        String value;
+        TextComponentTranslation i18n;
+        TextComponentString message;
+        if (world.isRemote) return EnumActionResult.PASS;
+        if (te instanceof IMultimeterProbe) {
+            message = ((IMultimeterProbe) te).getProbeMessage();
+        } else if (block == ModBlocks.INFRA_REDSTONE || block == ModBlocks.IN_RED_SCAFFOLD) {
+            value = getValue(world, pos, facing);
+            i18n = new TextComponentTranslation("msg.inred.multimeter.cable");
+            message = new TextComponentString(i18n.getFormattedText()+value);
+        } else if (block == ModBlocks.IN_RED_BLOCK) {
+            i18n = new TextComponentTranslation("msg.inred.multimeter.block");
+            message = new TextComponentString(i18n.getFormattedText());
+        } else if (block == ModBlocks.DEVICE_LIQUID_CRYSTAL) {
+            value = getValue(world, pos, facing);
+            i18n = new TextComponentTranslation("msg.inred.multimeter.direction");
+            message = new TextComponentString(i18n.getFormattedText()+" "+facing.getName()+value);
+        } else if (InRedLogic.checkCandidacy(world, pos, player.getAdjustedHorizontalFacing())) {
+            value = getValue(world, pos, player.getAdjustedHorizontalFacing());
+            i18n = new TextComponentTranslation("msg.inred.multimeter.direction");
+            message = new TextComponentString(i18n.getFormattedText() + " " + player.getAdjustedHorizontalFacing().getName() + value);
         } else {
-            face = facing;
-            note = new TextComponentTranslation("msg.inred.multimeter.cable");
-            dir=": ";
+            return EnumActionResult.PASS;
         }
-        if (player.isSneaking() == needSneak) {
-            int signal = InRedLogic.findIRValue(world, pos, face);
-            TextComponentString string = new TextComponentString(note.getFormattedText()+dir+signal+getBits(world, pos, face));
-            if (!world.isRemote) player.sendMessage(string);
-            if (needSneak) {
-                note = new TextComponentTranslation("msg.inred.multimeter.directly");
-                dir=" "+face+": ";
-                signal = InRedLogic.valueDirectlyAt(world, pos, face);
-                string = new TextComponentString(note.getFormattedText()+dir+signal+getBitsDirect(world, pos, face));
-                if (!world.isRemote) player.sendMessage(string);
-            }
-            return EnumActionResult.SUCCESS;
-        }
-        return EnumActionResult.PASS;
+        player.sendMessage(message);
+        return EnumActionResult.SUCCESS;
     }
 
-    private String getBits(World world, BlockPos pos, EnumFacing face) {
+    private String getValue(World world, BlockPos pos, EnumFacing face) {
         int signal = InRedLogic.findIRValue(world, pos, face.getOpposite());
         int bit1 = ((signal & 0b00_0001) != 0) ? 1:0;
         int bit2 = ((signal & 0b00_0010) != 0) ? 1:0;
@@ -63,18 +63,7 @@ public class ItemMultimeter extends ItemBase {
         int bit4 = ((signal & 0b00_1000) != 0) ? 1:0;
         int bit5 = ((signal & 0b01_0000) != 0) ? 1:0;
         int bit6 = ((signal & 0b10_0000) != 0) ? 1:0;
-        return " (0b"+bit6+bit5+"_"+bit4+bit3+bit2+bit1+")";
-    }
-
-    private String getBitsDirect(World world, BlockPos pos, EnumFacing face) {
-        int signal = InRedLogic.valueDirectlyAt(world, pos, face.getOpposite());
-        int bit1 = ((signal & 0b00_0001) != 0) ? 1:0;
-        int bit2 = ((signal & 0b00_0010) != 0) ? 1:0;
-        int bit3 = ((signal & 0b00_0100) != 0) ? 1:0;
-        int bit4 = ((signal & 0b00_1000) != 0) ? 1:0;
-        int bit5 = ((signal & 0b01_0000) != 0) ? 1:0;
-        int bit6 = ((signal & 0b10_0000) != 0) ? 1:0;
-        return " (0b"+bit6+bit5+"_"+bit4+bit3+bit2+bit1+")";
+        return ": "+signal+" ("+bit6+bit5+"_"+bit4+bit3+bit2+bit1+")";
     }
 
 }

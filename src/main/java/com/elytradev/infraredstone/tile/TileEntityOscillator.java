@@ -8,6 +8,7 @@ import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockBase;
 import com.elytradev.infraredstone.block.BlockOscillator;
 import com.elytradev.infraredstone.block.ModBlocks;
+import com.elytradev.infraredstone.logic.IMultimeterProbe;
 import com.elytradev.infraredstone.logic.InRedLogic;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 
@@ -23,11 +24,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 
-public class TileEntityOscillator extends TileEntityIRComponent implements ITickable, IContainerInventoryHolder {
+public class TileEntityOscillator extends TileEntityIRComponent implements ITickable, IContainerInventoryHolder, IMultimeterProbe {
     private InfraRedstoneHandler signal = new InfraRedstoneHandler();
     private int refreshTicks;
     public int maxRefreshTicks = 4;
@@ -82,6 +85,7 @@ public class TileEntityOscillator extends TileEntityIRComponent implements ITick
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if (facing == EnumFacing.UP || facing == EnumFacing.DOWN) return false;
         if (capability==InfraRedstone.CAPABILITY_IR) {
             if (world==null) return true;
             if (facing==null) return true;
@@ -219,5 +223,22 @@ public class TileEntityOscillator extends TileEntityIRComponent implements ITick
 
     public boolean isActive() {
         return signal.getSignalValue()!=0;
+    }
+
+    @Override
+    public TextComponentString getProbeMessage() {
+        TextComponentTranslation i18n = new TextComponentTranslation("msg.inred.multimeter.out");
+        return new TextComponentString(i18n.getFormattedText()+getValue());
+    }
+
+    private String getValue() {
+        int signal = this.signal.getSignalValue();
+        int bit1 = ((signal & 0b00_0001) != 0) ? 1:0;
+        int bit2 = ((signal & 0b00_0010) != 0) ? 1:0;
+        int bit3 = ((signal & 0b00_0100) != 0) ? 1:0;
+        int bit4 = ((signal & 0b00_1000) != 0) ? 1:0;
+        int bit5 = ((signal & 0b01_0000) != 0) ? 1:0;
+        int bit6 = ((signal & 0b10_0000) != 0) ? 1:0;
+        return ": "+signal+" ("+bit6+bit5+"_"+bit4+bit3+bit2+bit1+")";
     }
 }

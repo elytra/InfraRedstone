@@ -19,8 +19,9 @@ tile.device_liquid_crystal.name=Liquid Crystal Block
 
 #messages
 msg.inred.multimeter.direction=Signal input from
+msg.inred.multimeter.out=Device signal output
 msg.inred.multimeter.cable=Signal passing through cable
-msg.inred.multimeter.directly=Signal directly at
+msg.inred.multimeter.block=Block emits value of 63 (11_1111)
 
 #misc
 itemGroup.infraredstone=Infra-Redstone

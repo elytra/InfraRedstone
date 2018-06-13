@@ -36,6 +36,4 @@ public class BlockInfraRedstone extends BlockModule<TileEntityInRedBlock> implem
     public TileEntityInRedBlock createTileEntity(World world, IBlockState state) {
         return new TileEntityInRedBlock();
     }
-
-
 }
