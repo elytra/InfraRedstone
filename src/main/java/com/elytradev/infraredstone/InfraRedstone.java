@@ -4,7 +4,6 @@ import com.elytradev.concrete.network.NetworkContext;
 import com.elytradev.infraredstone.container.OscillatorContainer;
 import com.elytradev.infraredstone.logic.network.PacketButtonClick;
 import com.elytradev.infraredstone.tile.TileEntityOscillator;
-import com.elytradev.infraredstone.util.InRedConfig;
 import com.elytradev.concrete.inventory.IContainerInventoryHolder;
 import com.elytradev.concrete.inventory.gui.client.ConcreteGui;
 import com.elytradev.infraredstone.block.ModBlocks;
@@ -40,7 +39,6 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 
@@ -50,7 +48,6 @@ public class InfraRedstone {
     public static final String modId = "infraredstone";
     public static final String name  = "Infra-Redstone";
     public static final String version = "@VERSION@";
-    public static InRedConfig config;
 
     public static NetworkContext CONTEXT;
 
@@ -85,7 +82,6 @@ public class InfraRedstone {
         MinecraftForge.EVENT_BUS.register(InRedRecipes.class);
         MinecraftForge.EVENT_BUS.register(InRedLogic.class);
         MinecraftForge.EVENT_BUS.register(proxy);
-        config = InRedConfig.createConfig(event);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new IGuiHandler() {
             public static final int OSCILLATOR = 0;

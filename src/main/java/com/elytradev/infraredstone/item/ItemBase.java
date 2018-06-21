@@ -2,7 +2,6 @@ package com.elytradev.infraredstone.item;
 
 import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.util.C28n;
-import com.elytradev.infraredstone.util.InRedConfig;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
