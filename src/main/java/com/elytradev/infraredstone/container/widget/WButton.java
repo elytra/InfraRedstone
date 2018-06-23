@@ -24,6 +24,6 @@ public class WButton extends WClientButton {
 
     @Override
     public void addInformation(List<String> information) {
-        information.add(tooltipLabel);
+        if (tooltipLabel != null) information.add(tooltipLabel);
     }
 }
