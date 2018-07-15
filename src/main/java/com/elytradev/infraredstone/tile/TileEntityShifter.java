@@ -194,7 +194,7 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
         if (isActive()!=lastActive || isEject() != lastEject || selection!=lastSelection) { //Throttle updates - only send when something important changes
 
             WorldServer ws = (WorldServer)getWorld();
-            Chunk c = getWorld().getChunkFromBlockCoords(getPos());
+            Chunk c = getWorld().getChunk(getPos());
             SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
             for (EntityPlayerMP player : getWorld().getPlayers(EntityPlayerMP.class, Predicates.alwaysTrue())) {
                 if (ws.getPlayerChunkMap().isPlayerWatchingChunk(player, c.x, c.z)) {
@@ -214,8 +214,8 @@ public class TileEntityShifter extends TileEntityIRComponent implements ITickabl
                     IBlockState targetState = world.getBlockState(targetPos);
                     if (!(targetState.getBlock() instanceof BlockBase)) {
                         //Not one of ours. Update its redstone, and let observers see the fact that we updated too
-                        world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 1);
-                        world.markAndNotifyBlock(targetPos, world.getChunkFromBlockCoords(targetPos), targetState, targetState, 3); // 1 : Just cuase a BUD and notify observers
+                        world.markAndNotifyBlock(pos, world.getChunk(pos), state, state, 1);
+                        world.markAndNotifyBlock(targetPos, world.getChunk(targetPos), targetState, targetState, 3); // 1 : Just cuase a BUD and notify observers
                     }
                 }
             }

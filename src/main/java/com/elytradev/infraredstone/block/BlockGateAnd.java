@@ -75,7 +75,7 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
                 default:
                     break;
             }
-            blockCenteredHit = blockCenteredHit.addVector(0.5, 0.5, 0.5);
+            blockCenteredHit = blockCenteredHit.add(0.5, 0.5, 0.5);
             if (LEFT_AABB.contains(blockCenteredHit)) {
                 te.toggleInactive(EnumInactiveSelection.LEFT);
             } else if (BACK_AABB.contains(blockCenteredHit)) {
@@ -130,7 +130,7 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
     @Override
     public IBlockState getStateFromMeta(int meta){
         int facebits = meta & FACE;
-        EnumFacing facing = EnumFacing.getHorizontal(facebits);
+        EnumFacing facing = EnumFacing.byHorizontalIndex(facebits);
         return blockState.getBaseState().withProperty(FACING, facing);
     }
 

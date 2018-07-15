@@ -8,7 +8,4 @@ public interface IBlockBase {
 
     Item createItemBlock();
 
-    Block toBlock();
-
-
 }

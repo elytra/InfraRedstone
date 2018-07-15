@@ -25,7 +25,7 @@ public class BlockBase extends Block implements IBlockBase {
 
         this.name = name;
 
-        setUnlocalizedName(name);
+        setTranslationKey(name);
         setRegistryName(name);
 
         this.setHardness(0f);

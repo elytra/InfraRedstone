@@ -4,7 +4,7 @@ ext {
 	group = 'com.elytradev'
 	projectName = 'Skeleton'
 
-	useElytraVersionFormat = true
+	useElytraVersionFormat = System.properties["release"] == null
 	version = '1'
 
 	concreteVersion = '0.5.40'
@@ -15,8 +15,8 @@ ext {
 
 	language = 'java'
 
-	forge = '1.12.2-14.23.3.2655'
-	mappings = 'snapshot_20170908'
+	forge = '1.12.2-14.23.4.2736'
+	mappings = 'snapshot_20180715'
 
 	enforceLicenseHeaders = false
 

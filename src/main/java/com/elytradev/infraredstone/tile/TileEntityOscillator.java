@@ -41,7 +41,7 @@ public class TileEntityOscillator extends TileEntityIRComponent implements ITick
     boolean lastActive = false;
 
     public TileEntityOscillator() {
-        this.inv = new ConcreteItemStorage(0).withName(ModBlocks.OSCILLATOR.getUnlocalizedName() + ".name");
+        this.inv = new ConcreteItemStorage(0).withName(ModBlocks.OSCILLATOR.getTranslationKey() + ".name");
     }
 
     public void update() {
@@ -165,7 +165,7 @@ public class TileEntityOscillator extends TileEntityIRComponent implements ITick
     public void handleUpdateTag(NBTTagCompound tag) {
         readFromNBT(tag);
         IBlockState state = world.getBlockState(pos);
-        getWorld().markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 1 | 2 | 16);
+        getWorld().markAndNotifyBlock(pos, world.getChunk(pos), state, state, 1 | 2 | 16);
     }
 
     @Override
@@ -182,7 +182,7 @@ public class TileEntityOscillator extends TileEntityIRComponent implements ITick
         if (active!=lastActive) { //Throttle updates - only send when something important changes
 
             WorldServer ws = (WorldServer)getWorld();
-            Chunk c = getWorld().getChunkFromBlockCoords(getPos());
+            Chunk c = getWorld().getChunk(getPos());
             SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
             for (EntityPlayerMP player : getWorld().getPlayers(EntityPlayerMP.class, Predicates.alwaysTrue())) {
                 if (ws.getPlayerChunkMap().isPlayerWatchingChunk(player, c.x, c.z)) {
@@ -199,8 +199,8 @@ public class TileEntityOscillator extends TileEntityIRComponent implements ITick
                     IBlockState targetState = world.getBlockState(targetPos);
                     if (!(targetState.getBlock() instanceof BlockBase)) {
                         //Not one of ours. Update its redstone, and let observers see the fact that we updated too
-                        world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 1);
-                        world.markAndNotifyBlock(targetPos, world.getChunkFromBlockCoords(targetPos), targetState, targetState, 3); // 1 : Just cuase a BUD and notify observers
+                        world.markAndNotifyBlock(pos, world.getChunk(pos), state, state, 1);
+                        world.markAndNotifyBlock(targetPos, world.getChunk(targetPos), targetState, targetState, 3); // 1 : Just cuase a BUD and notify observers
                     }
                 }
             }

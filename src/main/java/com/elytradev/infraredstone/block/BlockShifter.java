@@ -98,7 +98,7 @@ public class BlockShifter extends BlockModule<TileEntityShifter> implements IBlo
     @Override
     public IBlockState getStateFromMeta(int meta){
         int facebits = meta & FACE;
-        EnumFacing facing = EnumFacing.getHorizontal(facebits);
+        EnumFacing facing = EnumFacing.byHorizontalIndex(facebits);
         return blockState.getBaseState().withProperty(FACING, facing);
     }
 

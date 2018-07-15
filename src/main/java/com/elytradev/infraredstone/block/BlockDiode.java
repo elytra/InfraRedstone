@@ -85,7 +85,7 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
                 default:
                     break;
             }
-            blockCenteredHit = blockCenteredHit.addVector(0.5, 0.5, 0.5);
+            blockCenteredHit = blockCenteredHit.add(0.5, 0.5, 0.5);
             TileEntityDiode teDiode = (TileEntityDiode)te;
             if (AABB_BIT_0.contains(blockCenteredHit)) {
                 teDiode.setMask(0);
@@ -152,7 +152,7 @@ public class BlockDiode extends BlockModule<TileEntityDiode> implements IBlockBa
     @Override
     public IBlockState getStateFromMeta(int meta){
         int facebits = meta & FACE;
-        EnumFacing facing = EnumFacing.getHorizontal(facebits);
+        EnumFacing facing = EnumFacing.byHorizontalIndex(facebits);
         return blockState.getBaseState().withProperty(FACING, facing);
     }
 

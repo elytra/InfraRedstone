@@ -134,7 +134,7 @@ public class TileEntityLiquidCrystal extends TileEntityIRComponent implements IT
             }
             
             WorldServer ws = (WorldServer)getWorld();
-            Chunk c = getWorld().getChunkFromBlockCoords(getPos());
+            Chunk c = getWorld().getChunk(getPos());
             SPacketUpdateTileEntity packet = new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
             for (EntityPlayerMP player : getWorld().getPlayers(EntityPlayerMP.class, Predicates.alwaysTrue())) {
                 if (ws.getPlayerChunkMap().isPlayerWatchingChunk(player, c.x, c.z)) {

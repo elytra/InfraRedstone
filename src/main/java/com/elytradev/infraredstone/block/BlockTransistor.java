@@ -82,7 +82,7 @@ public class BlockTransistor extends BlockModule<TileEntityTransistor> implement
     @Override
     public IBlockState getStateFromMeta(int meta){
         int facebits = meta & FACE;
-        EnumFacing facing = EnumFacing.getHorizontal(facebits);
+        EnumFacing facing = EnumFacing.byHorizontalIndex(facebits);
         return blockState.getBaseState().withProperty(FACING, facing);
     }
 

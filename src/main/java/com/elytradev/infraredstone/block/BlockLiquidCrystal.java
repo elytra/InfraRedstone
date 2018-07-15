@@ -53,7 +53,7 @@ public class BlockLiquidCrystal extends BlockModule<TileEntityLiquidCrystal> {
     }
     
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.TRANSLUCENT;
     }
     
