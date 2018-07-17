@@ -93,12 +93,12 @@ public class InRedRecipes {
                 'r', new ItemStack(ModBlocks.INFRA_REDSTONE)
         ));
         
-        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.DEVICE_LIQUID_CRYSTAL, 8),
-                "ggg", "gqg", "gpg",
-                'q', "gemQuartz",
-                'g', "blockGlass",
-                'p', new ItemStack(ModItems.PCB)
-        ));
+//        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.DEVICE_LIQUID_CRYSTAL, 8),
+//                "ggg", "gqg", "gpg",
+//                'q', "gemQuartz",
+//                'g', "blockGlass",
+//                'p', new ItemStack(ModItems.PCB)
+//        ));
 
 //        Items
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:items"), new ItemStack(ModItems.PCB, 1),

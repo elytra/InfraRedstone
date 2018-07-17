@@ -40,10 +40,10 @@ public class ItemMultimeter extends ItemBase {
         } else if (block == ModBlocks.IN_RED_BLOCK) {
             i18n = new TextComponentTranslation("msg.inred.multimeter.block");
             message = new TextComponentString(i18n.getFormattedText());
-        } else if (block == ModBlocks.DEVICE_LIQUID_CRYSTAL) {
-            value = getValue(world, pos, facing);
-            i18n = new TextComponentTranslation("msg.inred.multimeter.direction");
-            message = new TextComponentString(i18n.getFormattedText()+" "+facing.getName()+value);
+//        } else if (block == ModBlocks.DEVICE_LIQUID_CRYSTAL) {
+//            value = getValue(world, pos, facing);
+//            i18n = new TextComponentTranslation("msg.inred.multimeter.direction");
+//            message = new TextComponentString(i18n.getFormattedText()+" "+facing.getName()+value);
         } else if (InRedLogic.checkCandidacy(world, pos, player.getAdjustedHorizontalFacing())) {
             value = getValue(world, pos, player.getAdjustedHorizontalFacing());
             i18n = new TextComponentTranslation("msg.inred.multimeter.direction");
