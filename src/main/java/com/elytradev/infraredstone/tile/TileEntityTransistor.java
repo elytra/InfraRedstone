@@ -200,6 +200,6 @@ public class TileEntityTransistor extends TileEntityIRComponent implements ITick
         int bit4 = ((signal & 0b00_1000) != 0) ? 1:0;
         int bit5 = ((signal & 0b01_0000) != 0) ? 1:0;
         int bit6 = ((signal & 0b10_0000) != 0) ? 1:0;
-        return ": "+signal+" ("+bit6+bit5+"_"+bit4+bit3+bit2+bit1+")";
+        return ": 0b"+bit6+bit5+"_"+bit4+bit3+bit2+bit1+" ("+signal+")";
     }
 }

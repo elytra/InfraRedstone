@@ -86,8 +86,10 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
                 
                 int result = 0b11_1111; //63
                 for(int signal : signals) {
+                    // if any input added to signal is 0b00_0000, will result in no output
                     result &= signal;
                 }
+                // invert
                 if (inverted) result = (~result) & 0b11_1111;
                 
                 signal.setNextSignalValue(result);
@@ -306,6 +308,6 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
         int bit4 = ((signal & 0b00_1000) != 0) ? 1:0;
         int bit5 = ((signal & 0b01_0000) != 0) ? 1:0;
         int bit6 = ((signal & 0b10_0000) != 0) ? 1:0;
-        return ": "+signal+" ("+bit6+bit5+"_"+bit4+bit3+bit2+bit1+")";
+        return ": 0b"+bit6+bit5+"_"+bit4+bit3+bit2+bit1+" ("+signal+")";
     }
 }
