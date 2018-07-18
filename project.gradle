@@ -2,10 +2,10 @@
 
 ext {
 	group = 'com.elytradev'
-	projectName = 'Skeleton'
+	projectName = 'InfraRedstone'
 
 	useElytraVersionFormat = System.properties["release"] == null
-	version = '1'
+	version = '1.0'
 
 	concreteVersion = '0.5.40'
 	concreteModules = [ 'common', 'inventory', 'recipe', 'network', 'reflect' ]
