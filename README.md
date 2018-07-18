@@ -1,4 +1,4 @@
-<img src="https://unascribed.com/f/a231ace4_trumpet.png" align="right" width="180px"/>
+<img src="icon.png" align="right" width="180px"/>
 
 # InfraRedstone
 

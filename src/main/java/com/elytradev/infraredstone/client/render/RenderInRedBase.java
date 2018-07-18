@@ -65,15 +65,15 @@ public abstract class RenderInRedBase<T extends TileEntityIRComponent> extends F
         double adaptedZ = cornerZ;
         switch(facing) {
             case EAST:
-                adaptedX = cornerZ+10/16d;
+                adaptedX = cornerZ;
                 adaptedZ = cornerX;
                 break;
             case SOUTH:
                 adaptedZ += 10/16d;
                 break;
             case WEST:
-                adaptedX = cornerZ;
-                adaptedZ = cornerX;
+                adaptedX = 14/16d - cornerZ;
+                adaptedZ = 14/16d - cornerX;
                 break;
             default:
                 break;
