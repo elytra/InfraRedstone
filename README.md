@@ -2,6 +2,8 @@
 
 # InfraRedstone
 
+![Maven version](https://img.shields.io/maven-metadata/v/https/repo.elytradev.com/com/elytradev/infraredstone/maven-metadata.xml.svg)
+
 [>> Downloads <<](https://github.com/elytra/InfraRedstone/releases)
 
 *A Step Beyond Redstone*
