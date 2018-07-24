@@ -47,6 +47,7 @@ public class ClientProxy extends CommonProxy {
 
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/gate_xor_glow"));
 
+        event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/gate_not_glow"));
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/gate_not_glow_in"));
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/gate_not_glow_out"));
 

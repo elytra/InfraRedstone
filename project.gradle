@@ -5,7 +5,7 @@ ext {
 	projectName = 'InfraRedstone'
 
 	useElytraVersionFormat = System.properties["release"] == null
-	version = '1.0'
+	version = '1.1'
 
 	concreteVersion = '0.5.40'
 	concreteModules = [ 'common', 'inventory', 'recipe', 'network', 'reflect' ]

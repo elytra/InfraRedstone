@@ -45,9 +45,9 @@ public class TileEntityGateNot extends TileEntityIRComponent implements ITickabl
             if (state.getBlock() instanceof BlockGateNot) {
                 EnumFacing back = state.getValue(BlockGateNot.FACING).getOpposite();
                 int sig = InRedLogic.findIRValue(world, pos, back);
-                if (sig != 0) backActive = true; else backActive = false;
+                backActive = sig != 0;
                 if (!booleanMode) {
-                    signal.setNextSignalValue(~sig);
+                    signal.setNextSignalValue((~sig) & 0b11_1111);
                 } else {
                     if (sig == 0) {
                         signal.setNextSignalValue(1);
