@@ -154,8 +154,10 @@ public class TileEntityGateNot extends TileEntityIRComponent implements ITickabl
     @Override
     public void handleUpdateTag(NBTTagCompound tag) {
         readFromNBT(tag);
-        IBlockState state = world.getBlockState(pos);
-        getWorld().markAndNotifyBlock(pos, world.getChunk(pos), state, state, 1 | 2 | 16);
+        if (lastBooleanMode!=booleanMode) {
+            world.markBlockRangeForRenderUpdate(pos, pos);
+            lastBooleanMode = booleanMode;
+        }
     }
 
     @Override

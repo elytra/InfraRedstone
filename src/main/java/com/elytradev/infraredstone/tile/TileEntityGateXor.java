@@ -168,8 +168,10 @@ public class TileEntityGateXor extends TileEntityIRComponent implements ITickabl
     @Override
     public void handleUpdateTag(NBTTagCompound tag) {
         readFromNBT(tag);
-        IBlockState state = world.getBlockState(pos);
-        getWorld().markAndNotifyBlock(pos, world.getChunk(pos), state, state, 1 | 2 | 16);
+        if (lastBooleanMode!=booleanMode) {
+            world.markBlockRangeForRenderUpdate(pos, pos);
+            lastBooleanMode = booleanMode;
+        }
     }
 
     @Override
@@ -184,7 +186,7 @@ public class TileEntityGateXor extends TileEntityIRComponent implements ITickabl
         if (!hasWorld() || getWorld().isRemote) return;
 
         if (isActive()!=lastActive
-                ||valLeft!=lastValLeft
+                || valLeft!=lastValLeft
                 || valRight!=lastValRight
                 || booleanMode!=lastBooleanMode) { //Throttle updates - only send when something important changes
 
@@ -220,7 +222,7 @@ public class TileEntityGateXor extends TileEntityIRComponent implements ITickabl
             lastActive = isActive();
             lastValLeft = valLeft;
             lastValRight = valRight;
-            booleanMode = lastBooleanMode;
+            lastBooleanMode = booleanMode;
 
         }
     }
