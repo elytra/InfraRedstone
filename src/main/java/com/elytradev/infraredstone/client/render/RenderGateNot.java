@@ -9,8 +9,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.MinecraftForge;
 
 public class RenderGateNot extends RenderInRedBase<TileEntityGateNot> {
+    public static final String BOTH = "infraredstone:blocks/gate_not_glow";
     public static final String IN = "infraredstone:blocks/gate_not_glow_in";
     public static final String OUT = "infraredstone:blocks/gate_not_glow_out";
 
@@ -29,12 +31,17 @@ public class RenderGateNot extends RenderInRedBase<TileEntityGateNot> {
 
     @Override
     public TextureAtlasSprite getLightupTexture(TileEntityGateNot tile) {
+        boolean front;
+        torches[0].isFullHeight = !tile.booleanMode;
         if (tile.isActive()) {
             torches[0].isLit=true;
-            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(OUT);
+            front = true;
         } else {
             torches[0].isLit = false;
-            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(IN);
+            front = false;
         }
+        if (front) {
+            if (tile.backActive) return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(BOTH); else return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(OUT);
+        } else return (tile.backActive)? Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(IN) : null;
     }
 }

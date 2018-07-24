@@ -21,6 +21,18 @@
       "west": {
         "y": 270
       }
+    },
+    "boolean_mode": {
+      "true": {
+        "submodel": {
+          "front": { "model": "infraredstone:gate/boolean_on" }
+        }
+      },
+      "false": {
+        "submodel": {
+          "front": { "model": "infraredstone:gate/boolean_off" }
+        }
+      }
     }
   }
 }

@@ -36,6 +36,7 @@ public class RenderGateXor extends RenderInRedBase<TileEntityGateXor> {
 
     public void getTorches(TileEntityGateXor tile) {
         torches[0].isLit = tile.isActive();
+        torches[0].isFullHeight = !tile.booleanMode;
         torches[1].isLit = tile.isLeftActive();
         torches[2].isLit = tile.isRightActive();
     }

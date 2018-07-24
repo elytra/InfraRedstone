@@ -10,10 +10,13 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -22,15 +25,19 @@ public class BlockGateXor extends BlockModule<TileEntityGateXor> implements IBlo
 
     protected String name;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    public static final PropertyBool BOOLEAN_MODE = PropertyBool.create("boolean_mode");
     public static int FACE = 3;
 
     public BlockGateXor() {
         super(Material.CIRCUITS, "gate_xor");
         this.setDefaultState(blockState.getBaseState()
-                .withProperty(FACING, EnumFacing.NORTH));
+                .withProperty(FACING, EnumFacing.NORTH)
+                .withProperty(BOOLEAN_MODE, false));
 
         this.setHardness(0.5f);
     }
+
+    private static final AxisAlignedBB BOOLEAN_AABB = new AxisAlignedBB( 6/16d, 0d,  3/16d, 10/16d, 0.5d,  7/16d);
 
     @Override
     public Class<TileEntityGateXor> getTileEntityClass() {
@@ -41,7 +48,33 @@ public class BlockGateXor extends BlockModule<TileEntityGateXor> implements IBlo
     public TileEntityGateXor createTileEntity(World world, IBlockState state) {
         return new TileEntityGateXor();
     }
-    
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if(!world.isRemote && !player.isSneaking() && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityGateXor) {
+            TileEntityGateXor te = (TileEntityGateXor) world.getTileEntity(pos);
+            Vec3d blockCenteredHit = new Vec3d(hitX, hitY, hitZ);
+            blockCenteredHit = blockCenteredHit.subtract(0.5, 0.5, 0.5);
+            switch (state.getValue(BlockGateXor.FACING)) {
+                case SOUTH:
+                    blockCenteredHit = blockCenteredHit.rotateYaw((float)Math.PI);
+                    break;
+                case EAST:
+                    blockCenteredHit = blockCenteredHit.rotateYaw((float)Math.PI/2);
+                    break;
+                case WEST:
+                    blockCenteredHit = blockCenteredHit.rotateYaw(3*(float)Math.PI/2);
+                    break;
+                default:
+                    break;
+            }
+            blockCenteredHit = blockCenteredHit.add(0.5, 0.5, 0.5);
+            if (BOOLEAN_AABB.contains(blockCenteredHit)) {
+                te.toggleBooleanMode();
+            }
+        }
+        return true;
+    }
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
@@ -71,7 +104,7 @@ public class BlockGateXor extends BlockModule<TileEntityGateXor> implements IBlo
 
     @Override
     public BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING);
+        return new BlockStateContainer(this, FACING, BOOLEAN_MODE);
     }
 
     @Override
@@ -89,9 +122,19 @@ public class BlockGateXor extends BlockModule<TileEntityGateXor> implements IBlo
     }
 
     @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        TileEntity te = world.getTileEntity(pos);
+        if (!(te instanceof TileEntityGateXor)) return state;
+        TileEntityGateXor xor = (TileEntityGateXor)te;
+        return state
+                .withProperty(BOOLEAN_MODE, xor.booleanMode);
+    }
+
+    @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
         return this.getDefaultState()
-                .withProperty(FACING, placer.getHorizontalFacing());
+                .withProperty(FACING, placer.getHorizontalFacing())
+                .withProperty(BOOLEAN_MODE, false);
     }
 
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos)

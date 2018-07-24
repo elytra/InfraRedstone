@@ -44,15 +44,15 @@
         "y": 270
       }
     },
-    "inverted": {
+    "boolean_mode": {
       "true": {
         "submodel": {
-          "front": { "model": "infraredstone:gate/and/invert_on" }
+          "front": { "model": "infraredstone:gate/boolean_on" }
         }
       },
       "false": {
         "submodel": {
-          "front": { "model": "infraredstone:gate/and/invert_off" }
+          "front": { "model": "infraredstone:gate/boolean_off" }
         }
       }
     }

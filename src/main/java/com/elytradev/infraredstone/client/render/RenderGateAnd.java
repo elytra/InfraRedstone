@@ -38,7 +38,7 @@ public class RenderGateAnd extends RenderInRedBase<TileEntityGateAnd> {
 
     public void getTorches(TileEntityGateAnd tile) {
         torches[0].isLit = tile.isActive();
-        torches[0].isFullHeight = !tile.inverted;
+        torches[0].isFullHeight = !tile.booleanMode;
         torches[1].isLit = tile.isLeftActive();
         torches[1].isFullHeight = (tile.inactive != EnumInactiveSelection.LEFT);
         torches[2].isLit = tile.isBackActive();

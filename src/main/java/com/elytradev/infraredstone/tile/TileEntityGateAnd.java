@@ -34,7 +34,7 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
     private int valLeft;
     private int valBack;
     private int valRight;
-    public boolean inverted;
+    public boolean booleanMode;
     public EnumInactiveSelection inactive = EnumInactiveSelection.NONE;
 
     //Transient data to throttle sync down here
@@ -42,7 +42,7 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
     int lastValLeft = 0;
     int lastValBack = 0;
     int lastValRight = 0;
-    boolean lastInvert = false;
+    boolean lastBooleanMode = false;
     EnumInactiveSelection lastInactive = EnumInactiveSelection.NONE;
 
     public void update() {
@@ -64,33 +64,47 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
                 valLeft = sigLeft;
                 valRight = sigRight;
                 valBack = sigBack;
-                
-                switch (inactive) {
-                case LEFT:
-                    signals.add(sigBack);
-                    signals.add(sigRight);
-                    break;
-                case BACK:
-                    signals.add(sigLeft);
-                    signals.add(sigRight);
-                    break;
-                case RIGHT:
-                    signals.add(sigLeft);
-                    signals.add(sigBack);
-                    break;
-                case NONE:
-                    signals.add(sigLeft);
-                    signals.add(sigBack);
-                    signals.add(sigRight);
-                }
-                
                 int result = 0b11_1111; //63
-                for(int signal : signals) {
-                    // if any input added to signal is 0b00_0000, will result in no output
-                    result &= signal;
+
+                if (!booleanMode) {
+                    switch (inactive) {
+                        case LEFT:
+                            signals.add(sigBack);
+                            signals.add(sigRight);
+                            break;
+                        case BACK:
+                            signals.add(sigLeft);
+                            signals.add(sigRight);
+                            break;
+                        case RIGHT:
+                            signals.add(sigLeft);
+                            signals.add(sigBack);
+                            break;
+                        case NONE:
+                            signals.add(sigLeft);
+                            signals.add(sigBack);
+                            signals.add(sigRight);
+                    }
+
+                    for (int signal : signals) {
+                        // if any input added to signal is 0b00_0000, will result in no output
+                        result &= signal;
+                    }
+                } else {
+                    switch (inactive) {
+                        case LEFT:
+                            result = (sigBack > 0 && sigRight > 0)? 1 : 0;
+                            break;
+                        case BACK:
+                            result = (sigLeft > 0 && sigRight > 0)? 1 : 0;
+                            break;
+                        case RIGHT:
+                            result = (sigLeft > 0 && sigBack > 0)? 1 : 0;
+                            break;
+                        case NONE:
+                            result = (sigLeft > 0 && sigBack > 0 && sigRight > 0)? 1 : 0;
+                    }
                 }
-                // invert
-                if (inverted) result = (~result) & 0b11_1111;
                 
                 signal.setNextSignalValue(result);
                 markDirty();
@@ -159,12 +173,12 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
         return super.getCapability(capability, facing);
     }
 
-    public void toggleInvert() {
-        if (inverted) {
-            inverted = false;
+    public void toggleBooleanMode() {
+        if (booleanMode) {
+            booleanMode = false;
             world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.5f);
         } else {
-            inverted = true;
+            booleanMode = true;
             world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.55f);
         }
         markDirty();
@@ -188,7 +202,7 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
         tag.setInteger("Left", valLeft);
         tag.setInteger("Back", valBack);
         tag.setInteger("Right", valRight);
-        tag.setBoolean("Inverted", inverted);
+        tag.setBoolean("BooleanMode", booleanMode);
         tag.setString("Inactive", inactive.getName());
         return tag;
     }
@@ -200,7 +214,7 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
         valLeft = compound.getInteger("Left");
         valBack = compound.getInteger("Back");
         valRight = compound.getInteger("Right");
-        inverted = compound.getBoolean("Inverted");
+        booleanMode = compound.getBoolean("BooleanMode");
         inactive = EnumInactiveSelection.forName(compound.getString("Inactive"));
     }
 
@@ -217,9 +231,9 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
     @Override
     public void handleUpdateTag(NBTTagCompound tag) {
         readFromNBT(tag);
-        if (lastInvert!=inverted || lastInactive!= inactive) {
+        if (lastBooleanMode!=booleanMode || lastInactive!= inactive) {
             world.markBlockRangeForRenderUpdate(pos, pos);
-            lastInvert = inverted;
+            lastBooleanMode = booleanMode;
             lastInactive = inactive;
         }
     }
@@ -236,7 +250,7 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
         if (!hasWorld() || getWorld().isRemote) return;
         boolean active = isActive();
         if (active!=lastActive
-                || inverted!=lastInvert
+                || booleanMode!=lastBooleanMode
                 || inactive!=lastInactive
                 || valLeft!=lastValLeft
                 || valRight!=lastValRight
@@ -251,7 +265,7 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
                 }
             }
 
-            if (inverted!=lastInvert || inactive!=lastInactive) {
+            if (booleanMode!=lastBooleanMode || inactive!=lastInactive) {
                 //IBlockState state = world.getBlockState(pos);
                 //ws.markAndNotifyBlock(pos, c, state, state, 1 | 2 | 16);
             } else if (isActive()!=lastActive
@@ -273,7 +287,7 @@ public class TileEntityGateAnd extends TileEntityIRComponent implements ITickabl
             }
 
             lastInactive = inactive;
-            lastInvert = inverted;
+            lastBooleanMode = booleanMode;
             lastActive = active;
             lastValLeft = valLeft;
             lastValRight = valRight;

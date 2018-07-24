@@ -11,11 +11,13 @@ import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 import com.google.common.base.Predicates;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -27,11 +29,13 @@ public class TileEntityGateXor extends TileEntityIRComponent implements ITickabl
     private InfraRedstoneHandler signal = new InfraRedstoneHandler();
     private int valLeft;
     private int valRight;
+    public boolean booleanMode;
 
     //Transient data to throttle sync down here
     boolean lastActive = false;
     int lastValLeft = 0;
     int lastValRight = 0;
+    boolean lastBooleanMode = false;
 
     public void update() {
         if (world.isRemote || !hasWorld()) return;
@@ -47,12 +51,16 @@ public class TileEntityGateXor extends TileEntityIRComponent implements ITickabl
                 int sigRight = InRedLogic.findIRValue(world, pos, right);
                 valLeft = sigLeft;
                 valRight = sigRight;
-                if (sigLeft > 0 && sigRight == 0) {
-                    signal.setNextSignalValue(sigLeft);
-                } else if (sigLeft == 0 && sigRight > 0) {
-                    signal.setNextSignalValue(sigRight);
+                if (!booleanMode) {
+                    signal.setNextSignalValue(sigLeft ^ sigRight);
                 } else {
-                    signal.setNextSignalValue(0);
+                    if (sigLeft > 0 && sigRight == 0) {
+                        signal.setNextSignalValue(1);
+                    } else if (sigLeft == 0 && sigRight > 0) {
+                        signal.setNextSignalValue(1);
+                    } else {
+                        signal.setNextSignalValue(0);
+                    }
                 }
                 markDirty();
             }
@@ -116,6 +124,17 @@ public class TileEntityGateXor extends TileEntityIRComponent implements ITickabl
         return super.getCapability(capability, facing);
     }
 
+    public void toggleBooleanMode() {
+        if (booleanMode) {
+            booleanMode = false;
+            world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.5f);
+        } else {
+            booleanMode = true;
+            world.playSound(null, pos, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, 0.55f);
+        }
+        markDirty();
+    }
+
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tag = super.writeToNBT(compound);
@@ -123,6 +142,7 @@ public class TileEntityGateXor extends TileEntityIRComponent implements ITickabl
         //please forgive me, falk. We'll work on moving these out soon.
         tag.setInteger("Left", valLeft);
         tag.setInteger("Right", valRight);
+        tag.setBoolean("BooleanMode", booleanMode);
         return tag;
     }
 
@@ -132,6 +152,7 @@ public class TileEntityGateXor extends TileEntityIRComponent implements ITickabl
         if (compound.hasKey("Signal")) InfraRedstone.CAPABILITY_IR.readNBT(signal, null, compound.getTag("Signal"));
         valLeft = compound.getInteger("Left");
         valRight = compound.getInteger("Right");
+        booleanMode = compound.getBoolean("BooleanMode");
     }
 
     @Override
@@ -164,7 +185,8 @@ public class TileEntityGateXor extends TileEntityIRComponent implements ITickabl
 
         if (isActive()!=lastActive
                 ||valLeft!=lastValLeft
-                || valRight!=lastValRight) { //Throttle updates - only send when something important changes
+                || valRight!=lastValRight
+                || booleanMode!=lastBooleanMode) { //Throttle updates - only send when something important changes
 
             WorldServer ws = (WorldServer)getWorld();
             Chunk c = getWorld().getChunk(getPos());
@@ -175,21 +197,30 @@ public class TileEntityGateXor extends TileEntityIRComponent implements ITickabl
                 }
             }
 
-            IBlockState state = world.getBlockState(pos);
-            if (state.getBlock()==ModBlocks.GATE_XOR) {
-                EnumFacing facing = state.getValue(BlockGateXor.FACING);
-                BlockPos targetPos = pos.offset(facing);
-                IBlockState targetState = world.getBlockState(targetPos);
-                if (!(targetState.getBlock() instanceof BlockBase)) {
-                    //Not one of ours. Update its redstone, and let observers see the fact that we updated too
-                    world.markAndNotifyBlock(pos, world.getChunk(pos), state, state, 1);
-                    world.markAndNotifyBlock(targetPos, world.getChunk(targetPos), targetState, targetState, 3); // 1 : Just cuase a BUD and notify observers
+            if (booleanMode!=lastBooleanMode) {
+                //IBlockState state = world.getBlockState(pos);
+                //ws.markAndNotifyBlock(pos, c, state, state, 1 | 2 | 16);
+            } else if (isActive()!=lastActive
+                    || valLeft!=lastValLeft
+                    || valRight!=lastValRight) {
+                //BlockState isn't changing, but we need to notify the block in front of us so that vanilla redstone updates
+                IBlockState state = world.getBlockState(pos);
+                if (state.getBlock()==ModBlocks.GATE_XOR) {
+                    EnumFacing facing = state.getValue(BlockGateXor.FACING);
+                    BlockPos targetPos = pos.offset(facing);
+                    IBlockState targetState = world.getBlockState(targetPos);
+                    if (!(targetState.getBlock() instanceof BlockBase)) {
+                        //Not one of ours. Update its redstone, and let observers see the fact that we updated too
+                        world.markAndNotifyBlock(pos, world.getChunk(pos), state, state, 1);
+                        world.markAndNotifyBlock(targetPos, world.getChunk(targetPos), targetState, targetState, 3); // 1 : Just cuase a BUD and notify observers
+                    }
                 }
             }
 
             lastActive = isActive();
             lastValLeft = valLeft;
             lastValRight = valRight;
+            booleanMode = lastBooleanMode;
 
         }
     }

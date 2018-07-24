@@ -27,7 +27,7 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
 
     protected String name;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    public static final PropertyBool INVERTED = PropertyBool.create("inverted");
+    public static final PropertyBool BOOLEAN_MODE = PropertyBool.create("boolean_mode");
     public static final PropertyEnum<EnumInactiveSelection> INACTIVE = PropertyEnum.create("inactive", EnumInactiveSelection.class);
     public static int FACE = 3;
 
@@ -35,7 +35,7 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
         super(Material.CIRCUITS, "gate_and");
         this.setDefaultState(blockState.getBaseState()
                 .withProperty(FACING, EnumFacing.NORTH)
-                .withProperty(INVERTED, false)
+                .withProperty(BOOLEAN_MODE, false)
                 .withProperty(INACTIVE, EnumInactiveSelection.NONE));
 
         this.setHardness(0.5f);
@@ -44,7 +44,7 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
     private static final AxisAlignedBB LEFT_AABB   = new AxisAlignedBB( 0/16d, 0d,  6/16d,  3/16d, 0.5d, 10/16d);
     private static final AxisAlignedBB BACK_AABB   = new AxisAlignedBB( 6/16d, 0d, 13/16d, 10/16d, 0.5d, 16/16d);
     private static final AxisAlignedBB RIGHT_AABB  = new AxisAlignedBB(13/16d, 0d,  6/16d, 16/16d, 0.5d, 10/16d);
-    private static final AxisAlignedBB INVERT_AABB = new AxisAlignedBB( 6/16d, 0d,  3/16d, 10/16d, 0.5d,  7/16d);
+    private static final AxisAlignedBB BOOLEAN_AABB = new AxisAlignedBB( 6/16d, 0d,  3/16d, 10/16d, 0.5d,  7/16d);
 
     @Override
     public Class<TileEntityGateAnd> getTileEntityClass() {
@@ -82,8 +82,8 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
                 te.toggleInactive(EnumInactiveSelection.BACK);
             } else if (RIGHT_AABB.contains(blockCenteredHit)) {
                 te.toggleInactive(EnumInactiveSelection.RIGHT);
-            } else if (INVERT_AABB.contains(blockCenteredHit)) {
-            	te.toggleInvert();
+            } else if (BOOLEAN_AABB.contains(blockCenteredHit)) {
+            	te.toggleBooleanMode();
             }
         }
         return true;
@@ -117,7 +117,7 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
 
     @Override
     public BlockStateContainer createBlockState(){
-        return new BlockStateContainer(this, FACING, INVERTED, INACTIVE);
+        return new BlockStateContainer(this, FACING, BOOLEAN_MODE, INACTIVE);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
         if (!(te instanceof TileEntityGateAnd)) return state;
         TileEntityGateAnd and = (TileEntityGateAnd)te;
         return state
-                .withProperty(INVERTED, and.inverted)
+                .withProperty(BOOLEAN_MODE, and.booleanMode)
                 .withProperty(INACTIVE, and.inactive);
     }
 
@@ -148,7 +148,7 @@ public class BlockGateAnd extends BlockModule<TileEntityGateAnd> implements IBlo
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
         return this.getDefaultState()
                 .withProperty(FACING, placer.getHorizontalFacing())
-                .withProperty(INVERTED, false)
+                .withProperty(BOOLEAN_MODE, false)
                 .withProperty(INACTIVE, EnumInactiveSelection.NONE);
     }
 
