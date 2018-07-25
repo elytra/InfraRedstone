@@ -4,9 +4,9 @@ import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockBase;
 import com.elytradev.infraredstone.block.BlockEncoder;
 import com.elytradev.infraredstone.block.ModBlocks;
-import com.elytradev.infraredstone.logic.IInfraComparator;
+import com.elytradev.infraredstone.logic.IEncoderScannable;
 import com.elytradev.infraredstone.logic.IMultimeterProbe;
-import com.elytradev.infraredstone.logic.ISimpleInfraComparator;
+import com.elytradev.infraredstone.logic.ISimpleEncoderScannable;
 import com.elytradev.infraredstone.logic.InRedLogic;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 import com.google.common.base.Predicates;
@@ -41,10 +41,10 @@ public class TileEntityEncoder extends TileEntityIRComponent implements ITickabl
                 EnumFacing back = state.getValue(BlockEncoder.FACING).getOpposite();
                 BlockPos backPos = this.getPos().offset(back);
                 IBlockState quantify = world.getBlockState(backPos);
-                if (quantify instanceof IInfraComparator) {
-                    signal.setNextSignalValue(((IInfraComparator) quantify).getComparatorValue());
-                } else if (quantify instanceof ISimpleInfraComparator) {
-                    signal.setNextSignalValue(((ISimpleInfraComparator) quantify).getComparatorValue(world, backPos, quantify, back.getOpposite()));
+                if (quantify instanceof IEncoderScannable) {
+                    signal.setNextSignalValue(((IEncoderScannable) quantify).getComparatorValue());
+                } else if (quantify instanceof ISimpleEncoderScannable) {
+                    signal.setNextSignalValue(((ISimpleEncoderScannable) quantify).getComparatorValue(world, backPos, quantify, back.getOpposite()));
                 } else if (quantify.hasComparatorInputOverride()) {
                     signal.setNextSignalValue(4*quantify.getComparatorInputOverride(world, backPos));
                 } else {

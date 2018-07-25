@@ -1,9 +1,9 @@
 package com.elytradev.infraredstone.logic.impl;
 
-import com.elytradev.infraredstone.logic.IInfraComparator;
+import com.elytradev.infraredstone.logic.IEncoderScannable;
 import com.elytradev.infraredstone.logic.IInfraRedstone;
 
-public class InfraRedstoneHandler implements IInfraRedstone, IInfraComparator {
+public class InfraRedstoneHandler implements IInfraRedstone, IEncoderScannable {
 	public static final IInfraRedstone ALWAYS_OFF = new IInfraRedstone() {
 		@Override
 		public int getSignalValue() { return 0; }

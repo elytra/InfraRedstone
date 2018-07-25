@@ -2,6 +2,7 @@ package com.elytradev.infraredstone;
 
 import com.elytradev.concrete.network.NetworkContext;
 import com.elytradev.infraredstone.container.OscillatorContainer;
+import com.elytradev.infraredstone.logic.IEncoderScannable;
 import com.elytradev.infraredstone.logic.network.PacketButtonClick;
 import com.elytradev.infraredstone.tile.TileEntityOscillator;
 import com.elytradev.concrete.inventory.IContainerInventoryHolder;
@@ -9,7 +10,6 @@ import com.elytradev.concrete.inventory.gui.client.ConcreteGui;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.client.InRedTab;
 import com.elytradev.infraredstone.item.ModItems;
-import com.elytradev.infraredstone.logic.IInfraComparator;
 import com.elytradev.infraredstone.logic.IInfraRedstone;
 import com.elytradev.infraredstone.logic.InRedLogic;
 import com.elytradev.infraredstone.logic.impl.InfraComparatorSerializer;
@@ -58,8 +58,8 @@ public class InfraRedstone {
 
     @CapabilityInject(IInfraRedstone.class)
     public static final Capability<IInfraRedstone> CAPABILITY_IR = null;
-    @CapabilityInject(IInfraComparator.class)
-    public static final Capability<IInfraComparator> CAPABILITY_IR_COMPARATOR = null;
+    @CapabilityInject(IEncoderScannable.class)
+    public static final Capability<IEncoderScannable> CAPABILITY_IR_COMPARATOR = null;
     
     static {
         FluidRegistry.enableUniversalBucket();
@@ -77,7 +77,7 @@ public class InfraRedstone {
         CONTEXT.register(PacketButtonClick.class);
         
         CapabilityManager.INSTANCE.register(IInfraRedstone.class, new InfraRedstoneSerializer(), InfraRedstoneHandler::new);
-        CapabilityManager.INSTANCE.register(IInfraComparator.class, new InfraComparatorSerializer(), InfraRedstoneHandler::new);
+        CapabilityManager.INSTANCE.register(IEncoderScannable.class, new InfraComparatorSerializer(), InfraRedstoneHandler::new);
         
         MinecraftForge.EVENT_BUS.register(InRedRecipes.class);
         MinecraftForge.EVENT_BUS.register(InRedLogic.class);
