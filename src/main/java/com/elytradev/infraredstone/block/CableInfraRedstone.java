@@ -1,7 +1,7 @@
 package com.elytradev.infraredstone.block;
 
 import com.elytradev.infraredstone.InfraRedstone;
-import com.elytradev.infraredstone.logic.ISimpleInfraRedstone;
+import com.elytradev.infraredstone.api.ISimpleInfraRedstone;
 import com.elytradev.infraredstone.util.enums.EnumCableConnection;
 
 import net.minecraft.block.Block;

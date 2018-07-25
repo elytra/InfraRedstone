@@ -1,7 +1,7 @@
 package com.elytradev.infraredstone.logic.impl;
 
-import com.elytradev.infraredstone.logic.IEncoderScannable;
-import com.elytradev.infraredstone.logic.IInfraRedstone;
+import com.elytradev.infraredstone.api.IEncoderScannable;
+import com.elytradev.infraredstone.api.IInfraRedstone;
 
 public class InfraRedstoneHandler implements IInfraRedstone, IEncoderScannable {
 	public static final IInfraRedstone ALWAYS_OFF = new IInfraRedstone() {

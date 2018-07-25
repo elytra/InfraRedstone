@@ -1,6 +1,6 @@
 package com.elytradev.infraredstone.logic.impl;
 
-import com.elytradev.infraredstone.logic.IInfraRedstone;
+import com.elytradev.infraredstone.api.IInfraRedstone;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;

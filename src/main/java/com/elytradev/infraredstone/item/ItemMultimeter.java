@@ -1,9 +1,7 @@
 package com.elytradev.infraredstone.item;
 
-import com.elytradev.infraredstone.InRedLog;
-import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.ModBlocks;
-import com.elytradev.infraredstone.logic.IMultimeterProbe;
+import com.elytradev.infraredstone.api.IMultimeterProbe;
 import com.elytradev.infraredstone.logic.InRedLogic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;

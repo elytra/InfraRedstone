@@ -1,4 +1,4 @@
-package com.elytradev.infraredstone.logic;
+package com.elytradev.infraredstone.api;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;

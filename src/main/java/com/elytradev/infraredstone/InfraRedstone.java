@@ -2,7 +2,7 @@ package com.elytradev.infraredstone;
 
 import com.elytradev.concrete.network.NetworkContext;
 import com.elytradev.infraredstone.container.OscillatorContainer;
-import com.elytradev.infraredstone.logic.IEncoderScannable;
+import com.elytradev.infraredstone.api.IEncoderScannable;
 import com.elytradev.infraredstone.logic.network.PacketButtonClick;
 import com.elytradev.infraredstone.tile.TileEntityOscillator;
 import com.elytradev.concrete.inventory.IContainerInventoryHolder;
@@ -10,7 +10,7 @@ import com.elytradev.concrete.inventory.gui.client.ConcreteGui;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.elytradev.infraredstone.client.InRedTab;
 import com.elytradev.infraredstone.item.ModItems;
-import com.elytradev.infraredstone.logic.IInfraRedstone;
+import com.elytradev.infraredstone.api.IInfraRedstone;
 import com.elytradev.infraredstone.logic.InRedLogic;
 import com.elytradev.infraredstone.logic.impl.InfraComparatorSerializer;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;

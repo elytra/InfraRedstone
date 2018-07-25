@@ -1,4 +1,4 @@
-package com.elytradev.infraredstone.logic;
+package com.elytradev.infraredstone.api;
 
 /**
  * This Capability describes an "inspection" signal value to InfraComparators.

@@ -1,4 +1,4 @@
-package com.elytradev.infraredstone.logic;
+package com.elytradev.infraredstone.api;
 
 /**
  * This Capability describes an IR signal value to other InfraRedstone logic tiles.

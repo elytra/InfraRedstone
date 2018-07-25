@@ -1,6 +1,6 @@
 package com.elytradev.infraredstone.logic.impl;
 
-import com.elytradev.infraredstone.logic.IEncoderScannable;
+import com.elytradev.infraredstone.api.IEncoderScannable;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;

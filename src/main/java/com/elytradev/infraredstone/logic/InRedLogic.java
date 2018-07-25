@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.elytradev.infraredstone.InfraRedstone;
+import com.elytradev.infraredstone.api.IInfraRedstone;
+import com.elytradev.infraredstone.api.ISimpleInfraRedstone;
 import com.elytradev.infraredstone.block.ModBlocks;
 import com.google.common.base.Objects;
 

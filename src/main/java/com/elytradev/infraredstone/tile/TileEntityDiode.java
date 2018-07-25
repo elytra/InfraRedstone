@@ -4,7 +4,7 @@ import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.block.BlockBase;
 import com.elytradev.infraredstone.block.BlockDiode;
 import com.elytradev.infraredstone.block.ModBlocks;
-import com.elytradev.infraredstone.logic.IMultimeterProbe;
+import com.elytradev.infraredstone.api.IMultimeterProbe;
 import com.elytradev.infraredstone.logic.InRedLogic;
 import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 
