@@ -12,17 +12,23 @@ import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 import com.google.common.base.Predicates;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 public class TileEntityEncoder extends TileEntityIRComponent implements ITickable, IMultimeterProbe {
     private InfraRedstoneHandler signal = new InfraRedstoneHandler();
@@ -45,7 +51,14 @@ public class TileEntityEncoder extends TileEntityIRComponent implements ITickabl
                     signal.setNextSignalValue(((IEncoderScannable) quantify).getComparatorValue());
                 } else if (quantify instanceof ISimpleEncoderScannable) {
                     signal.setNextSignalValue(((ISimpleEncoderScannable) quantify).getComparatorValue(world, backPos, quantify, back.getOpposite()));
-                } else if (quantify.hasComparatorInputOverride()) {
+                } else if (world.getTileEntity(backPos) != null) {
+                    TileEntity te = world.getTileEntity(backPos);
+                    if (te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, back.getOpposite())) {
+                        IItemHandler inv = (IItemHandler)te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, back);
+                        signal.setNextSignalValue(getInventoryCapacity(inv));
+                        return;
+                    }
+                } if (quantify.hasComparatorInputOverride()) {
                     signal.setNextSignalValue(4*quantify.getComparatorInputOverride(world, backPos));
                 } else {
                     int sigBack = world.getRedstonePower(backPos, back);
@@ -60,10 +73,27 @@ public class TileEntityEncoder extends TileEntityIRComponent implements ITickabl
                 markDirty();
             }
         } else {
-            //Not an IR tick, so this is a "copy" tick. Adopt the previous tick's "next" value.
-            signal.setSignalValue(signal.getNextSignalValue());
-            markDirty();
+        //Not an IR tick, so this is a "copy" tick. Adopt the previous tick's "next" value.
+        signal.setSignalValue(signal.getNextSignalValue());
+        markDirty();
+    }
+    }
+
+    private int getInventoryCapacity(IItemHandler inv) {
+        int stacks = 0;
+        float percent = 0.0F;
+
+        for (int i = 0; i < inv.getSlots(); i++) {
+            ItemStack stack = inv.getStackInSlot(i);
+
+            if (!stack.isEmpty()) {
+                percent += (float)stack.getCount() / (float)Math.min(inv.getSlotLimit(i), stack.getMaxStackSize());
+                stacks++;
+            }
         }
+
+        percent /= (float)inv.getSlots();
+        return MathHelper.floor(percent * 62.0F) + (stacks > 0 ? 1 : 0);
     }
 
     @Override
