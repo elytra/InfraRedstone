@@ -18,10 +18,11 @@ public class ModBlocks {
     public static final BlockOscillator OSCILLATOR = new BlockOscillator();
     public static final BlockTransistor TRANSISTOR = new BlockTransistor();
     public static final BlockShifter SHIFTER = new BlockShifter();
+    public static final BlockEncoder ENCODER = new BlockEncoder();
 //    public static final BlockLiquidCrystal DEVICE_LIQUID_CRYSTAL = new BlockLiquidCrystal();
 
     public static Block[] allBlocks = {
-            INFRA_REDSTONE, IN_RED_SCAFFOLD, IN_RED_BLOCK, DIODE, GATE_NOT, GATE_AND, GATE_XOR, OSCILLATOR, TRANSISTOR, SHIFTER
+            INFRA_REDSTONE, IN_RED_SCAFFOLD, IN_RED_BLOCK, DIODE, GATE_NOT, GATE_AND, GATE_XOR, OSCILLATOR, TRANSISTOR, SHIFTER, ENCODER
     };
 
     public static void register(IForgeRegistry<Block> registry) {
@@ -37,6 +38,7 @@ public class ModBlocks {
         GameRegistry.registerTileEntity(OSCILLATOR.getTileEntityClass(), OSCILLATOR.getRegistryName().toString());
         GameRegistry.registerTileEntity(TRANSISTOR.getTileEntityClass(), TRANSISTOR.getRegistryName().toString());
         GameRegistry.registerTileEntity(SHIFTER.getTileEntityClass(), SHIFTER.getRegistryName().toString());
+        GameRegistry.registerTileEntity(ENCODER.getTileEntityClass(), ENCODER.getRegistryName().toString());
 //        GameRegistry.registerTileEntity(DEVICE_LIQUID_CRYSTAL.getTileEntityClass(), DEVICE_LIQUID_CRYSTAL.getRegistryName().toString());
 
     }

@@ -25,6 +25,7 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGateAnd.class, new RenderGateAnd());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGateXor.class, new RenderGateXor());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGateNot.class, new RenderGateNot());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEncoder.class, new RenderEncoder());
     }
     
     @SubscribeEvent
@@ -50,6 +51,8 @@ public class ClientProxy extends CommonProxy {
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/gate_not_glow"));
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/gate_not_glow_in"));
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/gate_not_glow_out"));
+
+        event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/encoder_glow"));
 
         event.getMap().registerSprite(new ResourceLocation("infraredstone:blocks/lights"));
     }

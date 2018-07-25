@@ -13,6 +13,7 @@ tile.gate_xor.name=XOR Gate
 tile.oscillator.name=Quartz Oscillator
 tile.transistor.name=Transistor
 tile.shifter.name=Shifter
+tile.encoder.name=Encoder
 tile.device_liquid_crystal.name=Liquid Crystal Block
 
 #tooltips
