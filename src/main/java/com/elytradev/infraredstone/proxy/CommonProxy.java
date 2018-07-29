@@ -20,7 +20,7 @@ public class CommonProxy {
         return I18n.canTranslate(key);
     }
 
-    public PluralRules getPluralRules() {
-        return PluralRulesLoader.loader.forLocale(ULocale.ENGLISH, PluralRules.PluralType.CARDINAL);
-    }
+    //public PluralRules getPluralRules() {
+    //    return PluralRulesLoader.loader.forLocale(ULocale.ENGLISH, PluralRules.PluralType.CARDINAL);
+    //}
 }

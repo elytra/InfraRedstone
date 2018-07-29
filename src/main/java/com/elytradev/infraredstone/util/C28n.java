@@ -23,6 +23,7 @@ public class C28n {
         return keyExists(key) ? Optional.of(InfraRedstone.proxy.i18nFormat(key, format)) : Optional.absent();
     }
 
+    /*
     public static String formatPlural(String key, long amount) {
         PluralRules pr = InfraRedstone.proxy.getPluralRules();
         String s = pr.select(amount);
@@ -30,7 +31,7 @@ public class C28n {
             return format(key+"."+s, amount);
         }
         return format(key+".other", amount);
-    }
+    }*/
 
     public static void formatList(List<String> out, String key, Object... format) {
         int i = 0;
