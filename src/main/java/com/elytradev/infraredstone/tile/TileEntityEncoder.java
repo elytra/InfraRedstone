@@ -53,7 +53,7 @@ public class TileEntityEncoder extends TileEntityIRComponent implements ITickabl
                 } else if (world.getTileEntity(backPos) != null) {
                     TileEntity te = world.getTileEntity(backPos);
                     if (te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, back.getOpposite())) {
-                        IItemHandler inv = (IItemHandler)te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, back);
+                        IItemHandler inv = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, back);
                         signal.setNextSignalValue(getInventoryCapacity(inv));
                         return;
                     }

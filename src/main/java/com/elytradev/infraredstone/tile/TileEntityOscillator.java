@@ -14,12 +14,14 @@ import com.elytradev.infraredstone.logic.impl.InfraRedstoneHandler;
 import com.google.common.base.Predicates;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -77,6 +79,7 @@ public class TileEntityOscillator extends TileEntityIRComponent implements ITick
         if (maxRefreshTicks >= 100) maxRefreshTicks = 100;
         if (maxRefreshTicks < 1) maxRefreshTicks = 1;
         refreshTicks = maxRefreshTicks;
+        world.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.3f, 1.0F);
         markDirty();
     }
 

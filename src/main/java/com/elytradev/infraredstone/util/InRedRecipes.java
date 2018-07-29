@@ -79,11 +79,19 @@ public class InRedRecipes {
                 'p', new ItemStack(ModItems.PCB)
         ));
 
+        recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.ENCODER, 1),
+                "rpr", "qeq",
+                'r', "dustRedstone",
+                'q', "gemQuartz",
+                'p', new ItemStack(ModItems.PCB),
+                'e', new ItemStack(Items.SPIDER_EYE)
+        ));
+
 //        Other
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.INFRA_REDSTONE, 3),
                 "rrr", "ggg",
                 'r', "dustRedstone",
-                'g', new ItemStack(Blocks.GLASS)
+                'g', "blockGlass"
         ));
 
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:blocks"), new ItemStack(ModBlocks.IN_RED_SCAFFOLD, 1),
