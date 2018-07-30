@@ -26,6 +26,11 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -60,10 +65,25 @@ public class TileEntityEncoder extends TileEntityIRComponent implements ITickabl
                     // no encoder API, so check for a tile entity
                 } else if (world.getTileEntity(backPos) != null) {
                     TileEntity te = world.getTileEntity(backPos);
-                    // check for a capability on the tile entity, make sure we only move on if we don't find one
+                    // check for capabilities on the tile entity, make sure we only move on if we don't find any
                     if (te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, back.getOpposite())) {
                         IItemHandler inv = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, back);
                         signal.setNextSignalValue(getInventoryCapacity(inv));
+                        markDirty();
+                        return;
+                    }  if (te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, back.getOpposite())) {
+                        IFluidHandler fluid = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, back);
+                        IFluidTankProperties[] props = fluid.getTankProperties();
+                        for (IFluidTankProperties prop : props) {
+                            if (prop.getContents() == null) signal.setNextSignalValue(0b00_0000);
+                            else signal.setNextSignalValue(((prop.getContents().amount/prop.getCapacity()) * 62) + 1);
+                        }
+                        markDirty();
+                        return;
+                    } if (te.hasCapability(CapabilityEnergy.ENERGY, back.getOpposite())) {
+                        IEnergyStorage energy = te.getCapability(CapabilityEnergy.ENERGY, back);
+                        if (energy.getEnergyStored() == 0) signal.setNextSignalValue(0b00_0000);
+                        else signal.setNextSignalValue(((energy.getEnergyStored()/energy.getMaxEnergyStored()) * 62) + 1);
                         markDirty();
                         return;
                     }
@@ -76,7 +96,7 @@ public class TileEntityEncoder extends TileEntityIRComponent implements ITickabl
                     // redstone first so inred's redstone-catching doesn't override it
                     int sigBack = world.getRedstonePower(backPos, back);
                     if (sigBack != 0) {
-                        signal.setNextSignalValue(4*sigBack);
+                        signal.setNextSignalValue(sigBack);
                     } else {
                         signal.setNextSignalValue(InRedLogic.findIRValue(world, pos, back));
                     }

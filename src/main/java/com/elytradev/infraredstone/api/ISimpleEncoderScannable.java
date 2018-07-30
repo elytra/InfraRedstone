@@ -17,7 +17,8 @@ public interface ISimpleEncoderScannable {
 	 * @param state the current blockstate of your object.
 	 * @param inspectingFrom the direction the infra-comparator is looking from.
 	 * @return a value from 0-63 depending on the state of your object and the given parameters.
-	 * It may be helpful to format the value in binaru: `0b00_0000`
+	 * See the Encoder Guidelines page on the InfraRedstone wiki for usage examples.
+	 * It may be helpful to format the value in binary: `0b00_0000`
 	 */
 	int getComparatorValue(World world, BlockPos pos, IBlockState state, EnumFacing inspectingFrom);
 }

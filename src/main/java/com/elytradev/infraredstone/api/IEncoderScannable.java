@@ -6,7 +6,8 @@ package com.elytradev.infraredstone.api;
 public interface IEncoderScannable {
 	/**
 	 * @return a value from 0-63 depending on the state of your object.
-	 * It may be helpful to format the value in binaru: `0b00_0000`
+	 * See the Encoder Guidelines page on the InfraRedstone wiki for usage examples.
+	 * It may be helpful to format the value in binary: `0b00_0000`
 	 */
 	int getComparatorValue();
 }
