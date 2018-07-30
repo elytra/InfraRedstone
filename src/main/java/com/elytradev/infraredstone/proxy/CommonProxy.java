@@ -16,7 +16,7 @@ public class CommonProxy {
 
     public void preInit() {}
 
-    public void playUISound(World world, @Nullable EntityPlayer player, BlockPos pos, SoundEvent sound, float pitch) {}
+    public void playUISound(SoundEvent sound, float pitch) {}
 
     public void registerItemRenderer(Item item, int meta, String id) {}
 

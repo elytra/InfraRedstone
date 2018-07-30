@@ -111,19 +111,19 @@ public class InRedRecipes {
 //        Items
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:items"), new ItemStack(ModItems.PCB, 1),
                 "c", "r", "s",
-                'c', "dyeCyan",
+                'c', new ItemStack(Items.CLAY_BALL),
                 'r', new ItemStack(ModBlocks.INFRA_REDSTONE),
                 's', new ItemStack(Blocks.STONE_SLAB)
         ));
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:items"), new ItemStack(ModItems.PCB, 2),
                 "cc", "rr", "ss",
-                'c', "dyeCyan",
+                'c', new ItemStack(Items.CLAY_BALL),
                 'r', new ItemStack(ModBlocks.INFRA_REDSTONE),
                 's', new ItemStack(Blocks.STONE_SLAB)
         ));
         recipe(r, new ShapedOreRecipe(new ResourceLocation("infraredstone:items"), new ItemStack(ModItems.PCB, 3),
                 "ccc", "rrr", "sss",
-                'c', "dyeCyan",
+                'c', new ItemStack(Items.CLAY_BALL),
                 'r', new ItemStack(ModBlocks.INFRA_REDSTONE),
                 's', new ItemStack(Blocks.STONE_SLAB)
         ));
