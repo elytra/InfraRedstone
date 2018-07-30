@@ -41,26 +41,39 @@ public class TileEntityEncoder extends TileEntityIRComponent implements ITickabl
         IBlockState state = world.getBlockState(this.getPos());
 
         if (InRedLogic.isIRTick()) {
-            //IR tick means we're searching for a next value
+            // IR tick means we're searching for a next value
             if (state.getBlock() instanceof BlockEncoder) {
                 EnumFacing back = state.getValue(BlockEncoder.FACING).getOpposite();
                 BlockPos backPos = this.getPos().offset(back);
                 IBlockState quantify = world.getBlockState(backPos);
+                // check for the main encoder API
                 if (quantify instanceof IEncoderScannable) {
                     signal.setNextSignalValue(((IEncoderScannable) quantify).getComparatorValue());
+                    // make sure we don't hit the if later down
+                    markDirty();
+                    return;
+                    // check for the non-TE encoder API
                 } else if (quantify instanceof ISimpleEncoderScannable) {
                     signal.setNextSignalValue(((ISimpleEncoderScannable) quantify).getComparatorValue(world, backPos, quantify, back.getOpposite()));
+                    markDirty();
+                    return;
+                    // no encoder API, so check for a tile entity
                 } else if (world.getTileEntity(backPos) != null) {
                     TileEntity te = world.getTileEntity(backPos);
+                    // check for a capability on the tile entity, make sure we only move on if we don't find one
                     if (te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, back.getOpposite())) {
                         IItemHandler inv = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, back);
                         signal.setNextSignalValue(getInventoryCapacity(inv));
                         markDirty();
                         return;
                     }
+                    // this if is the reason for all the markDirty(); return; garbage up above
+                    // check for a vanilla comparator interface
                 } if (quantify.hasComparatorInputOverride()) {
                     signal.setNextSignalValue(4*quantify.getComparatorInputOverride(world, backPos));
+                    // can't find anything else, so check for redstone/inred signal
                 } else {
+                    // redstone first so inred's redstone-catching doesn't override it
                     int sigBack = world.getRedstonePower(backPos, back);
                     if (sigBack != 0) {
                         signal.setNextSignalValue(4*sigBack);
@@ -68,12 +81,11 @@ public class TileEntityEncoder extends TileEntityIRComponent implements ITickabl
                         signal.setNextSignalValue(InRedLogic.findIRValue(world, pos, back));
                     }
                 }
-//                if (sigBack > 0 && (sigLeft > 0 || sigRight > 0)) signal.setNextSignalValue(sigBack);
-//                else signal.setNextSignalValue(0);
+
                 markDirty();
             }
         } else {
-        //Not an IR tick, so this is a "copy" tick. Adopt the previous tick's "next" value.
+        // Not an IR tick, so this is a "copy" tick. Adopt the previous tick's "next" value.
         signal.setSignalValue(signal.getNextSignalValue());
         markDirty();
     }
