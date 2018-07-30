@@ -4,12 +4,19 @@ import com.elytradev.infraredstone.InfraRedstone;
 import com.elytradev.infraredstone.client.render.*;
 import com.elytradev.infraredstone.tile.*;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import javax.annotation.Nullable;
 
 public class ClientProxy extends CommonProxy {
 
@@ -60,5 +67,11 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerItemRenderer(Item item, int meta, String id) {
         ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(new ResourceLocation(InfraRedstone.modId, id), "inventory"));
+    }
+
+    @Override
+    public void playUISound(World world, @Nullable EntityPlayer player, BlockPos pos, SoundEvent sound, float pitch) {
+        world.playSound(player, pos, sound, SoundCategory.MASTER, 0.3f, pitch);
+
     }
 }

@@ -79,7 +79,7 @@ public class TileEntityOscillator extends TileEntityIRComponent implements ITick
         if (maxRefreshTicks >= 100) maxRefreshTicks = 100;
         if (maxRefreshTicks < 1) maxRefreshTicks = 1;
         refreshTicks = maxRefreshTicks;
-        world.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.3f, 1.0F);
+        InfraRedstone.proxy.playUISound(world, world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false), pos, SoundEvents.UI_BUTTON_CLICK, 1.0F);
         markDirty();
     }
 
